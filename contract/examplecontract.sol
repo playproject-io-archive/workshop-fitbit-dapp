@@ -5,22 +5,26 @@ import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
 
 contract ExampleContract is usingOraclize {
 
-    uint public userId;
+    string public result;
 
     event NewOraclizeQuery(string description);
 
     function ExampleContract() public {
-        update();
+        callAPI();
     }
 
-    function __callback(bytes32 myid, string result) public {
+    function __callback(bytes32 myid, string _result) public {
         if (msg.sender != oraclize_cbAddress()) revert();
         NewOraclizeQuery(result);
-        userId = parseInt(result, 10);
+        result = _result;
     }
 
-    function update() public payable {
+    function callAPI() public payable {
         NewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
-        oraclize_query("URL", "json(https://jsonplaceholder.typicode.com/todos/1).userId");
+        oraclize_query("URL", "https://jsonplaceholder.typicode.com/todos/1");
+    }
+    
+    function getResult() public returns (string){
+        return result;
     }
 }
