@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Home Page</title>
+  <script language="javascript" type="text/javascript" src="web3.min.js"></script>
+  <script language="javascript" type="text/javascript" src="abi.js"></script>
 </head>
+
 <body>
-  
+
+  <script>
+    var myContract;
+    // var userAccount;
+
+    function callback(error, result) {
+      console.dir(result);
+    }
+
+    function startApp() {
+      var contractAddress = "0x692a70d2e424a56d2c6c27aa97d1a86395877b3a";
+      myContract = web3.eth.contract(ABI).at(contractAddress);
+      console.log("Current default: " + web3.eth.defaultAccount);
+      myContract.getResult(callback);
+    }
+
+    window.addEventListener('load', function () {
+
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+      } else { // set the provider you want from Web3.providers
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+      }
+      var defaultAccount = web3.eth.defaultAccount;
+      if (!defaultAccount) {
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+      }
+
+      startApp()
+    })
+  </script>
 </body>
+
 </html>
