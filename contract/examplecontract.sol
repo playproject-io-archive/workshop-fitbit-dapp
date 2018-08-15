@@ -10,7 +10,7 @@ contract ExampleContract is usingOraclize {
     event NewOraclizeQuery(string description);
 
     function ExampleContract() public {
-        callAPI();
+        callUserAPI();
     }
 
     function __callback(bytes32 myid, string _result) public {
@@ -19,12 +19,18 @@ contract ExampleContract is usingOraclize {
         result = _result;
     }
 
-    function callAPI() public payable {
+    function callTodoAPI() public payable {
         NewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
         oraclize_query("URL", "https://jsonplaceholder.typicode.com/todos/1");
+    }
+    
+    function callUserAPI() public payable {
+        NewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
+        oraclize_query("URL", "https://jsonplaceholder.typicode.com/users/1");
     }
     
     function getResult() public returns (string){
         return result;
     }
+
 }
