@@ -11,33 +11,51 @@
 </head>
 
 <body>
-
+  <h2>Web3 API version</h2>
+  <p id="p1"></p>
   <script>
     var myContract;
-    // var userAccount;
-
-    function callback(error, result) {
-      console.dir(result);
-    }
 
     function startApp() {
       var contractAddress = "0x692a70d2e424a56d2c6c27aa97d1a86395877b3a";
       myContract = web3.eth.contract(ABI).at(contractAddress);
       console.log("Current default: " + web3.eth.defaultAccount);
-      myContract.getResult(callback);
+
+      myContract.getResult({
+        from: web3.eth.defaultAccount,
+        gas: 132700
+      }, function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('result:', result);
+          console.log('fromAscii:', web3.fromAscii(result));
+        }
+      });
     }
 
     window.addEventListener('load', function () {
 
       if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider);
-      } else { // set the provider you want from Web3.providers
+      } else {
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
       }
+
       var defaultAccount = web3.eth.defaultAccount;
       if (!defaultAccount) {
         web3.eth.defaultAccount = web3.eth.accounts[0];
       }
+
+      var p1 = document.getElementById("p1");
+      p1.innerHTML = web3.version.api;
+
+      console.log('web3.version.network:', web3.version.network);
+      console.log('web3.version.api:', web3.version.api);
+      var coinbase = web3.eth.coinbase;
+      console.log('coinbase:', coinbase);
+      // var balance = web3.eth.getBalance(coinbase);
+      // console.log(balance.toString(10));
 
       startApp()
     })

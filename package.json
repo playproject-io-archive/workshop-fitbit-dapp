@@ -1,0 +1,21 @@
+{
+  "name": "dapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "abi.js",
+  "scripts": {
+    "start": "budo src/index.js:bundle.js --dir ./ --live --open",
+    "build": "browserify src/index.js > bundle.js"
+  },
+  "keywords": [],
+  "author": "alincode <alincode@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bel": "^6.0.0",
+    "csjs-inject": "^1.0.1",
+    "web3": "^1.0.0-beta.35"
+  },
+  "devDependencies": {
+    "budo": "^11.2.0"
+  }
+}

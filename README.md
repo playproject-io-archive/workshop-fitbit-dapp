@@ -4,9 +4,10 @@
 * [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/)
 * [Remix error : The constructor should be payable if you send value](https://ethereum.stackexchange.com/questions/35112/remix-error-the-constructor-should-be-payable-if-you-send-value?rq=1)
 
+## build & publish
 
-```
-cd dapp
-npm i http-server -g
-http-server .
+```sh
+npm run build
+git add -A && git commit -m "bundle"
+git push
 ```

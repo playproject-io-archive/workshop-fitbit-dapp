@@ -29,8 +29,12 @@ contract ExampleContract is usingOraclize {
         oraclize_query("URL", "https://jsonplaceholder.typicode.com/users/1");
     }
     
-    function getResult() public returns (string){
+    function getResult() public view returns (string){
         return result;
+    }
+    
+    function test() public pure returns (string){
+        return "test";
     }
 
 }
