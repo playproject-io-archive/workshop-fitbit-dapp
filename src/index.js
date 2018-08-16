@@ -6,14 +6,13 @@ var Web3 = require('web3');
 
 if (typeof web3 !== 'undefined') {
   console.log('=== 1');
-  console.log(web3.currentProvider);
   web3 = new Web3(web3.currentProvider);
 } else {
   console.log('=== 2');
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-var contractAddress = "0xa1c60e069785636db059ad27cebcfaab99b0159b";
+var contractAddress = "0x7ab49e7063f3e7b6a8760c89d3cb72c545bd924b";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -51,6 +50,11 @@ else document.body.appendChild(bel`
     <button class=${css.button} onclick=${start}> submit </button>
   </div>
 `)
+
+// const eventHandler = myContract.events.allEvents((error, data) => {
+//   if(error) console.error(error);
+//   document.body.innerHTML = data;
+// })
 
 /******************************************************************************
   START

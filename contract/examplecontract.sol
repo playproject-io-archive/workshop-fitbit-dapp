@@ -8,14 +8,17 @@ contract ExampleContract is usingOraclize {
     string public result;
 
     event NewOraclizeQuery(string description);
+    
+    event NewMessage(string message);
 
     function ExampleContract() public {
-        callUserAPI();
+        // callUserAPI();
     }
 
     function __callback(bytes32 myid, string _result) public {
         if (msg.sender != oraclize_cbAddress()) revert();
         NewOraclizeQuery(result);
+        NewMessage(result);
         result = _result;
     }
 
@@ -29,10 +32,10 @@ contract ExampleContract is usingOraclize {
         oraclize_query("URL", "https://jsonplaceholder.typicode.com/users/1");
     }
     
-    function getResult() public view returns (string){
-        return (result);
+    function clearResult() public {
+        result = "";
     }
-    
+
     function test() public pure returns (string){
         return "test";
     }

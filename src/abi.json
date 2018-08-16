@@ -1,5 +1,23 @@
 [{
     "constant": false,
+    "inputs": [],
+    "name": "callTodoAPI",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "callUserAPI",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [{
         "name": "myid",
         "type": "bytes32"
@@ -37,55 +55,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "callTodoAPI",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "callUserAPI",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "ExampleContract",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-      "indexed": false,
-      "name": "description",
-      "type": "string"
-    }],
-    "name": "NewOraclizeQuery",
-    "type": "event"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getResult",
-    "outputs": [{
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "result",
@@ -95,6 +64,15 @@
     }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "clearResult",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -108,5 +86,31 @@
     "payable": false,
     "stateMutability": "pure",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "name": "description",
+      "type": "string"
+    }],
+    "name": "NewOraclizeQuery",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "name": "message",
+      "type": "string"
+    }],
+    "name": "NewMessage",
+    "type": "event"
   }
 ]
