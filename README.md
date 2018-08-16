@@ -4,6 +4,13 @@
 * [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/)
 * [Remix error : The constructor should be payable if you send value](https://ethereum.stackexchange.com/questions/35112/remix-error-the-constructor-should-be-payable-if-you-send-value?rq=1)
 
+## Run it
+
+```
+npm i
+npm start
+```
+
 ## build & publish
 
 ```sh
