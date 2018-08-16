@@ -30,7 +30,7 @@ contract ExampleContract is usingOraclize {
     }
     
     function getResult() public view returns (string){
-        return result;
+        return (result);
     }
     
     function test() public pure returns (string){

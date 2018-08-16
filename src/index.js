@@ -5,12 +5,15 @@ var ABI = require('./abi.json');
 var Web3 = require('web3');
 
 if (typeof web3 !== 'undefined') {
+  console.log('=== 1');
+  console.log(web3.currentProvider);
   web3 = new Web3(web3.currentProvider);
 } else {
+  console.log('=== 2');
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-var contractAddress = "0x692a70d2e424a56d2c6c27aa97d1a86395877b3a";
+var contractAddress = "0xa1c60e069785636db059ad27cebcfaab99b0159b";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -63,7 +66,8 @@ function start(event) {
   Step 1
 ******************************************************************************/
 function getMyAddress(result) {
-  log(null, 'loading (1/7) - getMyAddress')
+  web3.eth.defaultAccount = web3.eth.accounts[0];
+  log('loading (1/7) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (err) return done(err)
     result.wallet = localAddresses[0]
@@ -74,11 +78,11 @@ function getMyAddress(result) {
   Step 2
 ******************************************************************************/
 function callAPI(result) {
-  log(null, 'loading (2/7) - callAPI')
-  console.dir(myContract);
-  myContract.methods.test().call({ from: result.wallet }, (err, data) => {
+  log('loading (2/7) - callAPI')
+  myContract.methods.result().call({ from: result.wallet }, (err, data) => {
     if (err) return console.error(err);
-    console.log('data:', data);
+    document.body.innerHTML = data;
+    console.dir(data);
     result.user = data
   })
 }
