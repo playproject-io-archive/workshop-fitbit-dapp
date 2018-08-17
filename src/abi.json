@@ -1,10 +1,13 @@
 [{
-    "constant": false,
+    "constant": true,
     "inputs": [],
-    "name": "callUserAPI",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
+    "name": "name",
+    "outputs": [{
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -46,36 +49,12 @@
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "result",
-    "outputs": [{
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [],
-    "name": "clearResult",
+    "name": "callAPItoGetUserName",
     "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "test",
-    "outputs": [{
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "pure",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {

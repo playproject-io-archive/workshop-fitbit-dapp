@@ -12,7 +12,7 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-var contractAddress = "0x696a92a0d6b36628dc92e32daba92b85df1c5d5c";
+var contractAddress = "0xed7e9d57efe6ee00114a311dae07bb1692999458";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -83,7 +83,7 @@ function getMyAddress(result) {
 ******************************************************************************/
 function callAPI(result) {
   log('loading (2/7) - callAPI')
-  myContract.methods.result().call({ from: result.wallet }, (err, data) => {
+  myContract.methods.name().call((err, data) => {
     if (err) return console.error(err);
     document.body.innerHTML = data;
     console.dir(data);
