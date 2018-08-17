@@ -12,7 +12,7 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-var contractAddress = "0x7ab49e7063f3e7b6a8760c89d3cb72c545bd924b";
+var contractAddress = "0x696a92a0d6b36628dc92e32daba92b85df1c5d5c";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;

@@ -1,15 +1,6 @@
 [{
     "constant": false,
     "inputs": [],
-    "name": "callTodoAPI",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
     "name": "callUserAPI",
     "outputs": [],
     "payable": true,

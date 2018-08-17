@@ -1,43 +1,127 @@
-pragma solidity ^0.4.0;
-
-import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
-
-
-contract ExampleContract is usingOraclize {
-
-    string public result;
-
-    event NewOraclizeQuery(string description);
-    
-    event NewMessage(string message);
-
-    function ExampleContract() public {
-        // callUserAPI();
-    }
-
-    function __callback(bytes32 myid, string _result) public {
-        if (msg.sender != oraclize_cbAddress()) revert();
-        NewOraclizeQuery(result);
-        NewMessage(result);
-        result = _result;
-    }
-
-    function callTodoAPI() public payable {
-        NewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
-        oraclize_query("URL", "https://jsonplaceholder.typicode.com/todos/1");
-    }
-    
-    function callUserAPI() public payable {
-        NewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
-        oraclize_query("URL", "https://jsonplaceholder.typicode.com/users/1");
-    }
-    
-    function clearResult() public {
-        result = "";
-    }
-
-    function test() public pure returns (string){
-        return "test";
-    }
-
-}
+[
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "callTodoAPI",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "callUserAPI",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "myid",
+				"type": "bytes32"
+			},
+			{
+				"name": "_result",
+				"type": "string"
+			}
+		],
+		"name": "__callback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "myid",
+				"type": "bytes32"
+			},
+			{
+				"name": "result",
+				"type": "string"
+			},
+			{
+				"name": "proof",
+				"type": "bytes"
+			}
+		],
+		"name": "__callback",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "result",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "clearResult",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "test",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "description",
+				"type": "string"
+			}
+		],
+		"name": "NewOraclizeQuery",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"name": "NewMessage",
+		"type": "event"
+	}
+]
