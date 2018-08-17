@@ -63,7 +63,7 @@ function start(event) {
   localStorage.ignorePrompt = true
   document.body.innerHTML = ''
   getMyAddress({
-    user: null
+    username: null
   }) // => Step 1
 }
 /******************************************************************************
@@ -75,19 +75,28 @@ function getMyAddress(result) {
   web3.eth.getAccounts((err, localAddresses) => {
     if (err) return done(err)
     result.wallet = localAddresses[0]
-    callAPI(result) // => Step 2
+    getName(result) // => Step 2
   })
 }
 /******************************************************************************
   Step 2
 ******************************************************************************/
+function getName(result) {
+  log('loading (2/7) - getName')
+  setInterval(function () { 
+      myContract.methods.name().call((err, data) => {
+        if (err) return console.error(err);
+        if (!data) callAPI(result);
+        document.body.innerHTML = data;
+        result.username = data
+      })
+  }, 1000);
+}
+
 function callAPI(result) {
-  log('loading (2/7) - callAPI')
-  myContract.methods.name().call((err, data) => {
+  log('loading (3/7) - callAPI')
+  myContract.methods.callAPItoGetUserName().send({ from: result.wallet, value: web3.utils.toWei("0.01", "ether")}, (err, data) => {
     if (err) return console.error(err);
-    document.body.innerHTML = data;
-    console.dir(data);
-    result.user = data
   })
 }
 
@@ -96,8 +105,8 @@ function callAPI(result) {
 ******************************************************************************/
 function done(err, result) {
   if (err) return log(new Error(err))
-  const { user } = result
-  if (user) {
+  const { username } = result
+  if (username) {
     log(null, 'success')
     // var el = dapp(result)
     // document.body.appendChild(el)
