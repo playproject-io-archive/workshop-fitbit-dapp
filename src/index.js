@@ -83,14 +83,12 @@ function getMyAddress(result) {
 ******************************************************************************/
 function getName(result) {
   log('loading (2/7) - getName')
-  setInterval(function () { 
-      myContract.methods.name().call((err, data) => {
-        if (err) return console.error(err);
-        if (!data) callAPI(result);
-        document.body.innerHTML = data;
-        result.username = data
-      })
-  }, 1000);
+    myContract.methods.name().call((err, data) => {
+      if (err) return console.error(err);
+      if (!data) callAPI(result);
+      document.body.innerHTML = data;
+      result.username = data
+    })
 }
 
 function callAPI(result) {
