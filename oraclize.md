@@ -17,3 +17,7 @@
 npm i ethereum-bridge -g
 ethereum-bridge -a 9 -H 127.0.0.1 -p 8545 --dev
 ```
+
+### Mise
+
+* oraclize_setProof
