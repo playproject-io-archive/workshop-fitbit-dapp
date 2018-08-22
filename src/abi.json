@@ -1,23 +1,11 @@
 [{
-    "constant": true,
-    "inputs": [],
-    "name": "name",
-    "outputs": [{
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [{
         "name": "myid",
         "type": "bytes32"
       },
       {
-        "name": "_result",
+        "name": "result",
         "type": "string"
       }
     ],
@@ -30,15 +18,15 @@
   {
     "constant": false,
     "inputs": [{
-        "name": "myid",
+        "name": "_queryId",
         "type": "bytes32"
       },
       {
-        "name": "result",
+        "name": "_result",
         "type": "string"
       },
       {
-        "name": "proof",
+        "name": "_proof",
         "type": "bytes"
       }
     ],
@@ -50,8 +38,74 @@
   },
   {
     "constant": false,
-    "inputs": [],
-    "name": "callAPItoGetUserName",
+    "inputs": [{
+        "name": "_userId",
+        "type": "uint256"
+      },
+      {
+        "name": "_result",
+        "type": "string"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "callback_ForGetUserName",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "result",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "LOG_OraclizeCallback",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "order",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "NewOraclizeQuery",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_userId",
+      "type": "string"
+    }],
+    "name": "register",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -64,23 +118,89 @@
     "type": "constructor"
   },
   {
-    "anonymous": false,
+    "constant": true,
     "inputs": [{
-      "indexed": false,
-      "name": "description",
+      "name": "_userId",
       "type": "string"
     }],
-    "name": "NewOraclizeQuery",
-    "type": "event"
+    "name": "getName",
+    "outputs": [{
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
+    "constant": true,
     "inputs": [{
-      "indexed": false,
-      "name": "message",
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "names",
+    "outputs": [{
+      "name": "",
       "type": "string"
     }],
-    "name": "NewMessage",
-    "type": "event"
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "",
+      "type": "bytes32"
+    }],
+    "name": "oraclizeCallbacks",
+    "outputs": [{
+        "name": "userId",
+        "type": "uint256"
+      },
+      {
+        "name": "oState",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "result",
+    "outputs": [{
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "test",
+    "outputs": [{
+      "name": "",
+      "type": "string"
+    }],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
   }
 ]

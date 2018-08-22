@@ -12,7 +12,7 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-var contractAddress = "0xed7e9d57efe6ee00114a311dae07bb1692999458";
+var contractAddress = "0xed79f95db6009a8eb9fa058745e1c78534b68909";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -94,7 +94,8 @@ function start(event) {
 
   document.body.innerHTML = '';
   getMyAddress({
-    username: null
+    username: null,
+    userId: input.value
   }); // => Step 1
 }
 /******************************************************************************
@@ -128,7 +129,7 @@ function getGasPrice(result) {
 function callAPI(result) {
   log('loading (3/7) - callAPI');
   // if (!localStorage.called) {
-    myContract.methods.callAPItoGetUserName().send({ from: result.wallet, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
+    myContract.methods.register(result.userId).send({ from: result.wallet, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
       if (err) return console.error(err);
       localStorage.called = true;
     })
@@ -141,9 +142,9 @@ function callAPI(result) {
 
 function getName() {
   log('loading (4/7) - getName')
-  myContract.methods.name().call((err, data) => {
+  myContract.methods.names(localStorage.userId).call((err, data) => {
     if (err) return console.error(err);
-    createResultElement(data);
+    if (data) createResultElement(data);
     // TODO for easy debug, it will be disable soon...
     window.result = data;
   })

@@ -41,6 +41,7 @@ contract ExampleContract is usingOraclize {
 
 
     function ExampleContract() public {
+        oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
         owner = msg.sender;
     }
 
