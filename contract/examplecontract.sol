@@ -19,6 +19,7 @@ contract ExampleContract is usingOraclize {
     string public result;
 
     mapping (bytes32 => oraclizeCallback) public oraclizeCallbacks;
+    mapping (uint => string) public names;
 
     enum oraclizeState { ForGetUserName, ForGetUserOtherData }
 
@@ -57,7 +58,7 @@ contract ExampleContract is usingOraclize {
     }
 
     function callback_ForGetUserName(uint _userId, string _result, bytes _proof) {
-        var sl_result = _result.toSlice();
+        names[_userId] = _result;
     }
 
     function callback_ForGetUserOtherData(bytes32 _queryId, string _result, bytes _proof) internal {
@@ -65,7 +66,7 @@ contract ExampleContract is usingOraclize {
 		uint userId = o.userId;
     }
     
-    function callUserAPI(string _userId) public payable {
+    function register(string _userId) public payable {
         string memory oraclize_url = strConcat(
 			oraclize_UsersBaseUrl,
 			_userId,
@@ -76,6 +77,10 @@ contract ExampleContract is usingOraclize {
         // bytes32 queryId = oraclize_query("URL", oraclize_url, oraclizeGas);
         bytes32 queryId = oraclize_query("URL", oraclize_url);
         oraclizeCallbacks[queryId] = oraclizeCallback(parseInt(_userId), oraclizeState.ForGetUserName);
+    }
+    
+    function getName(string _userId) view returns (string) {
+        return names[parseInt(_userId)];
     }
 
     function test() public pure returns (string) {
