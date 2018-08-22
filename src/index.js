@@ -38,18 +38,39 @@ const css = csjs`
     width: 150px;
   }
 `
-const hint = "Hello World"
+const hint = "Input user ID"
 const input = bel`
   <input class=${css.input} type="text" placeholder="${hint}"/>
 `
-if (localStorage.address) input.value = localStorage.address
-if (localStorage.ignorePrompt) start()
-else document.body.appendChild(bel`
+if (localStorage.userId) {
+  input.value = localStorage.userId
+  // if (localStorage.ignorePrompt) start()
+} else {
+  // createInputElement();
+}
+
+createInputElement();
+
+/******************************************************************************
+  Create Element
+******************************************************************************/
+function createInputElement() {
+  document.body.appendChild(bel`
   <div class=${css.box}>
     ${input}
-    <button class=${css.button} onclick=${start}> submit </button>
+    <button class=${css.button} onclick=${start} required="required"> Signup </button>
   </div>
 `)
+}
+
+function createResultElement(result) {
+  document.body.appendChild(bel`
+  <div class=${css.box}>
+    ${result}
+    <button class=${css.button} onclick=${clearResult} required="required"> Clear </button>
+  </div>
+`)
+}
 
 // const eventHandler = myContract.events.allEvents((error, data) => {
 //   if(error) console.error(error);
@@ -57,14 +78,24 @@ else document.body.appendChild(bel`
 // })
 
 /******************************************************************************
+  Event
+******************************************************************************/
+function clearResult(event) {
+  localStorage.clear();
+  location.reload();
+}
+
+/******************************************************************************
   START
 ******************************************************************************/
 function start(event) {
-  localStorage.ignorePrompt = true
-  document.body.innerHTML = ''
+  // localStorage.ignorePrompt = true;
+  localStorage.userId = input.value;
+
+  document.body.innerHTML = '';
   getMyAddress({
     username: null
-  }) // => Step 1
+  }); // => Step 1
 }
 /******************************************************************************
   Step 1
@@ -75,26 +106,46 @@ function getMyAddress(result) {
   web3.eth.getAccounts((err, localAddresses) => {
     if (err) return done(err)
     result.wallet = localAddresses[0]
-    getName(result) // => Step 2
+    getGasPrice(result);
   })
 }
 /******************************************************************************
   Step 2
 ******************************************************************************/
-function getName(result) {
-  log('loading (2/7) - getName')
-    myContract.methods.name().call((err, data) => {
-      if (err) return console.error(err);
-      if (!data) callAPI(result);
-      document.body.innerHTML = data;
-      result.username = data
-    })
+
+function getGasPrice(result) {
+  log('loading (2/7) - getGasPrice')
+  web3.eth.getGasPrice((err, gasPrice) => {
+    if (err) return done(err)
+    result.gasPrice = gasPrice;
+    callAPI(result);
+  })
 }
 
+/******************************************************************************
+  Step 3
+******************************************************************************/
 function callAPI(result) {
-  log('loading (3/7) - callAPI')
-  myContract.methods.callAPItoGetUserName().send({ from: result.wallet, value: web3.utils.toWei("0.01", "ether")}, (err, data) => {
+  log('loading (3/7) - callAPI');
+  // if (!localStorage.called) {
+    myContract.methods.callAPItoGetUserName().send({ from: result.wallet, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
+      if (err) return console.error(err);
+      localStorage.called = true;
+    })
+  // }
+
+  setTimeout(function () {
+    getName();
+  }, 10 * 1000);
+}
+
+function getName() {
+  log('loading (4/7) - getName')
+  myContract.methods.name().call((err, data) => {
     if (err) return console.error(err);
+    createResultElement(data);
+    // TODO for easy debug, it will be disable soon...
+    window.result = data;
   })
 }
 
