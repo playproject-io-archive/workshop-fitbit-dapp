@@ -5,6 +5,7 @@
   "main": "abi.js",
   "scripts": {
     "start": "budo src/index.js:bundle.js --dir ./ --live --open",
+    "fitbit": "budo src/fitbit.js:bundle.js --dir ./ --live --open",
     "build": "browserify src/index.js > bundle.js"
   },
   "keywords": [],
