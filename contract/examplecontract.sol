@@ -40,7 +40,8 @@ contract ExampleContract is usingOraclize {
     address public owner;
 
 
-    function ExampleContract() public {
+    function ExampleContract() payable {
+        oraclize_setCustomGasPrice(4000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
         owner = msg.sender;
     }
@@ -68,6 +69,9 @@ contract ExampleContract is usingOraclize {
     }
     
     function register(string _userId) public payable {
+        // require ETH to cover callback gas costs
+        require(msg.value >= 0.004 ether); // 200,000 gas * 20 Gwei = 0.004 ETH
+
         string memory oraclize_url = strConcat(
 			oraclize_UsersBaseUrl,
 			_userId,
