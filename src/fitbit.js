@@ -10,5 +10,5 @@ if (!window.location.hash) {
   );
 
   fitbitAccessToken = fragmentQueryParameters.access_token;
-  document.body.innerHTML = fitbitAccessToken;
+  document.body.innerHTML = fragmentQueryParameters;
 }
