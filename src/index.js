@@ -64,6 +64,7 @@ function createInputElement() {
 }
 
 function createResultElement(result) {
+  document.body.innerHTML = "";
   document.body.appendChild(bel`
   <div class=${css.box}>
     ${result}
