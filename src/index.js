@@ -75,10 +75,10 @@ function createResultElement(result) {
 `)
 }
 
-// const eventHandler = myContract.events.allEvents((error, data) => {
-//   if(error) console.error(error);
-//   document.body.innerHTML = data;
-// })
+const eventHandler = myContract.events.allEvents((error, data) => {
+  if(error) console.error(error);
+  console.log('event:', data);
+})
 
 /******************************************************************************
   Fitbit
