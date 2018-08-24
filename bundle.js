@@ -47149,7 +47149,9 @@ function createInputElement() {
   document.body.appendChild(bel`
   <div class=${css.box}>
     ${input}
-    <button class=${css.button} onclick=${start} required="required"> Signup </button>
+    <button class=${css.button} onclick=${start}> Signup </button>
+    <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
+    <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
   </div>
 `)
 }
@@ -47168,6 +47170,62 @@ function createResultElement(result) {
 //   if(error) console.error(error);
 //   document.body.innerHTML = data;
 // })
+
+/******************************************************************************
+  Fitbit
+******************************************************************************/
+
+if (window.location.hash) {
+  var fragmentQueryParameters = {};
+  window.location.hash.slice(1).replace(
+    new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+    function ($0, $1, $2, $3) { fragmentQueryParameters[$1] = $3; }
+  );
+
+  console.log('fragmentQueryParameters: ', fragmentQueryParameters);
+  localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
+}
+
+var processResponse = function (res) {
+  if (!res.ok) {
+    throw new Error('Fitbit API request failed: ' + res);
+  }
+
+  var contentType = res.headers.get('content-type')
+  if (contentType && contentType.indexOf("application/json") !== -1) {
+    return res.json();
+  } else {
+    throw new Error('JSON expected but received ' + contentType);
+  }
+}
+
+function showProfile(profile) {
+  console.dir(profile);
+}
+
+function getProfile(event) {
+  if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
+  fetch(
+    'https://api.fitbit.com/1/user/-/profile.json',
+    {
+      headers: new Headers({
+        'Authorization': 'Bearer ' + localStorage.fitbitAccessToken
+      }),
+      mode: 'cors',
+      method: 'GET'
+    }
+  ).then(processResponse)
+    .then(showProfile)
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+function getFitbitToken(event) {
+  const CLIENT_ID = '22CYSG';
+  const EXPIRES_IN = 31536000;
+  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
+}
 
 /******************************************************************************
   Event
