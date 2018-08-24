@@ -23,7 +23,7 @@ contract ExampleContract is usingOraclize {
 
     enum oraclizeState { ForGetUserName, ForGetUserOtherData }
 
-    event NewOraclizeQuery(string order, string description);
+    event NewOraclizeQuery(string tag, string description);
 
     event LOG_OraclizeCallback(
 		uint userId,
@@ -41,6 +41,7 @@ contract ExampleContract is usingOraclize {
 
 
     function ExampleContract() payable {
+        // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setCustomGasPrice(4000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
         owner = msg.sender;
@@ -86,6 +87,33 @@ contract ExampleContract is usingOraclize {
     
     function getName(string _userId) view returns (string) {
         return names[parseInt(_userId)];
+    }
+    
+    function request(string _query, string _method, string _url, string _kwargs) payable {
+
+        NewOraclizeQuery("request 1-2","Oraclize query was sent, standing by for the answer...");
+
+        oraclize_query("computation",
+            [_query,
+            _method,
+            _url,
+            _kwargs]
+        );
+    }
+    
+    function requestCustomHeaders(string _access_token) payable {
+        
+        string memory header = strConcat(
+			"{'headers': {'content-type': 'json', 'Authorization': 'Bearer ",
+			_access_token,
+			"'}}"
+			);
+        
+        request("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).user.age",
+                "GET",
+                "https://api.fitbit.com/1/user/-/profile.json",
+                header
+                );
     }
 
     function test() public pure returns (string) {
