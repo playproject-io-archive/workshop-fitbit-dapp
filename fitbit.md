@@ -1,8 +1,10 @@
 # fitbit
 
 * [Fitbit Development: Using OAuth 2.0](https://dev.fitbit.com/build/reference/web-api/oauth2/)
-* [create Fibit app account](https://dev.fitbit.com/apps/new)
-
+* [create Fitbit app account](https://dev.fitbit.com/apps/new)
+  * choose client app
+* [Fitbit Apps](https://dev.fitbit.com/apps)
+* [Swagger UI](https://dev.fitbit.com/build/reference/web-api/explore/)
 ### example
 
 * [jeremiahlee/fitbit-web-demo](https://github.com/jeremiahlee/fitbit-web-demo/blob/master/boot.js)
