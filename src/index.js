@@ -9,7 +9,8 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
   console.log('=== 2');
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  web3 = new Web3("ws://localhost:8545");
 }
 
 var contractAddress = "0xed79f95db6009a8eb9fa058745e1c78534b68909";
@@ -60,7 +61,7 @@ function createInputElement() {
     ${input}
     <button class=${css.button} onclick=${start}> Signup </button>
     <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
-    <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
+    <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
   </div>
 `)
 }
@@ -108,23 +109,23 @@ var processResponse = function (res) {
   }
 }
 
-function showProfile(profile) {
-  console.dir(profile);
+function showTotalStep(data) {
+  createResultElement(data.lifetime.total.steps);
 }
 
-function getProfile(event) {
+function getTotalStep(event) {
   if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
   fetch(
-    'https://api.fitbit.com/1/user/-/profile.json',
+    'https://api.fitbit.com/1/user/-/activities.json',
     {
       headers: new Headers({
-        'Authorization': 'Bearer ' + localStorage.fitbitAccessToken
+        'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
       }),
       mode: 'cors',
       method: 'GET'
     }
   ).then(processResponse)
-    .then(showProfile)
+    .then(showTotalStep)
     .catch(function (error) {
       console.error(error);
     });
