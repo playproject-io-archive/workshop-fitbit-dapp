@@ -1,0 +1,41 @@
+VALID JSON(RFC 4627)
+Formatted JSON Data {
+  "best": {
+    "total": {
+      "distance": {
+        "date": "2016-08-07",
+        "value": 22.13304
+      },
+      "steps": {
+        "date": "2016-08-07",
+        "value": 31892
+      }
+    },
+    "tracker": {
+      "distance": {
+        "date": "2016-08-07",
+        "value": 22.13304
+      },
+      "steps": {
+        "date": "2016-08-07",
+        "value": 31892
+      }
+    }
+  },
+  "lifetime": {
+    "total": {
+      "activeScore": -1,
+      "caloriesOut": -1,
+      "distance": 11173.67,
+      "floors": 13618,
+      "steps": 15910737
+    },
+    "tracker": {
+      "activeScore": -1,
+      "caloriesOut": -1,
+      "distance": 11173.67,
+      "floors": 13618,
+      "steps": 15910737
+    }
+  }
+}
