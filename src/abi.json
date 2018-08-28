@@ -87,7 +87,7 @@
     "anonymous": false,
     "inputs": [{
         "indexed": false,
-        "name": "order",
+        "name": "tag",
         "type": "string"
       },
       {
@@ -112,9 +112,46 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [{
+        "name": "_query",
+        "type": "string"
+      },
+      {
+        "name": "_method",
+        "type": "string"
+      },
+      {
+        "name": "_url",
+        "type": "string"
+      },
+      {
+        "name": "_kwargs",
+        "type": "string"
+      }
+    ],
+    "name": "request",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_access_token",
+      "type": "string"
+    }],
+    "name": "requestCustomHeaders",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "constructor"
   },
   {

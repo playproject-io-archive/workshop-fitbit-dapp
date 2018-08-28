@@ -46971,7 +46971,7 @@ module.exports=[{
     "anonymous": false,
     "inputs": [{
         "indexed": false,
-        "name": "order",
+        "name": "tag",
         "type": "string"
       },
       {
@@ -46996,9 +46996,46 @@ module.exports=[{
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [{
+        "name": "_query",
+        "type": "string"
+      },
+      {
+        "name": "_method",
+        "type": "string"
+      },
+      {
+        "name": "_url",
+        "type": "string"
+      },
+      {
+        "name": "_kwargs",
+        "type": "string"
+      }
+    ],
+    "name": "request",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_access_token",
+      "type": "string"
+    }],
+    "name": "requestCustomHeaders",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "constructor"
   },
   {
@@ -47095,21 +47132,21 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
-if (typeof web3 !== 'undefined') {
-  console.log('=== 1');
-  web3 = new Web3(web3.currentProvider);
-} else {
-  console.log('=== 2');
-  // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-  web3 = new Web3("ws://localhost:8545");
-}
-
 if(localStorage.web3 === 'dev') {
   console.log('=== dev');
   web3 = new Web3("ws://localhost:8545");
+} else {
+  if (typeof web3 !== 'undefined') {
+    console.log('=== 1');
+    web3 = new Web3(web3.currentProvider);
+  } else {
+    console.log('=== 2');
+    // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    web3 = new Web3("ws://localhost:8545");
+  }
 }
 
-var contractAddress = "0xed79f95db6009a8eb9fa058745e1c78534b68909";
+var contractAddress = "0xf900a403dfb2f56d0fe2d61525ce0ea15b50a8f6";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
