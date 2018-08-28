@@ -47298,8 +47298,9 @@ function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
   log('loading (1/7) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
+    localStorage.wallet = localAddresses[0];
     if (err) return done(err)
-    result.wallet = localAddresses[0]
+    result.wallet = localAddresses[0];
     getGasPrice(result);
   })
 }
@@ -47337,7 +47338,6 @@ function getName() {
     if (err) return console.error(err);
     if (data) createResultElement(data);
     // TODO for easy debug, it will be disable soon...
-    window.result = data;
   })
 }
 
