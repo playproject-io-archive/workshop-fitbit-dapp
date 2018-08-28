@@ -134,7 +134,7 @@ function getProfile(event) {
       method: 'GET'
     }
   ).then(processResponse)
-    .then(showName)
+    .then(showProfile)
     .catch(function (error) {
       console.error(error);
     });
