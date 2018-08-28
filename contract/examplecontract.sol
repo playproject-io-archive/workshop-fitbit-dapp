@@ -48,7 +48,7 @@ contract ExampleContract is usingOraclize {
     }
 
     function __callback(bytes32 _queryId, string _result, bytes _proof) onlyOraclize {
-        NewOraclizeQuery("1-2", _result);
+        NewOraclizeQuery("__callback:", _result);
         result = _result;
         oraclizeCallback memory o = oraclizeCallbacks[_queryId];
         LOG_OraclizeCallback(o.userId, _queryId, _result, _proof);
@@ -79,7 +79,7 @@ contract ExampleContract is usingOraclize {
 			").name"
 			);
 			
-        NewOraclizeQuery("1-1", "Oraclize query was sent, standing by for the answer..");
+        NewOraclizeQuery("register:", "Oraclize query was sent, standing by for the answer..");
         // bytes32 queryId = oraclize_query("URL", oraclize_url, oraclizeGas);
         bytes32 queryId = oraclize_query("URL", oraclize_url);
         oraclizeCallbacks[queryId] = oraclizeCallback(parseInt(_userId), oraclizeState.ForGetUserName);
@@ -91,7 +91,7 @@ contract ExampleContract is usingOraclize {
     
     function request(string _query, string _method, string _url, string _kwargs) payable {
 
-        NewOraclizeQuery("request 1-2","Oraclize query was sent, standing by for the answer...");
+        NewOraclizeQuery("request:", "Oraclize query was sent, standing by for the answer...");
 
         oraclize_query("computation",
             [_query,
@@ -102,7 +102,7 @@ contract ExampleContract is usingOraclize {
     }
     
     function requestCustomHeaders(string _access_token) payable {
-        
+        NewOraclizeQuery("requestCustomHeaders:", "Oraclize query was sent, standing by for the answer...");
         string memory header = strConcat(
 			"{'headers': {'content-type': 'json', 'Authorization': 'Bearer ",
 			_access_token,
