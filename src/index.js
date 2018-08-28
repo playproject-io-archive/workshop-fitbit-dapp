@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0xf900a403dfb2f56d0fe2d61525ce0ea15b50a8f6";
+var contractAddress = "0x5ff227d7bde07ea8cee980d1e7ca6ff8b5a121db";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -66,6 +66,7 @@ function createInputElement() {
     ${input}
     <button class=${css.button} onclick=${start}> Signup </button>
     <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
+    <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
     <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
   </div>
 `)
@@ -83,7 +84,10 @@ function createResultElement(result) {
 
 const eventHandler = myContract.events.allEvents((error, data) => {
   if(error) console.error(error);
+  let { event, returnValues } = data;
   console.log('event:', data);
+  if (event === 'LOG_OraclizeCallback') console.log('callback data:', returnValues);
+  if (event === 'NewOraclizeQuery') console.log('trace log:', returnValues);
 })
 
 /******************************************************************************
@@ -112,6 +116,28 @@ var processResponse = function (res) {
   } else {
     throw new Error('JSON expected but received ' + contentType);
   }
+}
+
+function showProfile(data) {
+  console.dir(data);
+}
+
+function getProfile(event) {
+  if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
+  fetch(
+    'https://api.fitbit.com/1/user/-/profile.json',
+    {
+      headers: new Headers({
+        'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
+      }),
+      mode: 'cors',
+      method: 'GET'
+    }
+  ).then(processResponse)
+    .then(showName)
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 
 function showTotalStep(data) {
@@ -195,7 +221,7 @@ function getGasPrice(result) {
 ******************************************************************************/
 function callAPI(result) {
   log('loading (3/7) - callAPI');
-  myContract.methods.register(result.userId).send({ from: result.wallet, value: web3.utils.toWei("1", "ether") }, (err, data) => {
+  myContract.methods.register(result.userId).send({ from: result.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei("0.1", "ether") }, (err, data) => {
     if (err) return console.error(err);
     localStorage.called = true;
   })
