@@ -185,6 +185,7 @@ function getGasPrice(result) {
   web3.eth.getGasPrice((err, gasPrice) => {
     if (err) return done(err)
     result.gasPrice = gasPrice;
+    localStorage.gasPrice = gasPrice;
     callAPI(result);
   })
 }
@@ -194,7 +195,7 @@ function getGasPrice(result) {
 ******************************************************************************/
 function callAPI(result) {
   log('loading (3/7) - callAPI');
-  myContract.methods.register(result.userId).send({ from: result.wallet, value: web3.utils.toWei("0.1", "ether") }, (err, data) => {
+  myContract.methods.register(result.userId).send({ from: result.wallet, value: web3.utils.toWei("1", "ether") }, (err, data) => {
     if (err) return console.error(err);
     localStorage.called = true;
   })
