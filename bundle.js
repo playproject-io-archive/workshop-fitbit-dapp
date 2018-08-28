@@ -47104,6 +47104,11 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3("ws://localhost:8545");
 }
 
+if(localStorage.web3 === 'dev') {
+  console.log('=== dev');
+  web3 = new Web3("ws://localhost:8545");
+}
+
 var contractAddress = "0xed79f95db6009a8eb9fa058745e1c78534b68909";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
