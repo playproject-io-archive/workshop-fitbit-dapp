@@ -193,12 +193,10 @@ function getGasPrice(result) {
 ******************************************************************************/
 function callAPI(result) {
   log('loading (3/7) - callAPI');
-  // if (!localStorage.called) {
-    myContract.methods.register(result.userId).send({ from: result.wallet, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
-      if (err) return console.error(err);
-      localStorage.called = true;
-    })
-  // }
+  myContract.methods.register(result.userId).send({ from: result.wallet, value: web3.utils.toWei("0.1", "ether") }, (err, data) => {
+    if (err) return console.error(err);
+    localStorage.called = true;
+  })
 
   setTimeout(function () {
     getName();
