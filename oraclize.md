@@ -33,5 +33,6 @@ node bridge -H localhost:8545 -a 9 --dev
 
 ### Mise
 
+* [Best Hex to String Converter Online to Convert Hex to Text (Hexadecimal to Text)](https://codebeautify.org/hex-string-converter)
 * oraclize_setProof
 * ProofShield

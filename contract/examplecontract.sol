@@ -13,34 +13,41 @@ contract ExampleContract is usingOraclize {
     
     uint constant oraclizeGas = 500000000;
 
-    string constant oraclize_UsersBaseUrl =
-		"json(https://jsonplaceholder.typicode.com/users/";
-
-    string public result;
-
     mapping (bytes32 => oraclizeCallback) public oraclizeCallbacks;
-    mapping (uint => string) public names;
 
-    enum oraclizeState { ForGetUserName, ForGetUserOtherData }
+    enum OraclizeState { ForGetUserName, ForGetUserSteps }
 
     event NewOraclizeQuery(string tag, string description);
+    
+    event OraclizeQueryId(string methodName, bytes32 queryId);
 
-    event LOG_OraclizeCallback(
-		uint userId,
+    event LOG_OraclizeCallbackName(
+		string userId,
 		bytes32 queryId,
-		string result,
+		string name,
 		bytes proof
 	);
 	
+	event LOG_OraclizeCallbackStep(
+		string userId,
+		bytes32 queryId,
+		uint step,
+		bytes proof
+	);
+	
+	struct Sponsor {
+	    string name;
+	    uint amount;
+	}
+	
     struct oraclizeCallback {
-        uint userId;
-        oraclizeState oState;
+        string userId;
+        OraclizeState oState;
     }
     
     address public owner;
 
-
-    function ExampleContract() payable {
+    function ExampleContract()  {
         // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setCustomGasPrice(4000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
@@ -49,71 +56,69 @@ contract ExampleContract is usingOraclize {
 
     function __callback(bytes32 _queryId, string _result, bytes _proof) onlyOraclize {
         NewOraclizeQuery("__callback:", _result);
-        result = _result;
         oraclizeCallback memory o = oraclizeCallbacks[_queryId];
-        LOG_OraclizeCallback(o.userId, _queryId, _result, _proof);
-
-        if (o.oState == oraclizeState.ForGetUserName) {
-            callback_ForGetUserName(o.userId, _result, _proof);
+ 
+        if (o.oState == OraclizeState.ForGetUserName) {
+            LOG_OraclizeCallbackName(o.userId, _queryId, _result, _proof);
+            callback_ForGetUserName(o.userId, _queryId, _result, _proof);
 		} else {
-            callback_ForGetUserOtherData(_queryId, _result, _proof);
+		    LOG_OraclizeCallbackStep(o.userId, _queryId, parseInt(_result), _proof);
+            callback_ForGetUserStep(o.userId, _queryId, _result, _proof);
         }
     }
 
-    function callback_ForGetUserName(uint _userId, string _result, bytes _proof) {
-        names[_userId] = _result;
-    }
-
-    function callback_ForGetUserOtherData(bytes32 _queryId, string _result, bytes _proof) internal {
+    function callback_ForGetUserName(string _userId, bytes32 _queryId, string _result, bytes _proof) {
         oraclizeCallback memory o = oraclizeCallbacks[_queryId];
-		uint userId = o.userId;
     }
     
-    function register(string _userId) public payable {
-        // require ETH to cover callback gas costs
-        require(msg.value >= 0.004 ether); // 200,000 gas * 20 Gwei = 0.004 ETH
-
-        string memory oraclize_url = strConcat(
-			oraclize_UsersBaseUrl,
-			_userId,
-			").name"
-			);
-			
-        NewOraclizeQuery("register:", "Oraclize query was sent, standing by for the answer..");
-        // bytes32 queryId = oraclize_query("URL", oraclize_url, oraclizeGas);
-        bytes32 queryId = oraclize_query("URL", oraclize_url);
-        oraclizeCallbacks[queryId] = oraclizeCallback(parseInt(_userId), oraclizeState.ForGetUserName);
+    function callback_ForGetUserStep(string _userId, bytes32 _queryId, string _result, bytes _proof) {
+        oraclizeCallback memory o = oraclizeCallbacks[_queryId];
     }
     
-    function getName(string _userId) view returns (string) {
-        return names[parseInt(_userId)];
-    }
-    
-    function request(string _query, string _method, string _url, string _kwargs) payable {
+    function request(string _query, string _method, string _url, string _kwargs, string _userId, OraclizeState state) payable {
 
-        NewOraclizeQuery("request:", "Oraclize query was sent, standing by for the answer...");
-
-        oraclize_query("computation",
+        bytes32 queryId = oraclize_query("computation",
             [_query,
             _method,
             _url,
             _kwargs]
         );
+        
+        OraclizeQueryId("request:", queryId);
+        
+        oraclizeCallbacks[queryId] = oraclizeCallback(_userId, state);
     }
     
-    function requestCustomHeaders(string _access_token) payable {
-        NewOraclizeQuery("requestCustomHeaders:", "Oraclize query was sent, standing by for the answer...");
+    function requestProfile(string _access_token, string _userId) payable {
         string memory header = strConcat(
 			"{'headers': {'content-type': 'json', 'Authorization': 'Bearer ",
 			_access_token,
 			"'}}"
 			);
+		NewOraclizeQuery("requestProfile:", header);
         
-        request("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).user.age",
+        request("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).user.displayName",
                 "GET",
                 "https://api.fitbit.com/1/user/-/profile.json",
-                header
-                );
+                header,
+                _userId,
+                OraclizeState.ForGetUserName);
+    }
+    
+    function requestActivities(string _access_token, string _userId) payable {
+        string memory header = strConcat(
+			"{'headers': {'content-type': 'json', 'Authorization': 'Bearer ",
+			_access_token,
+			"'}}"
+			);
+		NewOraclizeQuery("requestActivities:", header);
+        
+        request("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).lifetime.total.steps",
+                "GET",
+                "https://api.fitbit.com/1/user/-/activities.json",
+                header,
+                _userId,
+                OraclizeState.ForGetUserSteps);
     }
 
     function test() public pure returns (string) {
