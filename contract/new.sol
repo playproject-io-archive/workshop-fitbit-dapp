@@ -6,7 +6,7 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
 contract CommonMixin {
     address public owner;
     
-    modifier onlyOwner { require(msg.sender == owner); _; }
+    modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
     
     constructor() public {
         owner = msg.sender;
@@ -20,7 +20,7 @@ contract FunderMixin is CommonMixin {
     
     mapping (address => Funder) funders;
 
-    modifier minimizeContribute { require( msg.value > 1 ether); _; }
+    modifier minimizeContribute { require( msg.value > 1 ether, "ether not enough"); _; }
     
     struct Funder {
         address addr;
@@ -57,7 +57,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     using strings for *;
     uint constant oraclizeGas = 500000000;
     uint private minimizeSinupAmount = 0.2 ether;
-    uint private NumPlayers;
+    uint private numPlayers;
     uint private playersOfAmount;
     
     mapping (uint => address) playerIndexs;
@@ -65,7 +65,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     mapping (bytes32 => SignData) public signDatas;
     
     modifier onlyOraclize {require(msg.sender != oraclize_cbAddress()); _; }
-    modifier minimizeSignup { require( msg.value > minimizeSinupAmount); _; }
+    modifier minimizeSignup { require( msg.value > minimizeSinupAmount, "ether not enough"); _; }
     // ===>>> event
     
     event NewOraclizeQuery(string tag, string description);
@@ -87,7 +87,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         uint endStep;
         // 領過了嗎
         bool withdrew;
-     }
+    }
 	
 	struct SignData {
         string userId;
@@ -106,7 +106,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     function getNumPlayers() public returns (uint) {
-        return NumPlayers;
+        return numPlayers;
     }
     
     // Step1
@@ -150,9 +150,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         if(isSigned(o.addr)) {
             players[o.addr].endStep = steps;
         } else {
-            players[o.addr] = Player(o.addr, o.amount, o.userId, now, steps, 0, false);
-            playerIndexs[NumPlayers] = o.addr;
-            NumPlayers++;
+            addPlayer(o.addr, o.amount, o.userId, steps);
         }
     }
 
@@ -161,18 +159,31 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         return players[addr].amount > 0;
     }
     
+    function addPlayer(address _addr, uint _amount, string _userId, uint _beginStep) private {
+        players[_addr] = Player(_addr, _amount, _userId, now, _beginStep, 0, false);
+        playerIndexs[numPlayers] = _addr;
+        numPlayers++;
+    }
+    
     // 註冊
     function signup(string _access_token, string _userId)  public minimizeSignup payable {
         require(!isSigned(msg.sender));
-        requestActivities(_access_token, _userId);
+        // requestActivities(_access_token, _userId);
+        
+        // TODO: fake:
+        addPlayer(msg.sender, msg.value, _userId, 100);
     }
     
     // 玩家申請領獎
-    function playerWithdrawal(string _access_token, string _userId)  public payable {
+    function playerWithdrawal(string _access_token, string _userId, uint _endStep) public payable {
         require(isSigned(msg.sender));
         // TODO: check deadline
-        requestActivities(_access_token, _userId);
+        // requestActivities(_access_token, _userId);
+        
+        // TODO: fake:
+        players[msg.sender].endStep = _endStep;
     }
+    
 }
 
 contract FitnessRace is PlayerMixin, FunderMixin {
@@ -190,6 +201,10 @@ contract FitnessRace is PlayerMixin, FunderMixin {
         startAt = now;
         endAt = now + (60 * 60 * 24 * 7);
     }
+    
+    function getEnded() public returns (bool) {
+        return ended;
+    }
 
     function calculatorWinners() private {
         for(uint i = 0; i < getNumPlayers(); i++) {
@@ -200,7 +215,7 @@ contract FitnessRace is PlayerMixin, FunderMixin {
     }
     
     function playersWithdrawal() private {
-        uint totalAmount = getFundersOfAmount() + getPlayersOfAmount() - supportMaintainer;
+        uint totalAmount = getFundersOfAmount() + getPlayersOfAmount();
         uint averageAmount = totalAmount / winners.length;
         for(uint i = 0; i < winners.length; i++) {
             winners[i].transfer(averageAmount);
@@ -208,12 +223,12 @@ contract FitnessRace is PlayerMixin, FunderMixin {
     }
     
     // 公布活動結果
-    function compete() public onlyOwner returns (bool reached) {
+    function done() public onlyOwner returns (bool reached) {
         require(!ended);
         calculatorWinners();
         playersWithdrawal();
         ended = true;
-        owner.transfer(supportMaintainer);
+        // owner.transfer(supportMaintainer);
         return true;
     }
     
@@ -236,4 +251,35 @@ contract FitnessRace is PlayerMixin, FunderMixin {
     function getBalance() public onlyOwner view returns (uint amount) {
         return this.balance;
     }
+}
+
+contract TestFitnessRace is FitnessRace {
+    
+    function step1() payable {
+        fund("IBM");
+    }
+    
+    function step2() payable {
+        fund("ASUS");
+    }
+    
+    function step3() payable {
+        signup("token1", "Nina");
+        playerWithdrawal("token1", "Nina", 2000000);
+    }
+    
+    function step4() payable {
+        signup("token2", "Alex");
+        playerWithdrawal("token2", "Alex", 3000000);
+    }
+    
+    function step5() payable {
+        signup("token3", "Alin");
+        playerWithdrawal("token3", "Alin", 9000);
+    }
+    
+    function step6() payable {
+        done();   
+    }
+    
 }
