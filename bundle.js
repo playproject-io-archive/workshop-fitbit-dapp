@@ -46883,6 +46883,54 @@ function extend() {
 
 },{}],298:[function(require,module,exports){
 module.exports=[{
+    "constant": true,
+    "inputs": [],
+    "name": "getFundersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "getEnded",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [{
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumFunders",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [{
         "name": "myid",
@@ -46922,74 +46970,25 @@ module.exports=[{
   },
   {
     "constant": false,
-    "inputs": [{
-        "name": "_userId",
-        "type": "uint256"
-      },
-      {
-        "name": "_result",
-        "type": "string"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "callback_ForGetUserName",
+    "inputs": [],
+    "name": "kill",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "userId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "result",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "LOG_OraclizeCallback",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
-      }
-    ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
-  },
-  {
     "constant": false,
     "inputs": [{
-      "name": "_userId",
-      "type": "string"
-    }],
-    "name": "register",
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "signup",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -47012,6 +47011,10 @@ module.exports=[{
       {
         "name": "_kwargs",
         "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
       }
     ],
     "name": "request",
@@ -47021,71 +47024,84 @@ module.exports=[{
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [{
+      "name": "",
+      "type": "bytes32"
+    }],
+    "name": "signDatas",
+    "outputs": [{
+        "name": "userId",
+        "type": "string"
+      },
+      {
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumPlayers",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [{
-      "name": "_access_token",
-      "type": "string"
-    }],
-    "name": "requestCustomHeaders",
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      },
+      {
+        "name": "_endStep",
+        "type": "uint256"
+      }
+    ],
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
     "type": "function"
   },
   {
+    "constant": true,
     "inputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "constructor"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "_userId",
-      "type": "string"
-    }],
-    "name": "getName",
+    "name": "getTotalAmount",
     "outputs": [{
-      "name": "",
-      "type": "string"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
       "name": "",
       "type": "uint256"
     }],
-    "name": "names",
-    "outputs": [{
-      "name": "",
-      "type": "string"
-    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": true,
+    "constant": false,
     "inputs": [{
-      "name": "",
-      "type": "bytes32"
+      "name": "_name",
+      "type": "string"
     }],
-    "name": "oraclizeCallbacks",
-    "outputs": [{
-        "name": "userId",
-        "type": "uint256"
-      },
-      {
-        "name": "oState",
-        "type": "uint8"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -47101,12 +47117,39 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "result",
+    "constant": false,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isSigned",
     "outputs": [{
       "name": "",
-      "type": "string"
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "done",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getPlayersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -47115,14 +47158,116 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "test",
+    "name": "fundersOfAmount",
     "outputs": [{
       "name": "",
-      "type": "string"
+      "type": "uint256"
     }],
     "payable": false,
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "requestActivities",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_userId",
+        "type": "string"
+      },
+      {
+        "name": "_queryId",
+        "type": "bytes32"
+      },
+      {
+        "name": "steps",
+        "type": "uint256"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "callback_ForGetUserStep",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "ownerWithdrawal",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "NewOraclizeQuery",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "userId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "step",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
   }
 ]
 },{}],299:[function(require,module,exports){
@@ -47146,7 +47291,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x5ff227d7bde07ea8cee980d1e7ca6ff8b5a121db";
+var contractAddress = "0x4cc0576fe2f88b7c72dd39e8b0372e7e8609da3a";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -47164,7 +47309,7 @@ const css = csjs`
   }
   .input {
     margin: 10px;
-    width: 500px;
+    width: 50px;
     font-size: 20px;
   }
   .button {
@@ -47172,32 +47317,49 @@ const css = csjs`
     width: 150px;
   }
 `
-const hint = "Input user ID"
-const input = bel`
-  <input class=${css.input} type="text" placeholder="${hint}"/>
-`
-if (localStorage.userId) {
-  input.value = localStorage.userId
-  // if (localStorage.ignorePrompt) start()
-} else {
-  // createInputElement();
-}
 
-createInputElement();
+
 
 /******************************************************************************
   Create Element
 ******************************************************************************/
-function createInputElement() {
+
+const batAmountElement = bel`
+  <input class=${css.input} type="text"/>
+`
+const batAreaElement = bel`
+  <div>
+    how much you want to bet? ${batAmountElement} ETH 
+    <button class=${css.button} onclick=${bet}> Bet </button>
+  </div>
+`
+
+const fundAmountElement = bel`
+  <input class=${css.input} type="text"/>
+`
+const fundNameElement = bel`
+  <input class=${css.input} type="text"/>
+`
+const fundAreaElement = bel`
+  <div>
+    how much you want to fund? ${fundAmountElement} ETH and what your name ${fundNameElement}
+    <button class=${css.button} onclick=${fund}> Fund </button>
+  </div>
+`
+
+function render(result) {
   document.body.appendChild(bel`
-  <div class=${css.box}>
-    ${input}
-    <button class=${css.button} onclick=${start}> Signup </button>
+  <div class=${css.box} id="app">
+    There is ${result.numPlayers} player. <br>
+    There is ${result.numFunders} funder. <br>
+    Total money is ${result.totalAmount} <br>
+    ${batAreaElement}
+    ${fundAreaElement}
     <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
     <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
     <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
   </div>
-`)
+ `) 
 }
 
 function createResultElement(result) {
@@ -47210,13 +47372,17 @@ function createResultElement(result) {
 `)
 }
 
-const eventHandler = myContract.events.allEvents((error, data) => {
-  if(error) console.error(error);
-  let { event, returnValues } = data;
-  console.log('event:', data);
-  if (event === 'LOG_OraclizeCallback') console.log('callback data:', returnValues);
-  if (event === 'NewOraclizeQuery') console.log('trace log:', returnValues);
-})
+if(typeof web3 == 'undefined') {
+  const eventHandler = myContract.events.allEvents((error, data) => {
+    if (error) console.error(error);
+    let { event, returnValues } = data;
+    console.log('event:', data);
+    let userId = returnValues.userId;
+    if (event === 'LOG_OraclizeCallbackName') console.log('callback data:', returnValues);
+    if (event === 'LOG_OraclizeCallbackStep') console.log('callback data:', returnValues);
+    if (event === 'NewOraclizeQuery') console.log('oraclize log:', returnValues);
+  })
+}
 
 /******************************************************************************
   Fitbit
@@ -47230,6 +47396,7 @@ if (window.location.hash) {
   );
 
   console.log('fragmentQueryParameters: ', fragmentQueryParameters);
+  localStorage.userId = fragmentQueryParameters.user_id;
   localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
 }
 
@@ -47299,24 +47466,28 @@ function getFitbitToken(event) {
 /******************************************************************************
   Event
 ******************************************************************************/
+function bet(event) {
+  let betAmount = batAmountElement.value;
+  myContract.methods.signup(localStorage.fitbitAccessToken, result.userId).send({ from: result.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> bet ok.');
+  })
+}
+
+function fund(event) {
+  let fundAmount = fundAmountElement.value;
+  let name = fundNameElement.value;
+  myContract.methods.fund(name).send({ from: result.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> fund ok.');
+  })
+}
+
 function clearResult(event) {
   localStorage.clear();
   location.reload();
 }
 
-/******************************************************************************
-  START
-******************************************************************************/
-function start(event) {
-  // localStorage.ignorePrompt = true;
-  localStorage.userId = input.value;
-
-  document.body.innerHTML = '';
-  getMyAddress({
-    username: null,
-    userId: input.value
-  }); // => Step 1
-}
 /******************************************************************************
   Step 1
 ******************************************************************************/
@@ -47330,43 +47501,7 @@ function getMyAddress(result) {
     getGasPrice(result);
   })
 }
-/******************************************************************************
-  Step 2
-******************************************************************************/
 
-function getGasPrice(result) {
-  log('loading (2/7) - getGasPrice')
-  web3.eth.getGasPrice((err, gasPrice) => {
-    if (err) return done(err)
-    result.gasPrice = gasPrice;
-    localStorage.gasPrice = gasPrice;
-    callAPI(result);
-  })
-}
-
-/******************************************************************************
-  Step 3
-******************************************************************************/
-function callAPI(result) {
-  log('loading (3/7) - callAPI');
-  myContract.methods.register(result.userId).send({ from: result.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei("0.1", "ether") }, (err, data) => {
-    if (err) return console.error(err);
-    localStorage.called = true;
-  })
-
-  setTimeout(function () {
-    getName();
-  }, 10 * 1000);
-}
-
-function getName() {
-  log('loading (4/7) - getName')
-  myContract.methods.names(localStorage.userId).call((err, data) => {
-    if (err) return console.error(err);
-    if (data) createResultElement(data);
-    // TODO for easy debug, it will be disable soon...
-  })
-}
 
 /******************************************************************************
   DONE
@@ -47380,4 +47515,72 @@ function done(err, result) {
     // document.body.appendChild(el)
   } else log(new Error('fail'))
 }
+
+/******************************************************************************
+  START
+******************************************************************************/
+function start() {
+  getMyAddress({
+    fitbitAccessToken: localStorage.fitbitAccessToken
+  });
+}
+
+function getMyAddress(result) {
+  web3.eth.defaultAccount = web3.eth.accounts[0];
+  log('loading (1/7) - getMyAddress')
+  web3.eth.getAccounts((err, localAddresses) => {
+    localStorage.wallet = localAddresses[0];
+    if (err) return done(err)
+    result.wallet = localAddresses[0];
+    getNumPlayers(result);
+  })
+}
+
+function getNumPlayers(result) {
+  log('loading (2/7) - getNumPlayers')
+  myContract.methods.getNumPlayers().call((err, data) => {
+    if (err) return console.error(err);
+    result.numPlayers = parseInt(data, 10);
+    getPlayersOfAmount(result);
+  })
+}
+
+function getPlayersOfAmount(result) {
+  log('loading (3/7) - getPlayersOfAmount')
+  myContract.methods.getPlayersOfAmount().call((err, data) => {
+    if (err) return console.error(err);
+    result.playersOfAmount = data;
+    getNumFunders(result);
+  })
+}
+
+function getNumFunders(result) {
+  log('loading (4/7) - getNumFunders')
+  myContract.methods.getNumFunders().call((err, data) => {
+    if (err) return console.error(err);
+    result.numFunders = parseInt(data, 10);
+    getTotalAmount(result);
+  })
+}
+
+function getTotalAmount(result) {
+  log('loading (5/7) - getTotalAmount')
+  myContract.methods.getNumFunders().call((err, data) => {
+    if (err) return console.error(err);
+    result.totalAmount = parseInt(data, 10);
+    getFundersOfAmount(result);
+  })
+}
+
+function getFundersOfAmount(result) {
+  log('loading (6/7) - getFundersOfAmount')
+  myContract.methods.getFundersOfAmount().call((err, data) => {
+    if (err) return console.error(err);
+    result.fundersOfAmount = data;
+    console.log(result);
+    render(result);
+  })
+}
+
+start();
 },{"./abi.json":298,"bel":20,"csjs-inject":67,"web3":281}]},{},[299]);

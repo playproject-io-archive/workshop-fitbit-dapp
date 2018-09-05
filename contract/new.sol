@@ -30,11 +30,11 @@ contract FunderMixin is CommonMixin {
         // string url;
     }
     
-    function getNumFunders() public returns (uint) {
+    function getNumFunders() public view returns (uint) {
         return numFunders;
     }
     
-    function getFundersOfAmount() public returns (uint) {
+    function getFundersOfAmount() public view returns (uint) {
         return fundersOfAmount;
     }
     
@@ -64,7 +64,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     mapping (address => Player) players;
     mapping (bytes32 => SignData) public signDatas;
     
-    modifier onlyOraclize {require(msg.sender != oraclize_cbAddress()); _; }
+    modifier onlyOraclize { require(msg.sender != oraclize_cbAddress(), "only oraclize"); _; }
     modifier minimizeSignup { require( msg.value > minimizeSinupAmount, "ether not enough"); _; }
     // ===>>> event
     
@@ -101,11 +101,11 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
     
-    function getPlayersOfAmount() public onlyOwner returns (uint) {
+    function getPlayersOfAmount() public view onlyOwner returns (uint) {
         return playersOfAmount;
     }
     
-    function getNumPlayers() public returns (uint) {
+    function getNumPlayers() public view returns (uint) {
         return numPlayers;
     }
     
@@ -162,12 +162,13 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     function addPlayer(address _addr, uint _amount, string _userId, uint _beginStep) private {
         players[_addr] = Player(_addr, _amount, _userId, now, _beginStep, 0, false);
         playerIndexs[numPlayers] = _addr;
+        playersOfAmount += _amount;
         numPlayers++;
     }
     
     // 註冊
     function signup(string _access_token, string _userId)  public minimizeSignup payable {
-        require(!isSigned(msg.sender));
+        require(!isSigned(msg.sender), "you already signed");
         // requestActivities(_access_token, _userId);
         
         // TODO: fake:
@@ -176,7 +177,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     
     // 玩家申請領獎
     function playerWithdrawal(string _access_token, string _userId, uint _endStep) public payable {
-        require(isSigned(msg.sender));
+        require(isSigned(msg.sender), "you didn't sign yet.");
         // TODO: check deadline
         // requestActivities(_access_token, _userId);
         
@@ -214,8 +215,12 @@ contract FitnessRace is PlayerMixin, FunderMixin {
         }
     }
     
+    function getTotalAmount() public view returns (uint){
+        return getFundersOfAmount() + getPlayersOfAmount();
+    }
+    
     function playersWithdrawal() private {
-        uint totalAmount = getFundersOfAmount() + getPlayersOfAmount();
+        uint totalAmount = getTotalAmount();
         uint averageAmount = totalAmount / winners.length;
         for(uint i = 0; i < winners.length; i++) {
             winners[i].transfer(averageAmount);
