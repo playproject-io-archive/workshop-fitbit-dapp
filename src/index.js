@@ -69,7 +69,7 @@ const fundNameElement = bel`
 `
 const fundAreaElement = bel`
   <div>
-    how much you want to fund? ${fundAmountElement} ETH and what your name ${fundNameElement}
+    how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
 `
@@ -79,7 +79,7 @@ function render(result) {
   <div class=${css.box} id="app">
     There is ${result.numPlayers} player. <br>
     There is ${result.numFunders} funder. <br>
-    Funders total amount is ${result.fundersOfAmount} <br>
+    Funders total amount is ${result.fundersOfAmount} wei. <br>
     ${batAreaElement}
     ${fundAreaElement}
     <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
