@@ -79,7 +79,7 @@ function render(result) {
   <div class=${css.box} id="app">
     There is ${result.numPlayers} player. <br>
     There is ${result.numFunders} funder. <br>
-    Total money is ${result.totalAmount} <br>
+    Funders total amount is ${result.fundersOfAmount} <br>
     ${batAreaElement}
     ${fundAreaElement}
     <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
