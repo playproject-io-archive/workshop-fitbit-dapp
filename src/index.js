@@ -204,7 +204,7 @@ function bet(event) {
 function fund(event) {
   let fundAmount = fundAmountElement.value;
   let name = fundNameElement.value;
-  myContract.methods.fund(name).send({ from: result.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
+  myContract.methods.fund(name).send({ from: localStorage.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> fund ok.');
   })
