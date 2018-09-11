@@ -135,8 +135,8 @@ function render(result) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
       There is ${result.numPlayers} player. <br>
       There is ${result.numFunders} funder. <br>
-      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
       Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br>
+      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
     </div>
     ${batAreaElement}
     ${fundAreaElement}
@@ -255,7 +255,7 @@ function getFitbitToken(event) {
 ******************************************************************************/
 function bet(event) {
   let betAmount = batAmountElement.value;
-  myContract.methods.signup(localStorage.fitbitAccessToken, result.userId).send({ from: result.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
+  myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
   })
