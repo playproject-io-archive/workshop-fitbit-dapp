@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x4cc0576fe2f88b7c72dd39e8b0372e7e8609da3a";
+var contractAddress = "0xada71c28e4fb823c518a722eacb86218ab5b1fdd";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -117,6 +117,7 @@ const fundAreaElement = bel`
 `
 
 function errorRender(errorMessage) {
+  console.error(errorMessage);
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
     ${errorMessage}
