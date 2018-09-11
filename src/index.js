@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0xada71c28e4fb823c518a722eacb86218ab5b1fdd";
+var contractAddress = "0x2903df82b498827edd99e19b90107e2d562e6239";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -136,6 +136,7 @@ function render(result) {
       There is ${result.numPlayers} player. <br>
       There is ${result.numFunders} funder. <br>
       Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
+      Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br>
     </div>
     ${batAreaElement}
     ${fundAreaElement}
@@ -311,7 +312,6 @@ function getNumPlayers(result) {
   log('loading (2/7) - getNumPlayers')
   myContract.methods.getNumPlayers().call((err, data) => {
     if (err) return errorRender('Please switch to Rinkeby test chain!');
-    // if (err) return console.error(err);
     result.numPlayers = parseInt(data, 10);
     getPlayersOfAmount(result);
   })

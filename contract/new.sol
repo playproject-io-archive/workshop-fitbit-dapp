@@ -67,7 +67,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     mapping (address => Player) players;
     mapping (bytes32 => SignData) public signDatas;
     
-    modifier onlyOraclize { require(msg.sender != oraclize_cbAddress(), "only oraclize"); _; }
+    modifier onlyOraclize { require(msg.sender == oraclize_cbAddress(), "only oraclize"); _; }
     modifier minimizeSignup { require( msg.value > minimizeSinupAmount, "ether not enough"); _; }
     // ===>>> event
     
@@ -106,7 +106,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
     
-    function getPlayersOfAmount() public view onlyOwner returns (uint) {
+    function getPlayersOfAmount() public view returns (uint) {
         return playersOfAmount;
     }
     
@@ -143,7 +143,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // Step3
-    function __callback(bytes32 _queryId, string _result, bytes _proof) {
+    function __callback(bytes32 _queryId, string _result, bytes _proof) onlyOraclize {
         emit NewOraclizeQuery("__callback:", _result);
         // emit LOG_Address("msg.sender:", msg.sender);
         // emit LOG_Address("oraclize_cbAddress():", oraclize_cbAddress());
