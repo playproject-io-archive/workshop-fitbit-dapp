@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x2903df82b498827edd99e19b90107e2d562e6239";
+var contractAddress = "0xf78f69bee9321def658db3c1f88bb6aad5a24931";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;

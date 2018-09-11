@@ -20,7 +20,7 @@ contract FunderMixin is CommonMixin {
     
     mapping (address => Funder) funders;
 
-    modifier minimizeContribute { require( msg.value > 0.1 ether, "ether not enough"); _; }
+    modifier minimizeContribute { require( msg.value >= 0.1 ether, "ether not enough"); _; }
     
     struct Funder {
         address addr;
@@ -68,7 +68,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     mapping (bytes32 => SignData) public signDatas;
     
     modifier onlyOraclize { require(msg.sender == oraclize_cbAddress(), "only oraclize"); _; }
-    modifier minimizeSignup { require( msg.value > minimizeSinupAmount, "ether not enough"); _; }
+    modifier minimizeSignup { require( msg.value >= minimizeSinupAmount, "ether not enough"); _; }
     // ===>>> event
     
     event NewOraclizeQuery(string tag, string description);
