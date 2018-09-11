@@ -70,7 +70,9 @@ const css = csjs`
   }
   .button {
     font-size: 20px;
-    width: 150px;
+    width: 120px;
+    background-color: #4CAF50;
+    color: white;
   }
   .highlight {
     color: red;
@@ -87,15 +89,19 @@ const css = csjs`
   Create Element
 ******************************************************************************/
 
+// player
+
 const batAmountElement = bel`
   <input class=${css.input} type="text"/>
 `
 const batAreaElement = bel`
   <div class="${css.box3}">
-    how much you want to bet? ${batAmountElement} ETH 
+    Hi player, how much you want to bet? ${batAmountElement} ETH. 
     <button class=${css.button} onclick=${bet}> Bet </button>
   </div>
 `
+
+// funder
 
 const fundAmountElement = bel`
   <input class=${css.input} type="text"/>
@@ -105,10 +111,18 @@ const fundNameElement = bel`
 `
 const fundAreaElement = bel`
   <div class="${css.box4}">
-    how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
+    Hi funder, how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
 `
+
+function errorRender(errorMessage) {
+  document.body.appendChild(bel`
+  <div class=${css.box} id="app">
+    ${errorMessage}
+  </div>
+ `)
+}
 
 function render(result) {
   document.body.appendChild(bel`
@@ -260,21 +274,6 @@ function clearResult(event) {
 }
 
 /******************************************************************************
-  Step 1
-******************************************************************************/
-function getMyAddress(result) {
-  web3.eth.defaultAccount = web3.eth.accounts[0];
-  log('loading (1/7) - getMyAddress')
-  web3.eth.getAccounts((err, localAddresses) => {
-    localStorage.wallet = localAddresses[0];
-    if (err) return done(err)
-    result.wallet = localAddresses[0];
-    getGasPrice(result);
-  })
-}
-
-
-/******************************************************************************
   DONE
 ******************************************************************************/
 function done(err, result) {
@@ -310,7 +309,8 @@ function getMyAddress(result) {
 function getNumPlayers(result) {
   log('loading (2/7) - getNumPlayers')
   myContract.methods.getNumPlayers().call((err, data) => {
-    if (err) return console.error(err);
+    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    // if (err) return console.error(err);
     result.numPlayers = parseInt(data, 10);
     getPlayersOfAmount(result);
   })
