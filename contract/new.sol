@@ -16,11 +16,11 @@ contract CommonMixin {
 contract FunderMixin is CommonMixin {
     
     uint private numFunders;
-    uint public fundersOfAmount;
+    uint private fundersOfAmount;
     
     mapping (address => Funder) funders;
 
-    modifier minimizeContribute { require( msg.value > 1 ether, "ether not enough"); _; }
+    modifier minimizeContribute { require( msg.value > 0.1 ether, "ether not enough"); _; }
     
     struct Funder {
         address addr;
@@ -30,10 +30,12 @@ contract FunderMixin is CommonMixin {
         // string url;
     }
     
+    // 贊助人數
     function getNumFunders() public view returns (uint) {
         return numFunders;
     }
     
+    // 贊助總金額
     function getFundersOfAmount() public view returns (uint) {
         return fundersOfAmount;
     }
@@ -55,8 +57,9 @@ contract FunderMixin is CommonMixin {
 contract PlayerMixin is usingOraclize, CommonMixin {
     
     using strings for *;
-    uint constant oraclizeGas = 500000000;
-    uint private minimizeSinupAmount = 0.2 ether;
+    uint private constant GAS_LIMIT = 400000;
+    // uint private constant GAS_LIMIT = 2000000;
+    uint private minimizeSinupAmount = 0.1 ether;
     uint private numPlayers;
     uint private playersOfAmount;
     
@@ -69,6 +72,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     // ===>>> event
     
     event NewOraclizeQuery(string tag, string description);
+    event LOG_Address(string tag, address addr);
 
 	event LOG_OraclizeCallbackStep(
 		string userId,
@@ -98,6 +102,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     constructor() public {
         // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setCustomGasPrice(4000000000);
+        // oraclize_setCustomGasPrice(20000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
     
@@ -116,7 +121,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
 			_access_token,
 			"'}}"
 			);
-		emit NewOraclizeQuery("requestActivities:", header);
+		emit NewOraclizeQuery("requestActivities", _userId);
         
         request("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).lifetime.total.steps",
                 "GET",
@@ -132,13 +137,16 @@ contract PlayerMixin is usingOraclize, CommonMixin {
             _method,
             _url,
             _kwargs]
-        );
+        , GAS_LIMIT);
         signDatas[queryId] = SignData(_userId, msg.sender, msg.value);
+        emit NewOraclizeQuery("request", _userId);
     }
     
     // Step3
-    function __callback(bytes32 _queryId, string _result, bytes _proof) onlyOraclize {
+    function __callback(bytes32 _queryId, string _result, bytes _proof) {
         emit NewOraclizeQuery("__callback:", _result);
+        // emit LOG_Address("msg.sender:", msg.sender);
+        // emit LOG_Address("oraclize_cbAddress():", oraclize_cbAddress());
         SignData memory o = signDatas[_queryId];
         emit LOG_OraclizeCallbackStep(o.userId, _queryId, parseInt(_result), _proof);
         callback_ForGetUserStep(o.userId, _queryId, parseInt(_result), _proof);
@@ -169,25 +177,25 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     // 註冊
     function signup(string _access_token, string _userId)  public minimizeSignup payable {
         require(!isSigned(msg.sender), "you already signed");
-        // requestActivities(_access_token, _userId);
+        requestActivities(_access_token, _userId);
         
         // TODO: fake:
-        addPlayer(msg.sender, msg.value, _userId, 100);
+        // addPlayer(msg.sender, msg.value, _userId, 100);
     }
     
     // 玩家申請領獎
     function playerWithdrawal(string _access_token, string _userId, uint _endStep) public payable {
         require(isSigned(msg.sender), "you didn't sign yet.");
         // TODO: check deadline
-        // requestActivities(_access_token, _userId);
+        requestActivities(_access_token, _userId);
         
         // TODO: fake:
-        players[msg.sender].endStep = _endStep;
+        // players[msg.sender].endStep = _endStep;
     }
     
 }
 
-contract FitnessRace is PlayerMixin, FunderMixin {
+contract FitnessContest is PlayerMixin, FunderMixin {
     
     uint private supportMaintainer = 0.1 ether;
 
@@ -258,7 +266,7 @@ contract FitnessRace is PlayerMixin, FunderMixin {
     }
 }
 
-contract TestFitnessRace is FitnessRace {
+contract TestFitnessRace is FitnessContest {
     
     function step1() payable {
         fund("IBM");
