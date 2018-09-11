@@ -46883,69 +46883,30 @@ function extend() {
 
 },{}],298:[function(require,module,exports){
 module.exports=[{
-    "constant": true,
-    "inputs": [],
-    "name": "getFundersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "getEnded",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getBalance",
-    "outputs": [{
-      "name": "amount",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumFunders",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
+    "anonymous": false,
     "inputs": [{
-        "name": "myid",
+        "indexed": false,
+        "name": "userId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
         "type": "bytes32"
       },
       {
-        "name": "result",
-        "type": "string"
+        "indexed": false,
+        "name": "step",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
       }
     ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
   },
   {
     "constant": false,
@@ -46970,9 +46931,114 @@ module.exports=[{
   },
   {
     "constant": false,
+    "inputs": [{
+        "name": "myid",
+        "type": "bytes32"
+      },
+      {
+        "name": "result",
+        "type": "string"
+      }
+    ],
+    "name": "__callback",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_userId",
+        "type": "string"
+      },
+      {
+        "name": "_queryId",
+        "type": "bytes32"
+      },
+      {
+        "name": "steps",
+        "type": "uint256"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "callback_ForGetUserStep",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "done",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "getEnded",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isSigned",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [],
     "name": "kill",
     "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "ownerWithdrawal",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -46986,9 +47052,13 @@ module.exports=[{
       {
         "name": "_userId",
         "type": "string"
+      },
+      {
+        "name": "_endStep",
+        "type": "uint256"
       }
     ],
-    "name": "signup",
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -47024,6 +47094,162 @@ module.exports=[{
     "type": "function"
   },
   {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "LOG_Address",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "requestActivities",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "NewOraclizeQuery",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "signup",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [{
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getFundersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumFunders",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumPlayers",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getPlayersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [{
       "name": "",
@@ -47046,228 +47272,6 @@ module.exports=[{
     "payable": false,
     "stateMutability": "view",
     "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumPlayers",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_access_token",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_endStep",
-        "type": "uint256"
-      }
-    ],
-    "name": "playerWithdrawal",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getTotalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "_name",
-      "type": "string"
-    }],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isSigned",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getPlayersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "fundersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_access_token",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      }
-    ],
-    "name": "requestActivities",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_queryId",
-        "type": "bytes32"
-      },
-      {
-        "name": "steps",
-        "type": "uint256"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "callback_ForGetUserStep",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "ownerWithdrawal",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
-      }
-    ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "step",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "LOG_OraclizeCallbackStep",
-    "type": "event"
   }
 ]
 },{}],299:[function(require,module,exports){
@@ -47291,7 +47295,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x4cc0576fe2f88b7c72dd39e8b0372e7e8609da3a";
+var contractAddress = "0xada71c28e4fb823c518a722eacb86218ab5b1fdd";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -47390,6 +47394,7 @@ const fundAreaElement = bel`
 `
 
 function errorRender(errorMessage) {
+  console.error(errorMessage);
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
     ${errorMessage}
