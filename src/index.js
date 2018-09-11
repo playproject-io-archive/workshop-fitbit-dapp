@@ -28,11 +28,40 @@ const log = console.log;
 ******************************************************************************/
 const css = csjs`
   .box {
-    margin-top: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 20px;
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    grid-auto-rows: 100px; 
+  }
+  .box1 { 
+    grid-column-start: 1; 
+    grid-column-end: 4; 
+    grid-row-start: 1; 
+    grid-row-end: 3;
+    text-align: center;
+  } 
+  .box2 { 
+      grid-column-start: 1; 
+      grid-row-start: 3; 
+      grid-row-end: 5; 
+  }
+  .box3 { 
+      grid-column-start: 2; 
+      grid-column-end: 4; 
+      grid-row-start: 3; 
+      grid-row-end: 4; 
+  }
+  .box4 { 
+      grid-column-start: 2; 
+      grid-column-end: 4; 
+      grid-row-start: 4; 
+      grid-row-end: 5; 
+  }
+  .box5 { 
+    grid-column-start: 1; 
+    grid-column-end: 4; 
+    grid-row-start: 5; 
+    grid-row-end: 6;
+    text-align: center;
   }
   .input {
     margin: 10px;
@@ -46,9 +75,13 @@ const css = csjs`
   .highlight {
     color: red;
   }
+  img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 150px;
+  }
 `
-
-
 
 /******************************************************************************
   Create Element
@@ -58,7 +91,7 @@ const batAmountElement = bel`
   <input class=${css.input} type="text"/>
 `
 const batAreaElement = bel`
-  <div>
+  <div class="${css.box3}">
     how much you want to bet? ${batAmountElement} ETH 
     <button class=${css.button} onclick=${bet}> Bet </button>
   </div>
@@ -71,7 +104,7 @@ const fundNameElement = bel`
   <input class=${css.input} type="text"/>
 `
 const fundAreaElement = bel`
-  <div>
+  <div class="${css.box4}">
     how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
@@ -80,15 +113,22 @@ const fundAreaElement = bel`
 function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
-    <div>Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.</div>
-    There is ${result.numPlayers} player. <br>
-    There is ${result.numFunders} funder. <br>
-    Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
+    <div class=${css.box1}>
+      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
+    </div>
+    <div class="${css.box2}">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
+      There is ${result.numPlayers} player. <br>
+      There is ${result.numFunders} funder. <br>
+      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
+    </div>
     ${batAreaElement}
     ${fundAreaElement}
-    <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
-    <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
-    <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
+    <div class="${css.box5}">
+      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
+      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
+      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
+    </div>
   </div>
  `) 
 }
