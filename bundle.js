@@ -47316,6 +47316,9 @@ const css = csjs`
     font-size: 20px;
     width: 150px;
   }
+  .highlight {
+    color: red;
+  }
 `
 
 
@@ -47350,9 +47353,10 @@ const fundAreaElement = bel`
 function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
+    <div>Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.</div>
     There is ${result.numPlayers} player. <br>
     There is ${result.numFunders} funder. <br>
-    Funders total amount is ${result.fundersOfAmount} wei. <br>
+    Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
     ${batAreaElement}
     ${fundAreaElement}
     <button class=${css.button} onclick=${getFitbitToken}"> Get Fitbit Token </button>
