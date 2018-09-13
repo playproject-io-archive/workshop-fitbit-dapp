@@ -7,9 +7,12 @@
 * [Oraclize Documentation](http://docs.oraclize.it/#general-concepts-query)
 * [UrlRequests.sol](https://github.com/oraclize/ethereum-examples/blob/master/solidity/computation-datasource/url-requests/UrlRequests.sol#L43-L51)
 * [Oraclize - the provably honest oracle service](http://app.oraclize.it/service/monitor)
+* [oraclize/docs - Pricing](https://github.com/oraclize/docs/blob/master/source/includes/_pricing.md)
 
 ### Article
 
+* [Query fee too high on mainnet](https://github.com/oraclize/ethereum-api/issues/10)
+* [Estimate Gas when using Oraclize - Code intoxicated](https://cristian.io/post/estimate-gas/)
 * [Using APIs in Your Ethereum Smart Contract with Oraclize](https://medium.com/coinmonks/using-apis-in-your-ethereum-smart-contract-with-oraclize-95656434292e)
 * [Oracle系列一: Human Oracle – Taipei Ethereum Meetup – Medium](https://medium.com/taipei-ethereum-meetup/oracle%E7%B3%BB%E5%88%97%E4%B8%80-human-oracle-cb7ed8268030)
 * [johnhckuo/Oraclize-Tutorial](https://github.com/johnhckuo/Oraclize-Tutorial)
