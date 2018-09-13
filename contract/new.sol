@@ -46,10 +46,10 @@ contract FunderMixin is CommonMixin {
             funders[msg.sender].amount += msg.value;
             funders[msg.sender].name = _name;
         } else {
-            funders[msg.sender] = Funder(msg.sender, msg.value, now, _name);    
+            funders[msg.sender] = Funder(msg.sender, msg.value, now, _name);
+            numFunders++;
         }
         fundersOfAmount += msg.value;
-        numFunders++;
     }
     
 }
