@@ -163,7 +163,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
 
     // 是否註冊過
-    function isSigned(address addr) returns (bool) {
+    function isSigned(address addr) public view returns (bool) {
         return players[addr].amount > 0;
     }
     
@@ -178,9 +178,6 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     function signup(string _access_token, string _userId)  public minimizeSignup payable {
         require(!isSigned(msg.sender), "you already signed");
         requestActivities(_access_token, _userId);
-        
-        // TODO: fake:
-        // addPlayer(msg.sender, msg.value, _userId, 100);
     }
     
     // 玩家申請領獎

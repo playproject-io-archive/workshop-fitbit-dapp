@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x99f3beb1e6aabda96f2b39dd4b5941c52317b247";
+var contractAddress = "0x89a5b6fad71f1817dc56806bd55eae7b535fe90b";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 
@@ -97,12 +97,16 @@ const css = csjs`
 const batAmountElement = bel`
   <input class=${css.input} type="text"/>
 `
-const batAreaElement = bel`
+
+function batAreaElement(result) {
+  if (result.isSigned) return bel`<div>you already <span class="${css.highlight}">signed</span> the contest.</div>`;
+  return bel`
   <div class="${css.box3}">
     Hi player, how much you want to bet? ${batAmountElement} ETH. 
     <button class=${css.button} onclick=${bet}> Bet </button>
   </div>
-`
+  `
+}
 
 // funder
 
@@ -128,21 +132,27 @@ function errorRender(errorMessage) {
  `)
 }
 
+function welcome(result) {
+  if (localStorage.fitbitAccessToken) return;
+  return bel`<div>Hi</div>`;
+}
+
 function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
     <div class=${css.box1}>
       Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.<br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
+      ${welcome(result)}
     </div>
     <div class="${css.box2}">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
       There is ${result.numPlayers} player. <br>
+      Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
       There is ${result.numFunders} funder. <br>
-      Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br>
       Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
     </div>
-    ${batAreaElement}
+    ${batAreaElement(result)}
     ${fundAreaElement}
     <div class="${css.box5}">
       <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
@@ -151,16 +161,6 @@ function render(result) {
     </div>
   </div>
  `) 
-}
-
-function createResultElement(result) {
-  document.body.innerHTML = "";
-  document.body.appendChild(bel`
-  <div class=${css.box}>
-    ${result}
-    <button class=${css.button} onclick=${clearResult} required="required"> Clear </button>
-  </div>
-`)
 }
 
 if(typeof web3 == 'undefined') {
@@ -227,7 +227,7 @@ function getProfile(event) {
 }
 
 function showTotalStep(data) {
-  createResultElement(data.lifetime.total.steps);
+  console.log('step:', data.lifetime.total.steps);
 }
 
 function getTotalStep(event) {
@@ -251,7 +251,9 @@ function getTotalStep(event) {
 function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = 31536000;
-  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
+  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20profile&expires_in=${EXPIRES_IN}`);
+
+  // window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
 }
 
 /******************************************************************************
@@ -335,25 +337,25 @@ function getNumFunders(result) {
   myContract.methods.getNumFunders().call((err, data) => {
     if (err) return console.error(err);
     result.numFunders = parseInt(data, 10);
-    getTotalAmount(result);
-  })
-}
-
-function getTotalAmount(result) {
-  log('loading (5/7) - getTotalAmount')
-  myContract.methods.getNumFunders().call((err, data) => {
-    if (err) return console.error(err);
-    result.totalAmount = parseInt(data, 10);
     getFundersOfAmount(result);
   })
 }
 
 function getFundersOfAmount(result) {
-  log('loading (6/7) - getFundersOfAmount')
+  log('loading (5/7) - getFundersOfAmount')
   myContract.methods.getFundersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.fundersOfAmount = data;
-    console.log(result);
+    isSigned(result);
+  })
+}
+
+function isSigned(result) {
+  log('loading (6/7) - isSigned')
+  myContract.methods.isSigned(result.wallet).call((err, data) => {
+    if (err) return console.error(err);
+    result.isSigned = data;
+    console.dir(result);
     render(result);
   })
 }
