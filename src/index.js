@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0xf78f69bee9321def658db3c1f88bb6aad5a24931";
+var contractAddress = "0x9650c213c0d3afad5fd85984950ea40e3328bcd6";
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -129,7 +129,8 @@ function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
     <div class=${css.box1}>
-      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
+      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.<br>
+      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>
     <div class="${css.box2}">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
