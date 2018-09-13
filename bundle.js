@@ -47295,7 +47295,10 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x9650c213c0d3afad5fd85984950ea40e3328bcd6";
+var contractAddress = "0x457a19bd2a56d4bd62bc8c60fbe574238342fa06";
+const CONTRACT_GAS = 400000;
+const CONTRACT_PRICE = 40000000000;
+
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
 const log = console.log;
@@ -47533,7 +47536,7 @@ function getFitbitToken(event) {
 ******************************************************************************/
 function bet(event) {
   let betAmount = batAmountElement.value;
-  myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
+  myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
   })
@@ -47542,7 +47545,7 @@ function bet(event) {
 function fund(event) {
   let fundAmount = fundAmountElement.value;
   let name = fundNameElement.value;
-  myContract.methods.fund(name).send({ from: localStorage.wallet, gas: 200000, gasPrice: 40000000000, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
+  myContract.methods.fund(name).send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> fund ok.');
   })
