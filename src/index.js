@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x89a5b6fad71f1817dc56806bd55eae7b535fe90b";
+var contractAddress = "0x1f5da9a0ef7ba05d46c3745877ed3452d428bb00";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 
@@ -132,13 +132,19 @@ const batAmountElement = bel`
 `
 
 function batAreaElement(result) {
-  if (result.isSigned) return bel`<div>you already <span class="${css.highlight}">signed</span> the contest.</div>`;
-  return bel`
-  <div class="${css.box3}">
-    Hi player, how much you want to bet? ${batAmountElement} ETH. 
-    <button class=${css.button} onclick=${bet}> Bet </button>
-  </div>
-  `
+  if (result.isSigned){
+    return bel`<div>
+                you already <span class="${css.highlight}">signed</span> the contest. 
+                <button class=${css.button} onclick=${bet}> update step</button>
+              </div>`;
+  } else {
+    return bel`
+    <div class="${css.box3}">
+      Hi player, how much you want to bet? ${batAmountElement} ETH. 
+      <button class=${css.button} onclick=${bet}> Bet </button>
+    </div>
+    `
+  }
 }
 
 // funder
@@ -297,6 +303,13 @@ function bet(event) {
   myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
+  })
+}
+
+function playerWithdrawal(event) {
+  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(0.1, "ether") }, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> playerWithdrawal ok.');
   })
 }
 

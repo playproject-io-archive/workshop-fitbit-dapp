@@ -176,27 +176,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [{
-        "name": "_access_token",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_endStep",
-        "type": "uint256"
-      }
-    ],
-    "name": "playerWithdrawal",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "getTotalAmount",
@@ -283,6 +262,23 @@
       }
     ],
     "name": "requestActivities",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",

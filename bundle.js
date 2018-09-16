@@ -47060,27 +47060,6 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [{
-        "name": "_access_token",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_endStep",
-        "type": "uint256"
-      }
-    ],
-    "name": "playerWithdrawal",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "getTotalAmount",
@@ -47167,6 +47146,23 @@ module.exports=[{
       }
     ],
     "name": "requestActivities",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_access_token",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -47295,7 +47291,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x89a5b6fad71f1817dc56806bd55eae7b535fe90b";
+var contractAddress = "0x1f5da9a0ef7ba05d46c3745877ed3452d428bb00";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 
@@ -47363,6 +47359,39 @@ const css = csjs`
     padding: 5px;
     width: 150px;
   }
+
+  .info, .success, .warning, .error, .validation {
+			border: 1px solid;
+			margin: 10px 0px;
+			padding: 15px 10px 15px 50px;
+			background-repeat: no-repeat;
+			background-position: 10px center;
+		}
+		.info {
+			color: #00529B;
+			background-color: #BDE5F8;
+			background-image: url('https://i.imgur.com/ilgqWuX.png');
+		}
+		.success {
+			color: #4F8A10;
+			background-color: #DFF2BF;
+			background-image: url('https://i.imgur.com/Q9BGTuy.png');
+		}
+		.warning {
+			color: #9F6000;
+			background-color: #FEEFB3;
+			background-image: url('https://i.imgur.com/Z8q7ww7.png');
+		}
+		.error{
+			color: #D8000C;
+			background-color: #FFBABA;
+			background-image: url('https://i.imgur.com/GnyDvKN.png');
+		}
+		.validation {
+			color: #D63301;
+			background-color: #FFCCBA;
+			background-image: url('https://i.imgur.com/GnyDvKN.png');
+		}
 `
 
 /******************************************************************************
@@ -47376,13 +47405,19 @@ const batAmountElement = bel`
 `
 
 function batAreaElement(result) {
-  if (result.isSigned) return bel`<div>you already <span class="${css.highlight}">signed</span> the contest.</div>`;
-  return bel`
-  <div class="${css.box3}">
-    Hi player, how much you want to bet? ${batAmountElement} ETH. 
-    <button class=${css.button} onclick=${bet}> Bet </button>
-  </div>
-  `
+  if (result.isSigned){
+    return bel`<div>
+                you already <span class="${css.highlight}">signed</span> the contest. 
+                <button class=${css.button} onclick=${bet}> update step</button>
+              </div>`;
+  } else {
+    return bel`
+    <div class="${css.box3}">
+      Hi player, how much you want to bet? ${batAmountElement} ETH. 
+      <button class=${css.button} onclick=${bet}> Bet </button>
+    </div>
+    `
+  }
 }
 
 // funder
@@ -47403,7 +47438,7 @@ const fundAreaElement = bel`
 function errorRender(errorMessage) {
   console.error(errorMessage);
   document.body.appendChild(bel`
-  <div class=${css.box} id="app">
+  <div class=${css.error} id="app">
     ${errorMessage}
   </div>
  `)
@@ -47544,6 +47579,13 @@ function bet(event) {
   })
 }
 
+function playerWithdrawal(event) {
+  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(0.1, "ether") }, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> playerWithdrawal ok.');
+  })
+}
+
 function fund(event) {
   let fundAmount = fundAmountElement.value;
   let name = fundNameElement.value;
@@ -47584,6 +47626,7 @@ function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
   log('loading (1/7) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
+    if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
     localStorage.wallet = localAddresses[0];
     if (err) return done(err)
     result.wallet = localAddresses[0];
