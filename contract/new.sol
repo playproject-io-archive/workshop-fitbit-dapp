@@ -60,6 +60,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     uint private constant GAS_LIMIT = 400000;
     // uint private constant GAS_LIMIT = 2000000;
     uint private minimizeSinupAmount = 0.1 ether;
+    uint private minimizeFetchAmount = 0.01 ether;
     uint private numPlayers;
     uint private playersOfAmount;
     
@@ -69,6 +70,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     
     modifier onlyOraclize { require(msg.sender == oraclize_cbAddress(), "only oraclize"); _; }
     modifier minimizeSignup { require( msg.value >= minimizeSinupAmount, "ether not enough"); _; }
+    modifier minimizeFetch { require( msg.value >= minimizeFetchAmount, "ether not enough"); _; }
     // ===>>> event
     
     event NewOraclizeQuery(string tag, string description);
@@ -145,8 +147,6 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     // Step3
     function __callback(bytes32 _queryId, string _result, bytes _proof) onlyOraclize {
         emit NewOraclizeQuery("__callback:", _result);
-        // emit LOG_Address("msg.sender:", msg.sender);
-        // emit LOG_Address("oraclize_cbAddress():", oraclize_cbAddress());
         SignData memory o = signDatas[_queryId];
         emit LOG_OraclizeCallbackStep(o.userId, _queryId, parseInt(_result), _proof);
         callback_ForGetUserStep(o.userId, _queryId, parseInt(_result), _proof);
@@ -181,15 +181,11 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // 玩家申請領獎
-    function playerWithdrawal(string _access_token, string _userId, uint _endStep) public payable {
+    function playerWithdrawal(string _access_token, string _userId) public minimizeFetch payable {
         require(isSigned(msg.sender), "you didn't sign yet.");
         // TODO: check deadline
         requestActivities(_access_token, _userId);
-        
-        // TODO: fake:
-        // players[msg.sender].endStep = _endStep;
     }
-    
 }
 
 contract FitnessContest is PlayerMixin, FunderMixin {
@@ -263,33 +259,33 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     }
 }
 
-contract TestFitnessRace is FitnessContest {
+// contract TestFitnessContest is FitnessContest {
     
-    function step1() payable {
-        fund("IBM");
-    }
+//     function step1() payable {
+//         fund("IBM");
+//     }
     
-    function step2() payable {
-        fund("ASUS");
-    }
+//     function step2() payable {
+//         fund("ASUS");
+//     }
     
-    function step3() payable {
-        signup("token1", "Nina");
-        playerWithdrawal("token1", "Nina", 2000000);
-    }
+//     function step3() payable {
+//         signup("token1", "Nina");
+//         playerWithdrawal("token1", "Nina");
+//     }
     
-    function step4() payable {
-        signup("token2", "Alex");
-        playerWithdrawal("token2", "Alex", 3000000);
-    }
+//     function step4() payable {
+//         signup("token2", "Alex");
+//         playerWithdrawal("token2", "Alex");
+//     }
     
-    function step5() payable {
-        signup("token3", "Alin");
-        playerWithdrawal("token3", "Alin", 9000);
-    }
+//     function step5() payable {
+//         signup("token3", "Alin");
+//         playerWithdrawal("token3", "Alin");
+//     }
     
-    function step6() payable {
-        done();   
-    }
+//     function step6() payable {
+//         done();   
+//     }
     
-}
+// }

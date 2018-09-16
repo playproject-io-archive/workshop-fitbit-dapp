@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x1f5da9a0ef7ba05d46c3745877ed3452d428bb00";
+var contractAddress = "0x603e1caab5e72a4a00f3035e0e91ee6c26f9f7f8";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 
@@ -88,37 +88,37 @@ const css = csjs`
   }
 
   .info, .success, .warning, .error, .validation {
-			border: 1px solid;
-			margin: 10px 0px;
-			padding: 15px 10px 15px 50px;
-			background-repeat: no-repeat;
-			background-position: 10px center;
-		}
-		.info {
-			color: #00529B;
-			background-color: #BDE5F8;
-			background-image: url('https://i.imgur.com/ilgqWuX.png');
-		}
-		.success {
-			color: #4F8A10;
-			background-color: #DFF2BF;
-			background-image: url('https://i.imgur.com/Q9BGTuy.png');
-		}
-		.warning {
-			color: #9F6000;
-			background-color: #FEEFB3;
-			background-image: url('https://i.imgur.com/Z8q7ww7.png');
-		}
-		.error{
-			color: #D8000C;
-			background-color: #FFBABA;
-			background-image: url('https://i.imgur.com/GnyDvKN.png');
-		}
-		.validation {
-			color: #D63301;
-			background-color: #FFCCBA;
-			background-image: url('https://i.imgur.com/GnyDvKN.png');
-		}
+    border: 1px solid;
+    margin: 10px 0px;
+    padding: 15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+  }
+  .info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('https://i.imgur.com/ilgqWuX.png');
+  }
+  .success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image: url('https://i.imgur.com/Q9BGTuy.png');
+  }
+  .warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('https://i.imgur.com/Z8q7ww7.png');
+  }
+  .error{
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('https://i.imgur.com/GnyDvKN.png');
+  }
+  .validation {
+    color: #D63301;
+    background-color: #FFCCBA;
+    background-image: url('https://i.imgur.com/GnyDvKN.png');
+  }
 `
 
 /******************************************************************************
@@ -133,10 +133,11 @@ const batAmountElement = bel`
 
 function batAreaElement(result) {
   if (result.isSigned){
-    return bel`<div>
-                you already <span class="${css.highlight}">signed</span> the contest. 
-                <button class=${css.button} onclick=${bet}> update step</button>
-              </div>`;
+    return bel`
+    <div>
+      you already <span class="${css.highlight}">signed</span> the contest. 
+      <button class=${css.button} onclick=${playerWithdrawal}> update step</button>
+    </div>`;
   } else {
     return bel`
     <div class="${css.box3}">
@@ -161,6 +162,19 @@ const fundAreaElement = bel`
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
 `
+
+function debugAreaElement(result) {
+  if (localStorage.debug == "true") {
+    return bel`
+    <div class="${css.box5}">
+      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
+      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
+      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
+    </div>`;
+  } else {
+    return;
+  }
+}
 
 function errorRender(errorMessage) {
   console.error(errorMessage);
@@ -193,11 +207,7 @@ function render(result) {
     </div>
     ${batAreaElement(result)}
     ${fundAreaElement}
-    <div class="${css.box5}">
-      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
-      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
-      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
-    </div>
+    ${debugAreaElement(result)}
   </div>
  `) 
 }
@@ -307,7 +317,7 @@ function bet(event) {
 }
 
 function playerWithdrawal(event) {
-  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(0.1, "ether") }, (err, data) => {
+  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> playerWithdrawal ok.');
   })
