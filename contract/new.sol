@@ -116,6 +116,10 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         return numPlayers;
     }
     
+    function getYourStep()  public view returns (uint) {
+        return players[msg.sender].endStep - players[msg.sender].beginStep;
+    }
+    
     // Step1
     function requestActivities(string _access_token, string _userId) public payable {
         string memory header = strConcat(

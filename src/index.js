@@ -18,9 +18,10 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x603e1caab5e72a4a00f3035e0e91ee6c26f9f7f8";
+var contractAddress = "0x8983e19444f3850f96651e2916e049355e751982";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
+const MINIMIZE_SIGNUP_AMOUNT = 0.1
 
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
@@ -169,7 +170,8 @@ function debugAreaElement(result) {
     <div class="${css.box5}">
       <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
       <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
-      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
+      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button><br><br>
+      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
     return;
@@ -195,7 +197,6 @@ function render(result) {
   <div class=${css.box} id="app">
     <div class=${css.box1}>
       Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.<br>
-      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
       ${welcome(result)}
     </div>
     <div class="${css.box2}">
@@ -203,7 +204,8 @@ function render(result) {
       There is ${result.numPlayers} player. <br>
       Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
       There is ${result.numFunders} funder. <br>
-      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
+      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br><br>
+      Your contest step is ${result.step}.
     </div>
     ${batAreaElement(result)}
     ${fundAreaElement}
@@ -310,6 +312,8 @@ function getFitbitToken(event) {
 ******************************************************************************/
 function bet(event) {
   let betAmount = batAmountElement.value;
+  if (parseInt(batAmountElement.value, 10) > MINIMIZE_SIGNUP_AMOUNT) alert("The amount can't low than ", MINIMIZE_SIGNUP_AMOUNT);
+
   myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
@@ -412,6 +416,15 @@ function isSigned(result) {
   myContract.methods.isSigned(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isSigned = data;
+    getYourStep(result);
+  })
+}
+
+function getYourStep(result) {
+  log('loading (7/7) - getYourStep')
+  myContract.methods.getYourStep().call((err, data) => {
+    if (err) return console.error(err);
+    result.step = data;
     console.dir(result);
     render(result);
   })
