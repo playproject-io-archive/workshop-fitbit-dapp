@@ -46883,52 +46883,30 @@ function extend() {
 
 },{}],298:[function(require,module,exports){
 module.exports=[{
-    "constant": true,
-    "inputs": [],
-    "name": "getFundersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "getEnded",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getBalance",
-    "outputs": [{
-      "name": "amount",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumFunders",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "userId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "step",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
   },
   {
     "constant": false,
@@ -46970,9 +46948,114 @@ module.exports=[{
   },
   {
     "constant": false,
+    "inputs": [{
+        "name": "_userId",
+        "type": "string"
+      },
+      {
+        "name": "_queryId",
+        "type": "bytes32"
+      },
+      {
+        "name": "steps",
+        "type": "uint256"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "callback_ForGetUserStep",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "done",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "getEnded",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [],
     "name": "kill",
     "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "LOG_Address",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "NewOraclizeQuery",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "ownerWithdrawal",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -46988,7 +47071,7 @@ module.exports=[{
         "type": "string"
       }
     ],
-    "name": "signup",
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -47024,117 +47107,6 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [{
-      "name": "",
-      "type": "bytes32"
-    }],
-    "name": "signDatas",
-    "outputs": [{
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumPlayers",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getTotalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "_name",
-      "type": "string"
-    }],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isSigned",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getPlayersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [{
         "name": "_access_token",
@@ -47162,47 +47134,10 @@ module.exports=[{
         "type": "string"
       }
     ],
-    "name": "playerWithdrawal",
+    "name": "signup",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_queryId",
-        "type": "bytes32"
-      },
-      {
-        "name": "steps",
-        "type": "uint256"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "callback_ForGetUserStep",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "ownerWithdrawal",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -47212,62 +47147,139 @@ module.exports=[{
     "type": "constructor"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
-      }
-    ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
+    "constant": true,
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [{
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "LOG_Address",
-    "type": "event"
+    "constant": true,
+    "inputs": [],
+    "name": "getFundersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
+    "constant": true,
+    "inputs": [],
+    "name": "getNumFunders",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumPlayers",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getPlayersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getYourStep",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [{
-        "indexed": false,
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isSigned",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "",
+      "type": "bytes32"
+    }],
+    "name": "signDatas",
+    "outputs": [{
         "name": "userId",
         "type": "string"
       },
       {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
+        "name": "addr",
+        "type": "address"
       },
       {
-        "indexed": false,
-        "name": "step",
+        "name": "amount",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
       }
     ],
-    "name": "LOG_OraclizeCallbackStep",
-    "type": "event"
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   }
 ]
 },{}],299:[function(require,module,exports){
@@ -47291,9 +47303,10 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x1f5da9a0ef7ba05d46c3745877ed3452d428bb00";
+var contractAddress = "0x8983e19444f3850f96651e2916e049355e751982";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
+const MINIMIZE_SIGNUP_AMOUNT = 0.1
 
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
@@ -47361,37 +47374,37 @@ const css = csjs`
   }
 
   .info, .success, .warning, .error, .validation {
-			border: 1px solid;
-			margin: 10px 0px;
-			padding: 15px 10px 15px 50px;
-			background-repeat: no-repeat;
-			background-position: 10px center;
-		}
-		.info {
-			color: #00529B;
-			background-color: #BDE5F8;
-			background-image: url('https://i.imgur.com/ilgqWuX.png');
-		}
-		.success {
-			color: #4F8A10;
-			background-color: #DFF2BF;
-			background-image: url('https://i.imgur.com/Q9BGTuy.png');
-		}
-		.warning {
-			color: #9F6000;
-			background-color: #FEEFB3;
-			background-image: url('https://i.imgur.com/Z8q7ww7.png');
-		}
-		.error{
-			color: #D8000C;
-			background-color: #FFBABA;
-			background-image: url('https://i.imgur.com/GnyDvKN.png');
-		}
-		.validation {
-			color: #D63301;
-			background-color: #FFCCBA;
-			background-image: url('https://i.imgur.com/GnyDvKN.png');
-		}
+    border: 1px solid;
+    margin: 10px 0px;
+    padding: 15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+  }
+  .info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('https://i.imgur.com/ilgqWuX.png');
+  }
+  .success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image: url('https://i.imgur.com/Q9BGTuy.png');
+  }
+  .warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('https://i.imgur.com/Z8q7ww7.png');
+  }
+  .error{
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('https://i.imgur.com/GnyDvKN.png');
+  }
+  .validation {
+    color: #D63301;
+    background-color: #FFCCBA;
+    background-image: url('https://i.imgur.com/GnyDvKN.png');
+  }
 `
 
 /******************************************************************************
@@ -47406,10 +47419,11 @@ const batAmountElement = bel`
 
 function batAreaElement(result) {
   if (result.isSigned){
-    return bel`<div>
-                you already <span class="${css.highlight}">signed</span> the contest. 
-                <button class=${css.button} onclick=${bet}> update step</button>
-              </div>`;
+    return bel`
+    <div>
+      you already <span class="${css.highlight}">signed</span> the contest. 
+      <button class=${css.button} onclick=${playerWithdrawal}> update step</button>
+    </div>`;
   } else {
     return bel`
     <div class="${css.box3}">
@@ -47435,6 +47449,20 @@ const fundAreaElement = bel`
   </div>
 `
 
+function debugAreaElement(result) {
+  if (localStorage.debug == "true") {
+    return bel`
+    <div class="${css.box5}">
+      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
+      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
+      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button><br><br>
+      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
+    </div>`;
+  } else {
+    return;
+  }
+}
+
 function errorRender(errorMessage) {
   console.error(errorMessage);
   document.body.appendChild(bel`
@@ -47454,7 +47482,6 @@ function render(result) {
   <div class=${css.box} id="app">
     <div class=${css.box1}>
       Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.<br>
-      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
       ${welcome(result)}
     </div>
     <div class="${css.box2}">
@@ -47462,15 +47489,12 @@ function render(result) {
       There is ${result.numPlayers} player. <br>
       Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
       There is ${result.numFunders} funder. <br>
-      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br>
+      Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br><br>
+      Your contest step is ${result.step}.
     </div>
     ${batAreaElement(result)}
     ${fundAreaElement}
-    <div class="${css.box5}">
-      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
-      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
-      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
-    </div>
+    ${debugAreaElement(result)}
   </div>
  `) 
 }
@@ -47573,6 +47597,8 @@ function getFitbitToken(event) {
 ******************************************************************************/
 function bet(event) {
   let betAmount = batAmountElement.value;
+  if (parseInt(batAmountElement.value, 10) > MINIMIZE_SIGNUP_AMOUNT) alert("The amount can't low than ", MINIMIZE_SIGNUP_AMOUNT);
+
   myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
@@ -47580,7 +47606,7 @@ function bet(event) {
 }
 
 function playerWithdrawal(event) {
-  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(0.1, "ether") }, (err, data) => {
+  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> playerWithdrawal ok.');
   })
@@ -47675,6 +47701,15 @@ function isSigned(result) {
   myContract.methods.isSigned(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isSigned = data;
+    getYourStep(result);
+  })
+}
+
+function getYourStep(result) {
+  log('loading (7/7) - getYourStep')
+  myContract.methods.getYourStep().call((err, data) => {
+    if (err) return console.error(err);
+    result.step = data;
     console.dir(result);
     render(result);
   })
