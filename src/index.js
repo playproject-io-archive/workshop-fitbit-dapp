@@ -171,7 +171,8 @@ function debugAreaElement(result) {
     <div class="${css.box5}">
       <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
       <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
-      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button><br><br>
+      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
+      <button class=${css.button} onclick=${clearResult}"> Clear </button><br><br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
