@@ -46883,30 +46883,64 @@ function extend() {
 
 },{}],298:[function(require,module,exports){
 module.exports=[{
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "step",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "LOG_OraclizeCallbackStep",
-    "type": "event"
+    "constant": true,
+    "inputs": [],
+    "name": "isOnTime",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getFundersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "getEnded",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [{
+      "name": "amount",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumFunders",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "constant": false,
@@ -46948,67 +46982,6 @@ module.exports=[{
   },
   {
     "constant": false,
-    "inputs": [{
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_queryId",
-        "type": "bytes32"
-      },
-      {
-        "name": "steps",
-        "type": "uint256"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "callback_ForGetUserStep",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "_name",
-      "type": "string"
-    }],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "getEnded",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
     "inputs": [],
     "name": "kill",
     "outputs": [],
@@ -47017,32 +46990,19 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "ownerWithdrawal",
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getBeginStep",
     "outputs": [{
       "name": "",
       "type": "uint256"
     }],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
-      }
-    ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
   },
   {
     "constant": false,
@@ -47055,27 +47015,11 @@ module.exports=[{
         "type": "string"
       }
     ],
-    "name": "playerWithdrawal",
+    "name": "signup",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
     "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "LOG_Address",
-    "type": "event"
   },
   {
     "constant": false,
@@ -47107,6 +47051,117 @@ module.exports=[{
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [{
+      "name": "",
+      "type": "bytes32"
+    }],
+    "name": "signDatas",
+    "outputs": [{
+        "name": "userId",
+        "type": "string"
+      },
+      {
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumPlayers",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isSigned",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "done",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getPlayersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [{
         "name": "_access_token",
@@ -47134,28 +47189,47 @@ module.exports=[{
         "type": "string"
       }
     ],
-    "name": "signup",
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "constant": true,
     "inputs": [],
-    "name": "getBalance",
+    "name": "getYourBetAmount",
     "outputs": [{
-      "name": "amount",
+      "name": "",
       "type": "uint256"
     }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_userId",
+        "type": "string"
+      },
+      {
+        "name": "_queryId",
+        "type": "bytes32"
+      },
+      {
+        "name": "steps",
+        "type": "uint256"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "callback_ForGetUserStep",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -47164,7 +47238,7 @@ module.exports=[{
       "name": "addr",
       "type": "address"
     }],
-    "name": "getBeginStep",
+    "name": "getEndStep",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -47189,154 +47263,80 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": true,
+    "constant": false,
+    "inputs": [],
+    "name": "ownerWithdrawal",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
     "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getEndStep",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "NewOraclizeQuery",
+    "type": "event"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "getFundersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumFunders",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumPlayers",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getPlayersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getTotalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getYourBetAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
+    "anonymous": false,
     "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isSigned",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "LOG_Address",
+    "type": "event"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
+    "anonymous": false,
     "inputs": [{
-      "name": "",
-      "type": "bytes32"
-    }],
-    "name": "signDatas",
-    "outputs": [{
+        "indexed": false,
         "name": "userId",
         "type": "string"
       },
       {
-        "name": "addr",
-        "type": "address"
+        "indexed": false,
+        "name": "queryId",
+        "type": "bytes32"
       },
       {
-        "name": "amount",
+        "indexed": false,
+        "name": "step",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
       }
     ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "timeOut",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
   }
 ]
 },{}],299:[function(require,module,exports){
@@ -47360,7 +47360,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x7610d458d41e9bcc47ba371454d22d4b7bb1fa83";
+const contractAddress = "0xba98dafc3e246910c802bb33a2dc835a505b5c7e";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -47405,8 +47405,8 @@ const css = csjs`
   .box5 { 
     grid-column-start: 1; 
     grid-column-end: 4; 
-    grid-row-start: 5; 
-    grid-row-end: 6;
+    grid-row-start: 6; 
+    grid-row-end: 7;
     text-align: center;
   }
   .input {
@@ -47479,7 +47479,7 @@ function batAreaElement(result) {
     return bel`
     <div>
       you already <span class="${css.highlight}">signed</span> the contest. 
-      <button class=${css.button} onclick=${playerWithdrawal}> update step</button>
+      <button class=${css.button} onclick=${updateStep}> update step</button>
     </div>`;
   } else {
     return bel`
@@ -47501,7 +47501,8 @@ const fundNameElement = bel`
 `
 const fundAreaElement = bel`
   <div class="${css.box4}">
-    Hi funder, minimum funding is 0.1 ETH, how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
+    Hi funder, minimum funding is 0.1 ETH, how much you want to fund? ${fundAmountElement} ETH <br>
+    and input your name ${fundNameElement}
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
 `
@@ -47606,12 +47607,16 @@ var processResponse = function (res) {
   }
 }
 
+function isExistToken() {
+  return localStorage.fitbitAccessToken && localStorage.fitbitAccessToken.length > 0
+}
+
 function showProfile(data) {
   console.dir(data);
 }
 
 function getProfile(event) {
-  if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
+  if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
     'https://api.fitbit.com/1/user/-/profile.json',
     {
@@ -47633,7 +47638,7 @@ function showTotalStep(data) {
 }
 
 function getTotalStep(event) {
-  if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
+  if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
     'https://api.fitbit.com/1/user/-/activities.json',
     {
@@ -47665,13 +47670,26 @@ function bet(event) {
   let betAmount = batAmountElement.value;
   if (parseInt(batAmountElement.value, 10) > MINIMIZE_SIGNUP_AMOUNT) alert("The amount can't low than ", MINIMIZE_SIGNUP_AMOUNT);
 
+  if (!localStorage.fitbitAccessToken) {
+    localStorage.continueBetAmount = betAmount;
+    localStorage.continueEvent = 1;
+    getFitbitToken();
+    return;
+  }
+
   myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> bet ok.');
+    localStorage.removeItem("continueBetAmount");
+    localStorage.removeItem("continueEvent");
   })
 }
 
-function playerWithdrawal(event) {
+function updateStep(event) {
+  if (!localStorage.fitbitAccessToken) {
+    localStorage.continueEvent = 2;
+    getFitbitToken();
+    return;
+  }
   myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> playerWithdrawal ok.');
@@ -47712,6 +47730,19 @@ function start() {
   getMyAddress({
     fitbitAccessToken: localStorage.fitbitAccessToken
   });
+}
+
+function continueProcess() {
+  switch (localStorage.continueEvent) {
+    case 1:
+      bet();
+      break;
+    case 2:
+      updateStep();
+      break;
+    default:
+      break;
+  }
 }
 
 function getMyAddress(result) {
@@ -47786,6 +47817,7 @@ function getContestStep(result) {
     if (err) return console.error(err);
     result.step = (data.length > 20) ? 0 : data;
     console.dir(result);
+    continueProcess();
     render(result);
   })
 }

@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x7610d458d41e9bcc47ba371454d22d4b7bb1fa83";
+const contractAddress = "0xba98dafc3e246910c802bb33a2dc835a505b5c7e";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -63,8 +63,8 @@ const css = csjs`
   .box5 { 
     grid-column-start: 1; 
     grid-column-end: 4; 
-    grid-row-start: 5; 
-    grid-row-end: 6;
+    grid-row-start: 6; 
+    grid-row-end: 7;
     text-align: center;
   }
   .input {
@@ -137,7 +137,7 @@ function batAreaElement(result) {
     return bel`
     <div>
       you already <span class="${css.highlight}">signed</span> the contest. 
-      <button class=${css.button} onclick=${playerWithdrawal}> update step</button>
+      <button class=${css.button} onclick=${updateStep}> update step</button>
     </div>`;
   } else {
     return bel`
@@ -159,7 +159,8 @@ const fundNameElement = bel`
 `
 const fundAreaElement = bel`
   <div class="${css.box4}">
-    Hi funder, minimum funding is 0.1 ETH, how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
+    Hi funder, minimum funding is 0.1 ETH, how much you want to fund? ${fundAmountElement} ETH <br>
+    and input your name ${fundNameElement}
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
 `
@@ -264,12 +265,16 @@ var processResponse = function (res) {
   }
 }
 
+function isExistToken() {
+  return localStorage.fitbitAccessToken && localStorage.fitbitAccessToken.length > 0
+}
+
 function showProfile(data) {
   console.dir(data);
 }
 
 function getProfile(event) {
-  if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
+  if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
     'https://api.fitbit.com/1/user/-/profile.json',
     {
@@ -291,7 +296,7 @@ function showTotalStep(data) {
 }
 
 function getTotalStep(event) {
-  if (!localStorage.fitbitAccessToken) console.error('the fitbit access token is not found.')
+  if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
     'https://api.fitbit.com/1/user/-/activities.json',
     {
@@ -323,13 +328,26 @@ function bet(event) {
   let betAmount = batAmountElement.value;
   if (parseInt(batAmountElement.value, 10) > MINIMIZE_SIGNUP_AMOUNT) alert("The amount can't low than ", MINIMIZE_SIGNUP_AMOUNT);
 
+  if (!localStorage.fitbitAccessToken) {
+    localStorage.continueBetAmount = betAmount;
+    localStorage.continueEvent = 1;
+    getFitbitToken();
+    return;
+  }
+
   myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> bet ok.');
+    localStorage.removeItem("continueBetAmount");
+    localStorage.removeItem("continueEvent");
   })
 }
 
-function playerWithdrawal(event) {
+function updateStep(event) {
+  if (!localStorage.fitbitAccessToken) {
+    localStorage.continueEvent = 2;
+    getFitbitToken();
+    return;
+  }
   myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> playerWithdrawal ok.');
@@ -370,6 +388,19 @@ function start() {
   getMyAddress({
     fitbitAccessToken: localStorage.fitbitAccessToken
   });
+}
+
+function continueProcess() {
+  switch (localStorage.continueEvent) {
+    case 1:
+      bet();
+      break;
+    case 2:
+      updateStep();
+      break;
+    default:
+      break;
+  }
 }
 
 function getMyAddress(result) {
@@ -444,6 +475,7 @@ function getContestStep(result) {
     if (err) return console.error(err);
     result.step = (data.length > 20) ? 0 : data;
     console.dir(result);
+    continueProcess();
     render(result);
   })
 }

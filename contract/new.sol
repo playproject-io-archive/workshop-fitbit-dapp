@@ -9,6 +9,7 @@ contract CommonMixin {
     uint duration = 604800;
     
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
+    modifier onlyOnTime { require(!timeOut(), "only on time"); _; }
     
     constructor() public {
         owner = msg.sender;
@@ -49,7 +50,7 @@ contract FunderMixin is CommonMixin {
     }
     
      // 贊助
-    function fund(string _name) public minimizeContribute payable {
+    function fund(string _name) public minimizeContribute onlyOnTime payable {
         if(funders[msg.sender].amount != 0) {
             funders[msg.sender].amount += msg.value;
             funders[msg.sender].name = _name;
@@ -201,15 +202,14 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // 註冊
-    function signup(string _access_token, string _userId)  public minimizeSignup payable {
+    function signup(string _access_token, string _userId)  public minimizeSignup onlyOnTime payable {
         require(!isSigned(msg.sender), "you already signed");
         requestActivities(_access_token, _userId);
     }
     
     // 玩家申請領獎
-    function playerWithdrawal(string _access_token, string _userId) public minimizeFetch payable {
+    function playerWithdrawal(string _access_token, string _userId) public minimizeFetch onlyOnTime payable {
         require(isSigned(msg.sender), "you didn't sign yet.");
-        // TODO: check deadline
         requestActivities(_access_token, _userId);
     }
 }
