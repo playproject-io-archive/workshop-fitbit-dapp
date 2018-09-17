@@ -251,7 +251,6 @@ if (window.location.hash) {
   console.log('fragmentQueryParameters: ', fragmentQueryParameters);
   localStorage.userId = fragmentQueryParameters.user_id;
   localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
-  if (localStorage.continueEvent) getProfile();
 }
 
 var processResponse = function (res) {
@@ -272,7 +271,6 @@ function isExistToken() {
 }
 
 function showProfile(data) {
-  localStorage.userId = data.user.encodedId;
   console.dir(data);
 }
 
@@ -319,7 +317,7 @@ function getTotalStep(event) {
 function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = 31536000;
-  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20profile&expires_in=${EXPIRES_IN}`);
+  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity&expires_in=${EXPIRES_IN}`);
 
   // window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
 }
