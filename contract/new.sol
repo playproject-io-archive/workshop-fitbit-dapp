@@ -5,12 +5,20 @@ import "github.com/Arachnid/solidity-stringutils/strings.sol";
 
 contract CommonMixin {
     address public owner;
+    uint startTime;
+    uint duration = 604800;
     
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
     
     constructor() public {
         owner = msg.sender;
+        startTime = now;
     }
+    
+    function timeOut() public constant returns (bool) {
+        return !(startTime + duration > now);
+    }
+
 }
 
 contract FunderMixin is CommonMixin {
@@ -69,8 +77,10 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     mapping (bytes32 => SignData) public signDatas;
     
     modifier onlyOraclize { require(msg.sender == oraclize_cbAddress(), "only oraclize"); _; }
+    modifier onlySigned { require( isSigned(msg.sender), "only signed"); _; }
     modifier minimizeSignup { require( msg.value >= minimizeSinupAmount, "ether not enough"); _; }
     modifier minimizeFetch { require( msg.value >= minimizeFetchAmount, "ether not enough"); _; }
+    
     // ===>>> event
     
     event NewOraclizeQuery(string tag, string description);
@@ -116,8 +126,16 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         return numPlayers;
     }
     
-    function getYourStep()  public view returns (uint) {
-        return players[msg.sender].endStep - players[msg.sender].beginStep;
+    function getBeginStep(address addr) public view returns (uint) {
+        return players[addr].beginStep;
+    }
+    
+    function getEndStep(address addr) public view returns (uint) {
+        return players[addr].endStep;
+    }
+    
+    function getContestStep(address addr) public view returns (uint) {
+        return players[addr].endStep - players[addr].beginStep;
     }
     
     // Step1
@@ -169,6 +187,10 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     // 是否註冊過
     function isSigned(address addr) public view returns (bool) {
         return players[addr].amount > 0;
+    }
+    
+    function getYourBetAmount() public view returns (uint) {
+        return players[msg.sender].amount;
     }
     
     function addPlayer(address _addr, uint _amount, string _userId, uint _beginStep) private {

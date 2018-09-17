@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-var contractAddress = "0x8983e19444f3850f96651e2916e049355e751982";
+var contractAddress = "0x7610d458d41e9bcc47ba371454d22d4b7bb1fa83";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -142,7 +142,7 @@ function batAreaElement(result) {
   } else {
     return bel`
     <div class="${css.box3}">
-      Hi player, how much you want to bet? ${batAmountElement} ETH. 
+      Hi player, minimum price is 0.1 ETH, how much you want to bet? ${batAmountElement} ETH. 
       <button class=${css.button} onclick=${bet}> Bet </button>
     </div>
     `
@@ -159,7 +159,7 @@ const fundNameElement = bel`
 `
 const fundAreaElement = bel`
   <div class="${css.box4}">
-    Hi funder, how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
+    Hi funder, minimum funding is 0.1 ETH, how much you want to fund? ${fundAmountElement} ETH and what is your name ${fundNameElement}
     <button class=${css.button} onclick=${fund}> Fund </button>
   </div>
 `
@@ -192,6 +192,15 @@ function welcome(result) {
   return bel`<div>Hi</div>`;
 }
 
+function stepElement(result) {
+  if(!result.isSigned) return;
+  return bel`
+    <div>
+      Your begin step is ${result.beginStep}.<br>
+      Your contest step is ${result.step}.
+    </div>`;
+}
+
 function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
@@ -205,7 +214,7 @@ function render(result) {
       Players total amount is ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
       There is ${result.numFunders} funder. <br>
       Funders total amount is ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br><br>
-      Your contest step is ${result.step}.
+      ${stepElement(result)}
     </div>
     ${batAreaElement(result)}
     ${fundAreaElement}
@@ -365,7 +374,7 @@ function start() {
 
 function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
-  log('loading (1/7) - getMyAddress')
+  log('loading (1/8) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
     localStorage.wallet = localAddresses[0];
@@ -376,7 +385,7 @@ function getMyAddress(result) {
 }
 
 function getNumPlayers(result) {
-  log('loading (2/7) - getNumPlayers')
+  log('loading (2/8) - getNumPlayers')
   myContract.methods.getNumPlayers().call((err, data) => {
     if (err) return errorRender('Please switch to Rinkeby test chain!');
     result.numPlayers = parseInt(data, 10);
@@ -385,7 +394,7 @@ function getNumPlayers(result) {
 }
 
 function getPlayersOfAmount(result) {
-  log('loading (3/7) - getPlayersOfAmount')
+  log('loading (3/8) - getPlayersOfAmount')
   myContract.methods.getPlayersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.playersOfAmount = data;
@@ -394,7 +403,7 @@ function getPlayersOfAmount(result) {
 }
 
 function getNumFunders(result) {
-  log('loading (4/7) - getNumFunders')
+  log('loading (4/8) - getNumFunders')
   myContract.methods.getNumFunders().call((err, data) => {
     if (err) return console.error(err);
     result.numFunders = parseInt(data, 10);
@@ -403,7 +412,7 @@ function getNumFunders(result) {
 }
 
 function getFundersOfAmount(result) {
-  log('loading (5/7) - getFundersOfAmount')
+  log('loading (5/8) - getFundersOfAmount')
   myContract.methods.getFundersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.fundersOfAmount = data;
@@ -412,19 +421,28 @@ function getFundersOfAmount(result) {
 }
 
 function isSigned(result) {
-  log('loading (6/7) - isSigned')
+  log('loading (6/8) - isSigned')
   myContract.methods.isSigned(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isSigned = data;
-    getYourStep(result);
+    getBeginStep(result);
   })
 }
 
-function getYourStep(result) {
-  log('loading (7/7) - getYourStep')
-  myContract.methods.getYourStep().call((err, data) => {
+function getBeginStep(result) {
+  log('loading (7/8) - getBeginStep')
+  myContract.methods.getBeginStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
-    result.step = data;
+    result.beginStep = data;
+    getContestStep(result);
+  })
+}
+
+function getContestStep(result) {
+  log('loading (8/8) - getContestStep')
+  myContract.methods.getContestStep(result.wallet).call((err, data) => {
+    if (err) return console.error(err);
+    result.step = (data.length > 20) ? 0 : data;
     console.dir(result);
     render(result);
   })
