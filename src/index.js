@@ -250,6 +250,7 @@ if (window.location.hash) {
   console.log('fragmentQueryParameters: ', fragmentQueryParameters);
   localStorage.userId = fragmentQueryParameters.user_id;
   localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
+  if (localStorage.continueEvent) getProfile();
 }
 
 var processResponse = function (res) {
@@ -270,6 +271,7 @@ function isExistToken() {
 }
 
 function showProfile(data) {
+  localStorage.userId = data.user.encodedId;
   console.dir(data);
 }
 
@@ -328,14 +330,16 @@ function bet(event) {
   let betAmount = batAmountElement.value;
   if (parseInt(batAmountElement.value, 10) > MINIMIZE_SIGNUP_AMOUNT) alert("The amount can't low than ", MINIMIZE_SIGNUP_AMOUNT);
 
-  if (!localStorage.fitbitAccessToken) {
+  const token = localStorage.fitbitAccessToken;
+  const userId = localStorage.userId;
+  if (!token) {
     localStorage.continueBetAmount = betAmount;
     localStorage.continueEvent = 1;
     getFitbitToken();
     return;
   }
 
-  myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
+  myContract.methods.signup(token, userId).send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
     localStorage.removeItem("continueBetAmount");
