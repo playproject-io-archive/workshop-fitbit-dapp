@@ -392,10 +392,10 @@ function start() {
 
 function continueProcess() {
   switch (localStorage.continueEvent) {
-    case 1:
+    case "1":
       bet();
       break;
-    case 2:
+    case "2":
       updateStep();
       break;
     default:
