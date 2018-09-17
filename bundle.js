@@ -47679,6 +47679,7 @@ function bet(event) {
 
   myContract.methods.signup(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
+    console.log('>>> bet ok.');
     localStorage.removeItem("continueBetAmount");
     localStorage.removeItem("continueEvent");
   })
@@ -47693,6 +47694,7 @@ function updateStep(event) {
   myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> playerWithdrawal ok.');
+    localStorage.removeItem("continueEvent");
   })
 }
 
