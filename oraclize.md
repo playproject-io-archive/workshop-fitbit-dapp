@@ -34,6 +34,35 @@ git clone https://github.com/oraclize/ethereum-bridge
 node bridge -H localhost:8545 -a 9 --dev
 ```
 
+
+### Encrypted Queries
+
+https://docs.oraclize.it/#ethereum-advanced-topics-encrypted-queries
+
+```
+curl https://api.oraclize.it/v1/utils/encryption/encrypt -X POST -H "Content-Type: application/json" --data '{"message": "ENCRYPTED MESSAGE"}'
+```
+
+```
+{"result": "BMZRD5bjqUc8LBHWZ5o8T7OMkTZ+OpWhgdHkI3yk5PkjSOJ6ZQpTQvdGQbiZlotPZDO9XVlF0A6Q0kelAealMILqQtu5Es6KEBgNbihYmDOMpOetVjUNeWxKx5+Rc5lTy+I=", "success": true}
+```
+
+```
+curl https://api.oraclize.it/v1/utils/encryption/decrypt -X POST -H "Content-Type: application/json" --data '{"message": "BK9Wn0pfCkawzl4IQLTEbo0NJkgUsnE1nrDmw0mtWl2hWRDgekclBlgc3eUaTF2OvnaCIvWNm+lAgusGRnVttf+TqQiFiJAtk5yZU2UU2jTNdd5I82T3/WyCPJvqiwnE51Q="}'
+```
+
+```
+{"success": true}
+```
+
+#### other example
+
+```
+curl https://api.oraclize.it/v1/utils/encryption/encrypt -X POST -H "Content-Type: application/json" --data '{"message":"json(https://api.postcodes.io/postcodes).status"}'
+
+curl https://api.oraclize.it/v1/utils/encryption/encrypt -X POST -H "Content-Type: application/json" --data '{"message" : "[\"OX49 5NU\", \"M32 0JG\", \"NE30 1DP\"]"}'
+```
+
 ### Mise
 
 * [Best Hex to String Converter Online to Convert Hex to Text (Hexadecimal to Text)](https://codebeautify.org/hex-string-converter)
