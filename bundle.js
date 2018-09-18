@@ -47613,6 +47613,7 @@ function isExistToken() {
 }
 
 function showProfile(data) {
+  // localStorage.userId
   console.dir(data);
 }
 
@@ -47659,7 +47660,11 @@ function getTotalStep(event) {
 function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = 31536000;
-  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity&expires_in=${EXPIRES_IN}`);
+  // const uri = window.location.href;
+  // const uri = "https://alincode.github.io/devon4";
+  const uri = "http://192.168.0.173:9966"
+  const redirectUri = encodeURIComponent(uri);
+  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`);
 
   // window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
 }
@@ -47821,7 +47826,7 @@ function getContestStep(result) {
   myContract.methods.getContestStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.step = (data.length > 20) ? 0 : data;
-    console.dir(result);
+    console.log('result: ', result);
     continueProcess();
     render(result);
   })
