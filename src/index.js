@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0xba98dafc3e246910c802bb33a2dc835a505b5c7e";
+const contractAddress = "0xc49505a761bc7b152c9effa76f6bcb13c8ebf1b1";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -189,9 +189,13 @@ function errorRender(errorMessage) {
  `)
 }
 
-function welcome(result) {
-  if (localStorage.fitbitAccessToken) return;
-  return bel`<div>Hi</div>`;
+function adminAreaElement(result) {
+  if (!result.isOwner) return;
+  return bel`
+  <div>
+    <button class=${css.button} onclick=${contestDone}"> Contest Done </button>
+    <button class=${css.button} onclick=${ownerWithdrawal}"> Owner Withdrawal </button>
+  </div>`;
 }
 
 function stepElement(result) {
@@ -207,8 +211,9 @@ function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
     <div class=${css.box1}>
-      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.<br>
-      ${welcome(result)}
+      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
+      <br><br>
+      ${adminAreaElement(result)}
     </div>
     <div class="${css.box2}">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
@@ -271,7 +276,7 @@ function isExistToken() {
 }
 
 function showProfile(data) {
-  // localStorage.userId
+  localStorage.userId = data.user.encodedId;
   console.dir(data);
 }
 
@@ -329,6 +334,9 @@ function getFitbitToken(event) {
 /******************************************************************************
   Event
 ******************************************************************************/
+
+// player
+
 function bet(event) {
   let betAmount = batAmountElement.value;
   if (parseInt(batAmountElement.value, 10) > MINIMIZE_SIGNUP_AMOUNT) alert("The amount can't low than ", MINIMIZE_SIGNUP_AMOUNT);
@@ -363,6 +371,8 @@ function updateStep(event) {
   })
 }
 
+// funder
+
 function fund(event) {
   let fundAmount = fundAmountElement.value;
   let name = fundNameElement.value;
@@ -371,6 +381,23 @@ function fund(event) {
     console.log('>>> fund ok.');
   })
 }
+
+// owner
+
+function contestDone(event) {
+  myContract.methods.done().send({ from: localStorage.wallet}, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> contest done.');
+  })
+}
+
+function ownerWithdrawal(event) {
+  myContract.methods.ownerWithdrawal().send({ from: localStorage.wallet}, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> owner withdrawal');
+  })
+}
+
 
 function clearResult(event) {
   localStorage.clear();
@@ -414,7 +441,7 @@ function continueProcess() {
 
 function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
-  log('loading (1/8) - getMyAddress')
+  log('loading (1/9) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
     localStorage.wallet = localAddresses[0];
@@ -425,7 +452,7 @@ function getMyAddress(result) {
 }
 
 function getNumPlayers(result) {
-  log('loading (2/8) - getNumPlayers')
+  log('loading (2/9) - getNumPlayers')
   myContract.methods.getNumPlayers().call((err, data) => {
     if (err) return errorRender('Please switch to Rinkeby test chain!');
     result.numPlayers = parseInt(data, 10);
@@ -434,7 +461,7 @@ function getNumPlayers(result) {
 }
 
 function getPlayersOfAmount(result) {
-  log('loading (3/8) - getPlayersOfAmount')
+  log('loading (3/9) - getPlayersOfAmount')
   myContract.methods.getPlayersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.playersOfAmount = data;
@@ -443,7 +470,7 @@ function getPlayersOfAmount(result) {
 }
 
 function getNumFunders(result) {
-  log('loading (4/8) - getNumFunders')
+  log('loading (4/9) - getNumFunders')
   myContract.methods.getNumFunders().call((err, data) => {
     if (err) return console.error(err);
     result.numFunders = parseInt(data, 10);
@@ -452,7 +479,7 @@ function getNumFunders(result) {
 }
 
 function getFundersOfAmount(result) {
-  log('loading (5/8) - getFundersOfAmount')
+  log('loading (5/9) - getFundersOfAmount')
   myContract.methods.getFundersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.fundersOfAmount = data;
@@ -461,16 +488,16 @@ function getFundersOfAmount(result) {
 }
 
 function isSigned(result) {
-  log('loading (6/8) - isSigned')
+  log('loading (6/9) - isSigned')
   myContract.methods.isSigned(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isSigned = data;
-    getBeginStep(result);
+    data ? getBeginStep(result) : isOwner(result);
   })
 }
 
 function getBeginStep(result) {
-  log('loading (7/8) - getBeginStep')
+  log('loading (7/9) - getBeginStep')
   myContract.methods.getBeginStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.beginStep = data;
@@ -479,10 +506,20 @@ function getBeginStep(result) {
 }
 
 function getContestStep(result) {
-  log('loading (8/8) - getContestStep')
+  log('loading (8/9) - getContestStep')
   myContract.methods.getContestStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.step = (data.length > 20) ? 0 : data;
+    isOwner(result);
+  })
+}
+
+function isOwner(result) {
+  log('loading (9/9) - isOwner')
+  myContract.methods.isOwner(result.wallet).call((err, data) => {
+    if (err) return console.error(err);
+    result.isOwner = data;
+    
     console.log('result: ', result);
     continueProcess();
     render(result);
