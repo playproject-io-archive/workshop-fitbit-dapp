@@ -167,7 +167,7 @@
         "type": "string"
       },
       {
-        "name": "_kwargs",
+        "name": "_header",
         "type": "string"
       },
       {

@@ -47051,7 +47051,7 @@ module.exports=[{
         "type": "string"
       },
       {
-        "name": "_kwargs",
+        "name": "_header",
         "type": "string"
       },
       {
@@ -47375,7 +47375,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0xc49505a761bc7b152c9effa76f6bcb13c8ebf1b1";
+const contractAddress = "0x2173f457f9424bc1e5983d0dc62d263b3ef85f09";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
