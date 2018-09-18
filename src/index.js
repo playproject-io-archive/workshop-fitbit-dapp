@@ -319,8 +319,7 @@ function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = 31536000;
   // const uri = window.location.href;
-  // const uri = "https://alincode.github.io/devon4";
-  const uri = "http://192.168.0.173:9966"
+  const uri = "https://alincode.github.io/devon4";
   const redirectUri = encodeURIComponent(uri);
   window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`);
 
