@@ -432,9 +432,14 @@ function encrypt(data, next) {
     .catch(console.error);
 }
 
-// encrypt({ "message": "json(https://api.postcodes.io/postcodes).status" }, function(data) {
-//   console.log(data);
-// });
+function encryptHeader(token, next) {
+  const header = `{'headers': {'content-type': 'json', 'Authorization': 'Bearer ${token}'}}`;
+  encrypt({ "message" : header }, function (data) {
+    next(data);
+  });
+}
+
+// encryptHeader("123", console.log);
 
 /******************************************************************************
   DONE
