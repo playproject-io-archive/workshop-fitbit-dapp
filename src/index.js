@@ -32,44 +32,44 @@ const log = console.log;
 ******************************************************************************/
 const css = csjs`
   .box {
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    grid-auto-rows: 100px; 
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 100px;
   }
-  .box1 { 
-    grid-column-start: 1; 
-    grid-column-end: 4; 
-    grid-row-start: 1; 
+  .box1 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
     grid-row-end: 3;
     text-align: center;
-  } 
-  .box2 { 
-      grid-column-start: 1; 
-      grid-row-start: 3; 
-      grid-row-end: 5; 
   }
-  .box3 { 
-      grid-column-start: 2; 
-      grid-column-end: 4; 
-      grid-row-start: 3; 
-      grid-row-end: 4; 
+  .box2 {
+      grid-column-start: 1;
+      grid-row-start: 3;
+      grid-row-end: 5;
+  }
+  .box3 {
+      grid-column-start: 2;
+      grid-column-end: 4;
+      grid-row-start: 3;
+      grid-row-end: 4;
       color: #00529B;
       background-color: #BDE5F8;
       padding-left: 20px;
   }
-  .box4 { 
-      grid-column-start: 2; 
-      grid-column-end: 4; 
-      grid-row-start: 4; 
+  .box4 {
+      grid-column-start: 2;
+      grid-column-end: 4;
+      grid-row-start: 4;
       grid-row-end: 5;
       color: #4F8A10;
       background-color: #DFF2BF;
       padding-left: 20px;
   }
-  .box5 { 
-    grid-column-start: 1; 
-    grid-column-end: 4; 
-    grid-row-start: 6; 
+  .box5 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 6;
     grid-row-end: 7;
     text-align: center;
   }
@@ -142,7 +142,7 @@ function batAreaElement(result) {
   if (result.isSigned){
     return bel`
     <div>
-      you already <span class="${css.highlight}">signed</span> the contest. 
+      you already <span class="${css.highlight}">signed</span> the contest.
       <button class=${css.button} onclick=${updateStep}> update step</button>
     </div>`;
   } else {
@@ -232,7 +232,7 @@ function render(result) {
     ${fundAreaElement}
     ${debugAreaElement(result)}
   </div>
- `) 
+ `)
 }
 
 if(typeof web3 == 'undefined') {
@@ -331,7 +331,7 @@ function getFitbitToken(event) {
   // const uri = window.location.href;
   const uri = "https://alincode.github.io/devon4";
   const redirectUri = encodeURIComponent(uri);
-  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`);
+  window.open(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`, '_blank');
 
   // window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
 }
@@ -562,7 +562,7 @@ function isOwner(result) {
   myContract.methods.isOwner(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isOwner = data;
-    
+
     console.log('result: ', result);
     continueProcess();
     render(result);
