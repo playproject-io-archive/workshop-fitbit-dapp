@@ -9,15 +9,19 @@ contract CommonMixin {
     uint duration = 604800;
     
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
-    modifier onlyOnTime { require(!timeOut(), "only on time"); _; }
+    modifier onlyOnTime { require(isOnTime(), "only on time"); _; }
     
     constructor() public {
         owner = msg.sender;
         startTime = now;
     }
     
-    function timeOut() public constant returns (bool) {
-        return !(startTime + duration > now);
+    function isOnTime() public constant returns (bool) {
+        return startTime + duration > now;
+    }
+    
+    function isOwner(address addr) public constant returns (bool) {
+        return addr == owner;
     }
 
 }
@@ -156,12 +160,12 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // Step2
-    function request(string _query, string _method, string _url, string _kwargs, string _userId) public payable {
+    function request(string _query, string _method, string _url, string _header, string _userId) public payable {
         bytes32 queryId = oraclize_query("computation",
             [_query,
             _method,
             _url,
-            _kwargs]
+            _header]
         , GAS_LIMIT);
         signDatas[queryId] = SignData(_userId, msg.sender, msg.value);
         emit NewOraclizeQuery("request", _userId);
@@ -215,8 +219,6 @@ contract PlayerMixin is usingOraclize, CommonMixin {
 }
 
 contract FitnessContest is PlayerMixin, FunderMixin {
-    
-    uint private supportMaintainer = 0.1 ether;
 
     uint private constant GOAL_STEP = 100000;
     bool ended;
@@ -234,16 +236,21 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         return ended;
     }
 
+    function getTotalAmount() public view returns (uint){
+        return getFundersOfAmount() + getPlayersOfAmount();
+    }
+    
+    function isWinner(address addr) private returns (bool win){
+        Player memory player = players[addr];
+        return (player.endStep - player.beginStep) > GOAL_STEP;
+    }
+    
     function calculatorWinners() private {
         for(uint i = 0; i < getNumPlayers(); i++) {
             if (isWinner(playerIndexs[i])) {
                 winners.push(playerIndexs[i]);
             }
         }
-    }
-    
-    function getTotalAmount() public view returns (uint){
-        return getFundersOfAmount() + getPlayersOfAmount();
     }
     
     function playersWithdrawal() private {
@@ -256,21 +263,15 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     
     // 公布活動結果
     function done() public onlyOwner returns (bool reached) {
-        require(!ended);
+        // require(!ended);
         calculatorWinners();
         playersWithdrawal();
         ended = true;
-        // owner.transfer(supportMaintainer);
         return true;
     }
     
-    function isWinner(address addr) private returns (bool win){
-        Player memory player = players[addr];
-        return (player.endStep - player.beginStep) > GOAL_STEP;
-    }
-    
     function ownerWithdrawal() public onlyOwner returns (uint) {
-        // TODO: check deadline
+        // require(!isOnTime(), "only activity timeout");
         owner.transfer(this.balance);
         return this.balance;
     }
@@ -284,34 +285,3 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         return this.balance;
     }
 }
-
-// contract TestFitnessContest is FitnessContest {
-    
-//     function step1() payable {
-//         fund("IBM");
-//     }
-    
-//     function step2() payable {
-//         fund("ASUS");
-//     }
-    
-//     function step3() payable {
-//         signup("token1", "Nina");
-//         playerWithdrawal("token1", "Nina");
-//     }
-    
-//     function step4() payable {
-//         signup("token2", "Alex");
-//         playerWithdrawal("token2", "Alex");
-//     }
-    
-//     function step5() payable {
-//         signup("token3", "Alin");
-//         playerWithdrawal("token3", "Alin");
-//     }
-    
-//     function step6() payable {
-//         done();   
-//     }
-    
-// }
