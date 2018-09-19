@@ -418,6 +418,25 @@ function clearResult(event) {
 }
 
 /******************************************************************************
+  Oraclize
+******************************************************************************/
+function encrypt(data, next) {
+  const init = {
+    method: 'POST',
+    body: JSON.stringify(data),
+  };
+
+  fetch('https://api.oraclize.it/v1/utils/encryption/encrypt', init)
+    .then(processResponse)
+    .then(next)
+    .catch(console.error);
+}
+
+// encrypt({ "message": "json(https://api.postcodes.io/postcodes).status" }, function(data) {
+//   console.log(data);
+// });
+
+/******************************************************************************
   DONE
 ******************************************************************************/
 function done(err, result) {
