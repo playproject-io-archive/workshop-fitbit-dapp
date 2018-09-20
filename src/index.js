@@ -210,7 +210,7 @@ function render(result) {
       Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
       <br><br>
       ${adminAreaElement(result)}
-      <br><br><br>
+      <br>
       <div>
         <b>Welcome</b> to the Fitbit wellness contest.<br>
         The price money is shared equally between all participate<br>
