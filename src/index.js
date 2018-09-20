@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x688dca6b2f0c809139b04b5d3f36cba31294efb1";
+const contractAddress = "0x33a63e496a7231d15a7fa0b315878563b3c81b94";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -351,7 +351,6 @@ function bet(event) {
   }
 
   const token = localStorage.fitbitAccessToken;
-  const userId = localStorage.userId;
   if (!token) {
     localStorage.continueBetAmount = betAmount;
     localStorage.continueEvent = 1;
@@ -359,7 +358,15 @@ function bet(event) {
     return;
   }
 
-  myContract.methods.signup(token, userId).send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") }, (err, data) => {
+  encryptHeader(token, function(error, header){
+    console.log(header);
+    signup(header, betAmount);
+  });
+}
+
+function signup(header, betAmount) {
+  const options = { from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") };
+  myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
     localStorage.removeItem("continueBetAmount");
@@ -435,7 +442,12 @@ function encrypt(data, next) {
 function encryptHeader(token, next) {
   const header = `{'headers': {'content-type': 'json', 'Authorization': 'Bearer ${token}'}}`;
   encrypt({ "message" : header }, function (data) {
-    next(data);
+    // console.log(data);
+    if (data.success) {
+      next(null, data.result);
+    } else {
+      next(new Error("encrypt header fail"));
+    }
   });
 }
 
