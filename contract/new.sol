@@ -264,16 +264,6 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         ended = true;
         return true;
     }
-    
-    function ownerWithdrawal() public onlyOwner returns (uint) {
-        // require(!isOnTime(), "only activity timeout");
-        owner.transfer(this.balance);
-        return this.balance;
-    }
-    
-    function kill() public onlyOwner {
-        selfdestruct(owner);
-    }
 
     // 合約裡面的結餘
     function getBalance() public onlyOwner view returns (uint amount) {

@@ -46996,15 +46996,6 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "kill",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [{
       "name": "addr",
@@ -47278,18 +47269,6 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "ownerWithdrawal",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -47375,7 +47354,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x33a63e496a7231d15a7fa0b315878563b3c81b94";
+const contractAddress = "0xaef4e3e1987dfb4340aa827aea09e2df01ca7c3d";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -47395,40 +47374,48 @@ const css = csjs`
   }
   .box1 {
     grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+  }
+  .box2 {
+    grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 3;
     text-align: center;
   }
-  .box2 {
-      grid-column-start: 1;
-      grid-row-start: 3;
-      grid-row-end: 5;
-  }
   .box3 {
-      grid-column-start: 2;
-      grid-column-end: 4;
-      grid-row-start: 3;
-      grid-row-end: 5;
-      color: #00529B;
-      background-color: #BDE5F8;
-      padding: 20px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 7;
   }
   .box4 {
-      grid-column-start: 2;
-      grid-column-end: 4;
-      grid-row-start: 5;
-      grid-row-end: 7;
-      color: #4F8A10;
-      background-color: #DFF2BF;
-      padding: 20px;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 5;
+    color: #00529B;
+    background-color: #BDE5F8;
+    padding: 20px;
   }
   .box5 {
-    grid-column-start: 1;
+    grid-column-start: 2;
     grid-column-end: 4;
-    grid-row-start: 6;
+    grid-row-start: 5;
     grid-row-end: 7;
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    padding: 20px;
+  }
+  .box6 {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 7;
+    grid-row-end: 8;
     text-align: center;
+    margin-top: 20px;
   }
   .input {
     margin: 10px;
@@ -47439,6 +47426,13 @@ const css = csjs`
     margin-top: 10px;
     font-size: 20px;
     width: 200px;
+    background-color: #4CAF50;
+    color: white;
+  }
+  .shortButton {
+    margin-top: 10px;
+    font-size: 20px;
+    width: 120px;
     background-color: #4CAF50;
     color: white;
   }
@@ -47495,15 +47489,13 @@ const css = csjs`
 function batAreaElement(result) {
   if (result.isSigned){
     return bel`
-    <div>
-      You successfully <span class="${css.highlight}">joined</span> the contest.<br>
+    <div class="${css.box4}">
+      You successfully <span class="${css.highlight}">joined</span> the contest. Your current amount of steps ${result.beginStep - result.endStep}.<br>
       <button class=${css.button} onclick=${updateStep}> Allow us to update your step data from fitbit </button><br>
-      Your current amount of steps ${result.beginStep - result.endStep}<br>
-      ()
     </div>`;
   } else {
     return bel`
-    <div class="${css.box3}">
+    <div class="${css.box4}">
       I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)<br>
       <button class=${css.button} onclick=${bet}> Bet</button> (joining fee 0.1 ETH)
     </div>
@@ -47520,21 +47512,21 @@ const fundNameElement = bel`
   <input class=${css.input} type="text"/>
 `
 const fundAreaElement = bel`
-  <div class="${css.box4}">
+  <div class="${css.box5}">
     I want to sponsor this contest with ${fundAmountElement} ETH!<br>
     Name you want to be added to our sponsorship board. ${fundNameElement}<br>
-    <button class=${css.button} onclick=${fund}> Fund </button> (min 0.1 ETH)
+    <button class=${css.button} onclick=${fund}> Fund </button> (min 0.5 ETH)
   </div>
 `
 
 function debugAreaElement(result) {
   if (localStorage.debug == "true") {
     return bel`
-    <div class="${css.box5}">
-      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
-      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
-      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button>
-      <button class=${css.button} onclick=${clearResult}"> Clear </button><br><br>
+    <div class="${css.box6}">
+      <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button>
+      <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button>
+      <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button>
+      <button class=${css.shortButton} onclick=${clearResult}"> Clear </button><br><br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
@@ -47556,14 +47548,16 @@ function adminAreaElement(result) {
   return bel`
   <div>
     <button class=${css.button} onclick=${contestDone}"> Contest Done </button>
-    <button class=${css.button} onclick=${ownerWithdrawal}"> Owner Withdrawal </button>
   </div>`;
 }
 
 function render(result) {
   document.body.appendChild(bel`
   <div class=${css.box} id="app">
-    <div class=${css.box1}>
+    <div class="${css.box1}">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
+    </div>
+    <div class=${css.box2}>
       Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
       <br><br>
       ${adminAreaElement(result)}
@@ -47574,8 +47568,7 @@ function render(result) {
         who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)
       </div>
     </div>
-    <div class="${css.box2}">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
+    <div class="${css.box3}">
       Total players: ${result.numPlayers} <br>
       Total fees: ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
       Total funders: ${result.numFunders} <br>
