@@ -144,28 +144,23 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // Step1
-    function requestActivities(string _access_token, string _userId) public payable {
-        string memory header = strConcat(
-			"{'headers': {'content-type': 'json', 'Authorization': 'Bearer ",
-			_access_token,
-			"'}}"
-			);
+    function requestActivities(string _encryptHeader, string _userId) public payable {
 		emit NewOraclizeQuery("requestActivities", _userId);
         
         request("json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).lifetime.total.steps",
                 "GET",
                 "https://api.fitbit.com/1/user/-/activities.json",
-                header,
+                _encryptHeader,
                 _userId);
     }
     
     // Step2
-    function request(string _query, string _method, string _url, string _header, string _userId) public payable {
+    function request(string _query, string _method, string _url, string _encryptHeader, string _userId) public payable {
         bytes32 queryId = oraclize_query("computation",
             [_query,
             _method,
             _url,
-            _header]
+            _encryptHeader]
         , GAS_LIMIT);
         signDatas[queryId] = SignData(_userId, msg.sender, msg.value);
         emit NewOraclizeQuery("request", _userId);
@@ -206,15 +201,15 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // 註冊
-    function signup(string _access_token, string _userId)  public minimizeSignup onlyOnTime payable {
+    function signup(string _encryptHeader, string _userId)  public minimizeSignup onlyOnTime payable {
         require(!isSigned(msg.sender), "you already signed");
-        requestActivities(_access_token, _userId);
+        requestActivities(_encryptHeader, _userId);
     }
     
     // 玩家申請領獎
-    function playerWithdrawal(string _access_token, string _userId) public minimizeFetch onlyOnTime payable {
+    function playerWithdrawal(string _encryptHeader, string _userId) public minimizeFetch onlyOnTime payable {
         require(isSigned(msg.sender), "you didn't sign yet.");
-        requestActivities(_access_token, _userId);
+        requestActivities(_encryptHeader, _userId);
     }
 }
 
