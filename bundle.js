@@ -46882,101 +46882,38 @@ function extend() {
 }
 
 },{}],298:[function(require,module,exports){
-module.exports=[{
-    "constant": true,
-    "inputs": [],
-    "name": "isOnTime",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
+module.exports=[
   {
-    "constant": true,
-    "inputs": [],
-    "name": "getFundersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "getEnded",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getBalance",
-    "outputs": [{
-      "name": "amount",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumFunders",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "myid",
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "userId",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
         "type": "bytes32"
       },
       {
-        "name": "result",
-        "type": "string"
+        "indexed": false,
+        "name": "step",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
       }
     ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isOwner",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
   },
   {
     "constant": false,
-    "inputs": [{
+    "inputs": [
+      {
         "name": "_queryId",
         "type": "bytes32"
       },
@@ -46996,23 +46933,89 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getBeginStep",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "description",
+        "type": "string"
+      }
+    ],
+    "name": "NewOraclizeQuery",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "LOG_Address",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "myid",
+        "type": "bytes32"
+      },
+      {
+        "name": "result",
+        "type": "string"
+      }
+    ],
+    "name": "__callback",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [{
+    "inputs": [],
+    "name": "done",
+    "outputs": [
+      {
+        "name": "reached",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -47021,7 +47024,7 @@ module.exports=[{
         "type": "string"
       }
     ],
-    "name": "signup",
+    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -47029,7 +47032,8 @@ module.exports=[{
   },
   {
     "constant": false,
-    "inputs": [{
+    "inputs": [
+      {
         "name": "_query",
         "type": "string"
       },
@@ -47057,119 +47061,9 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [{
-      "name": "",
-      "type": "bytes32"
-    }],
-    "name": "signDatas",
-    "outputs": [{
-        "name": "userId",
-        "type": "string"
-      },
+    "constant": false,
+    "inputs": [
       {
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumPlayers",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getTotalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "_name",
-      "type": "string"
-    }],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isSigned",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getPlayersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -47186,7 +47080,8 @@ module.exports=[{
   },
   {
     "constant": false,
-    "inputs": [{
+    "inputs": [
+      {
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -47195,77 +47090,10 @@ module.exports=[{
         "type": "string"
       }
     ],
-    "name": "playerWithdrawal",
+    "name": "signup",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getYourBetAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_userId",
-        "type": "string"
-      },
-      {
-        "name": "_queryId",
-        "type": "bytes32"
-      },
-      {
-        "name": "steps",
-        "type": "uint256"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "callback_ForGetUserStep",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getEndStep",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getContestStep",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -47275,62 +47103,284 @@ module.exports=[{
     "type": "constructor"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
+    "constant": true,
+    "inputs": [],
+    "name": "getAllFunders",
+    "outputs": [
       {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
+        "name": "",
+        "type": "address[]"
       }
     ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
+    "constant": true,
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [
       {
-        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
         "name": "addr",
         "type": "address"
       }
     ],
-    "name": "LOG_Address",
-    "type": "event"
+    "name": "getBeginStep",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
+    "constant": true,
+    "inputs": [
+      {
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "getContestStep",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getEnded",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "getEndStep",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getFundersOfAmount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumFunders",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumPlayers",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getPlayersOfAmount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalAmount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getYourBetAmount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isOnTime",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "isOwner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "isSigned",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "signDatas",
+    "outputs": [
+      {
         "name": "userId",
         "type": "string"
       },
       {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
+        "name": "addr",
+        "type": "address"
       },
       {
-        "indexed": false,
-        "name": "step",
+        "name": "amount",
         "type": "uint256"
       },
       {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
+        "name": "encryptHeader",
+        "type": "string"
       }
     ],
-    "name": "LOG_OraclizeCallbackStep",
-    "type": "event"
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   }
 ]
 },{}],299:[function(require,module,exports){
@@ -47354,7 +47404,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0xaef4e3e1987dfb4340aa827aea09e2df01ca7c3d";
+const contractAddress = "0xfc1317928c32ff26561a1f3728a5693e18f5baa9";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -47389,9 +47439,15 @@ const css = csjs`
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 3;
-    grid-row-end: 7;
+    grid-row-end: 5;
   }
   .box4 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 5;
+    grid-row-end: 7;
+  }
+  .box5 {
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 3;
@@ -47400,7 +47456,7 @@ const css = csjs`
     background-color: #BDE5F8;
     padding: 20px;
   }
-  .box5 {
+  .box6 {
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 5;
@@ -47409,7 +47465,7 @@ const css = csjs`
     background-color: #DFF2BF;
     padding: 20px;
   }
-  .box6 {
+  .box7 {
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 7;
@@ -47484,18 +47540,28 @@ const css = csjs`
   Create Element
 ******************************************************************************/
 
+function funderAreaElement(result) {
+  if (!result.funderAddresses) return;
+  return bel`<div class="${css.box4}">Funder : <ul>
+    ${result.funderAddresses.map(function (item) {
+      return bel`<li>${item}</li>`
+    })}
+  </ul></div>`
+}
+
 // player
 
-function batAreaElement(result) {
+function betAreaElement(result) {
   if (result.isSigned){
     return bel`
-    <div class="${css.box4}">
-      You successfully <span class="${css.highlight}">joined</span> the contest. Your current amount of steps ${result.beginStep - result.endStep}.<br>
+    <div class="${css.box5}">
+      You successfully <span class="${css.highlight}">joined</span> the contest.<br>
+      Your current amount of steps ${result.beginStep - result.endStep}.<br>
       <button class=${css.button} onclick=${updateStep}> Allow us to update your step data from fitbit </button><br>
     </div>`;
   } else {
     return bel`
-    <div class="${css.box4}">
+    <div class="${css.box5}">
       I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)<br>
       <button class=${css.button} onclick=${bet}> Bet</button> (joining fee 0.1 ETH)
     </div>
@@ -47512,7 +47578,7 @@ const fundNameElement = bel`
   <input class=${css.input} type="text"/>
 `
 const fundAreaElement = bel`
-  <div class="${css.box5}">
+  <div class="${css.box6}">
     I want to sponsor this contest with ${fundAmountElement} ETH!<br>
     Name you want to be added to our sponsorship board. ${fundNameElement}<br>
     <button class=${css.button} onclick=${fund}> Fund </button> (min 0.5 ETH)
@@ -47522,7 +47588,7 @@ const fundAreaElement = bel`
 function debugAreaElement(result) {
   if (localStorage.debug == "true") {
     return bel`
-    <div class="${css.box6}">
+    <div class="${css.box7}">
       <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button>
       <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button>
       <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button>
@@ -47574,7 +47640,8 @@ function render(result) {
       Total funders: ${result.numFunders} <br>
       Total prize amount: ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br><br>
     </div>
-    ${batAreaElement(result)}
+    ${funderAreaElement(result)}
+    ${betAreaElement(result)}
     ${fundAreaElement}
     ${debugAreaElement(result)}
   </div>
@@ -47835,7 +47902,7 @@ function continueProcess() {
 
 function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
-  log('loading (1/11) - getMyAddress')
+  log('loading (1/12) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
     if (err) return done(err)
@@ -47846,7 +47913,7 @@ function getMyAddress(result) {
 }
 
 function getBalance(result) {
-  log('loading (2/11) - getBalance')
+  log('loading (2/12) - getBalance')
   web3.eth.getBalance(result.wallet, (err, wei) => {
     if (err) return done(err)
     const balance = web3.utils.fromWei(wei, 'ether');
@@ -47857,7 +47924,7 @@ function getBalance(result) {
 }
 
 function getNumPlayers(result) {
-  log('loading (3/11) - getNumPlayers')
+  log('loading (3/12) - getNumPlayers')
   myContract.methods.getNumPlayers().call((err, data) => {
     if (err) return errorRender('Please switch to Rinkeby test chain!');
     result.numPlayers = parseInt(data, 10);
@@ -47866,7 +47933,7 @@ function getNumPlayers(result) {
 }
 
 function getPlayersOfAmount(result) {
-  log('loading (4/11) - getPlayersOfAmount')
+  log('loading (4/12) - getPlayersOfAmount')
   myContract.methods.getPlayersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.playersOfAmount = data;
@@ -47875,7 +47942,7 @@ function getPlayersOfAmount(result) {
 }
 
 function getNumFunders(result) {
-  log('loading (5/11) - getNumFunders')
+  log('loading (5/12) - getNumFunders')
   myContract.methods.getNumFunders().call((err, data) => {
     if (err) return console.error(err);
     result.numFunders = parseInt(data, 10);
@@ -47884,16 +47951,26 @@ function getNumFunders(result) {
 }
 
 function getFundersOfAmount(result) {
-  log('loading (6/11) - getFundersOfAmount')
+  log('loading (6/12) - getFundersOfAmount')
   myContract.methods.getFundersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.fundersOfAmount = data;
+    getAllFunders(result);
+  })
+}
+
+function getAllFunders(result) {
+  log('loading (7/12) - getAllFunders')
+  myContract.methods.getAllFunders().call((err, data) => {
+    console.dir(data);
+    if (err) return console.error(err);
+    result.funderAddresses = data;
     isSigned(result);
   })
 }
 
 function isSigned(result) {
-  log('loading (7/11) - isSigned')
+  log('loading (8/12) - isSigned')
   myContract.methods.isSigned(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isSigned = data;
@@ -47902,7 +47979,7 @@ function isSigned(result) {
 }
 
 function getBeginStep(result) {
-  log('loading (8/11) - getBeginStep')
+  log('loading (9/12) - getBeginStep')
   myContract.methods.getBeginStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.beginStep = data;
@@ -47911,7 +47988,7 @@ function getBeginStep(result) {
 }
 
 function getEndStep(result) {
-  log('loading (9/11) - getEndStep')
+  log('loading (10/12) - getEndStep')
   myContract.methods.getEndStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.endStep = data;
@@ -47920,7 +47997,7 @@ function getEndStep(result) {
 }
 
 function getContestStep(result) {
-  log('loading (10/11) - getContestStep')
+  log('loading (11/12) - getContestStep')
   myContract.methods.getContestStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.step = (data.length > 20) ? 0 : data;
@@ -47929,7 +48006,7 @@ function getContestStep(result) {
 }
 
 function isOwner(result) {
-  log('loading (10/11) - isOwner')
+  log('loading (12/12) - isOwner')
   myContract.methods.isOwner(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isOwner = data;
