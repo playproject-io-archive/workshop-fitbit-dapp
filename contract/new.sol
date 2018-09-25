@@ -1,12 +1,11 @@
 pragma solidity ^0.4.0;
 
 import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
-import "github.com/Arachnid/solidity-stringutils/strings.sol";
 
 contract CommonMixin {
     address public owner;
     uint startTime;
-    uint duration = 604800;
+    uint duration = 2592000;
     
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
     modifier onlyOnTime { require(isOnTime(), "only on time"); _; }
@@ -31,16 +30,20 @@ contract FunderMixin is CommonMixin {
     uint private numFunders;
     uint private fundersOfAmount;
     
+    address[] funderAddresses;
     mapping (address => Funder) funders;
 
-    modifier minimizeContribute { require( msg.value >= 0.1 ether, "ether not enough"); _; }
+    modifier minimizeContribute { require( msg.value >= 0.5 ether, "ether not enough"); _; }
     
     struct Funder {
         address addr;
         uint amount;
         uint createdAt;
         string name;
-        // string url;
+    }
+    
+    function getAllFunders() external view returns (address[]) {
+      return funderAddresses;
     }
     
     // 贊助人數
@@ -61,6 +64,7 @@ contract FunderMixin is CommonMixin {
         } else {
             funders[msg.sender] = Funder(msg.sender, msg.value, now, _name);
             numFunders++;
+            funderAddresses.push(msg.sender);
         }
         fundersOfAmount += msg.value;
     }
@@ -69,7 +73,6 @@ contract FunderMixin is CommonMixin {
 
 contract PlayerMixin is usingOraclize, CommonMixin {
     
-    using strings for *;
     uint private constant GAS_LIMIT = 400000;
     // uint private constant GAS_LIMIT = 2000000;
     uint private minimizeSinupAmount = 0.1 ether;
@@ -106,14 +109,15 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         uint createdAt;
         uint beginStep;
         uint endStep;
-        // 領過了嗎
-        bool withdrew;
+        bool winner;
+        string encryptHeader;
     }
 	
 	struct SignData {
         string userId;
         address addr;
         uint amount;
+        string encryptHeader;
     }
     
     constructor() public {
@@ -162,12 +166,12 @@ contract PlayerMixin is usingOraclize, CommonMixin {
             _url,
             _encryptHeader]
         , GAS_LIMIT);
-        signDatas[queryId] = SignData(_userId, msg.sender, msg.value);
+        signDatas[queryId] = SignData(_userId, msg.sender, msg.value, _encryptHeader);
         emit NewOraclizeQuery("request", _userId);
     }
     
     // Step3
-    function __callback(bytes32 _queryId, string _result, bytes _proof) onlyOraclize {
+    function __callback(bytes32 _queryId, string _result, bytes _proof) public onlyOraclize {
         emit NewOraclizeQuery("__callback:", _result);
         SignData memory o = signDatas[_queryId];
         emit LOG_OraclizeCallbackStep(o.userId, _queryId, parseInt(_result), _proof);
@@ -175,12 +179,12 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // Step4
-    function callback_ForGetUserStep(string _userId, bytes32 _queryId, uint steps, bytes _proof) {
+    function callback_ForGetUserStep(string _userId, bytes32 _queryId, uint steps, bytes _proof) private {
         SignData memory o = signDatas[_queryId];
         if(isSigned(o.addr)) {
             players[o.addr].endStep = steps;
         } else {
-            addPlayer(o.addr, o.amount, o.userId, steps);
+            addPlayer(o.addr, o.amount, o.userId, o.encryptHeader, steps);
         }
     }
 
@@ -193,8 +197,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         return players[msg.sender].amount;
     }
     
-    function addPlayer(address _addr, uint _amount, string _userId, uint _beginStep) private {
-        players[_addr] = Player(_addr, _amount, _userId, now, _beginStep, 0, false);
+    function addPlayer(address _addr, uint _amount, string _userId, string _encryptHeader, uint _beginStep) private {
+        players[_addr] = Player(_addr, _amount, _userId, now, _beginStep, 0, false, _encryptHeader);
         playerIndexs[numPlayers] = _addr;
         playersOfAmount += _amount;
         numPlayers++;
@@ -211,6 +215,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         require(isSigned(msg.sender), "you didn't sign yet.");
         requestActivities(_encryptHeader, _userId);
     }
+    
+    
 }
 
 contract FitnessContest is PlayerMixin, FunderMixin {
@@ -227,7 +233,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         endAt = now + (60 * 60 * 24 * 7);
     }
     
-    function getEnded() public returns (bool) {
+    function getEnded() public view returns (bool) {
         return ended;
     }
 
@@ -235,7 +241,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         return getFundersOfAmount() + getPlayersOfAmount();
     }
     
-    function isWinner(address addr) private returns (bool win){
+    function isWinner(address addr) private view returns (bool win){
         Player memory player = players[addr];
         return (player.endStep - player.beginStep) > GOAL_STEP;
     }
