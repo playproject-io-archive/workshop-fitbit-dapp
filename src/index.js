@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0xa95c2251cba38dd81238418ca80728083f3d9f61";
+const contractAddress = "0xec235f5ea9c72f8f782c9a8c138e8f906a071bb3";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
