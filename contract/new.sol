@@ -1,4 +1,5 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.17;
+pragma experimental ABIEncoderV2;
 
 import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
 
@@ -45,6 +46,24 @@ contract FunderMixin is CommonMixin {
     function getAllFunders() external view returns (address[]) {
       return funderAddresses;
     }
+    
+    function getFunder(address addr) public view returns (string, uint) {
+        return (funders[addr].name, funders[addr].amount);
+    }
+    
+    function getFunders() public view returns (string[], uint[]) {
+        string[] memory names = new string[](funderAddresses.length);
+        uint[] memory amounts = new uint[](funderAddresses.length);
+        
+        for (uint i = 0; i < funderAddresses.length; i++) {
+            Funder storage funder = funders[funderAddresses[i]];
+            names[i] = funder.name;
+            amounts[i] = funder.amount;
+        }
+        
+        return (names, amounts);
+    }
+
     
     // 贊助人數
     function getNumFunders() public view returns (uint) {
