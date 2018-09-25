@@ -1,8 +1,6 @@
-[
-  {
+[{
     "anonymous": false,
-    "inputs": [
-      {
+    "inputs": [{
         "indexed": false,
         "name": "userId",
         "type": "string"
@@ -28,8 +26,24 @@
   },
   {
     "constant": false,
-    "inputs": [
+    "inputs": [{
+        "name": "myid",
+        "type": "bytes32"
+      },
       {
+        "name": "result",
+        "type": "string"
+      }
+    ],
+    "name": "__callback",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
         "name": "_queryId",
         "type": "bytes32"
       },
@@ -49,26 +63,32 @@
     "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
-      }
-    ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
+    "constant": false,
+    "inputs": [],
+    "name": "done",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
+    "inputs": [{
         "indexed": false,
         "name": "tag",
         "type": "string"
@@ -83,55 +103,24 @@
     "type": "event"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "myid",
-        "type": "bytes32"
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
       },
       {
-        "name": "result",
+        "indexed": false,
+        "name": "description",
         "type": "string"
       }
     ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
+    "name": "NewOraclizeQuery",
+    "type": "event"
   },
   {
     "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [
-      {
-        "name": "reached",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_name",
-        "type": "string"
-      }
-    ],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -148,8 +137,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_query",
         "type": "string"
       },
@@ -178,8 +166,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -196,8 +183,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -222,12 +208,10 @@
     "constant": true,
     "inputs": [],
     "name": "getAllFunders",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address[]"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "address[]"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -236,45 +220,82 @@
     "constant": true,
     "inputs": [],
     "name": "getBalance",
-    "outputs": [
-      {
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "amount",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "getBeginStep",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "getContestStep",
-    "outputs": [
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getEnded",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getEndStep",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getFunder",
+    "outputs": [{
+        "name": "",
+        "type": "string"
+      },
       {
         "name": "",
         "type": "uint256"
@@ -287,30 +308,14 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getEnded",
-    "outputs": [
+    "name": "getFunders",
+    "outputs": [{
+        "name": "",
+        "type": "string[]"
+      },
       {
         "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "getEndStep",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
+        "type": "uint256[]"
       }
     ],
     "payable": false,
@@ -321,12 +326,10 @@
     "constant": true,
     "inputs": [],
     "name": "getFundersOfAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -335,12 +338,10 @@
     "constant": true,
     "inputs": [],
     "name": "getNumFunders",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -349,12 +350,10 @@
     "constant": true,
     "inputs": [],
     "name": "getNumPlayers",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -363,12 +362,10 @@
     "constant": true,
     "inputs": [],
     "name": "getPlayersOfAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -377,12 +374,10 @@
     "constant": true,
     "inputs": [],
     "name": "getTotalAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -391,12 +386,10 @@
     "constant": true,
     "inputs": [],
     "name": "getYourBetAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -405,50 +398,40 @@
     "constant": true,
     "inputs": [],
     "name": "isOnTime",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "isOwner",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "isSigned",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -457,27 +440,22 @@
     "constant": true,
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
+    "inputs": [{
+      "name": "",
+      "type": "bytes32"
+    }],
     "name": "signDatas",
-    "outputs": [
-      {
+    "outputs": [{
         "name": "userId",
         "type": "string"
       },

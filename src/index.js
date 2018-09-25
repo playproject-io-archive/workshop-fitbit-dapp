@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0xfc1317928c32ff26561a1f3728a5693e18f5baa9";
+const contractAddress = "0xa95c2251cba38dd81238418ca80728083f3d9f61";
 const CONTRACT_GAS = 400000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = 0.1
@@ -155,10 +155,11 @@ const css = csjs`
 ******************************************************************************/
 
 function funderAreaElement(result) {
-  if (!result.funderAddresses) return;
+  if (result.funders[0].length == 0) return;
   return bel`<div class="${css.box4}">Funder : <ul>
-    ${result.funderAddresses.map(function (item) {
-      return bel`<li>${item}</li>`
+    ${result.funders[0].map(function (item, index) {
+    return bel`<li>${item} : ${web3.utils.fromWei(result.funders[1][index], "ether")} ETH
+    </li>`
     })}
   </ul></div>`
 }
@@ -569,16 +570,15 @@ function getFundersOfAmount(result) {
   myContract.methods.getFundersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.fundersOfAmount = data;
-    getAllFunders(result);
+    getFunders(result);
   })
 }
 
-function getAllFunders(result) {
-  log('loading (7/12) - getAllFunders')
-  myContract.methods.getAllFunders().call((err, data) => {
-    console.dir(data);
+function getFunders(result) {
+  log('loading (7/12) - getFunders')
+  myContract.methods.getFunders().call((err, data) => {
     if (err) return console.error(err);
-    result.funderAddresses = data;
+    result.funders = data;
     isSigned(result);
   })
 }
