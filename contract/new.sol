@@ -230,9 +230,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
     
     // 玩家申請領獎
-    function playerWithdrawal(string _encryptHeader, string _userId) public minimizeFetch onlyOnTime payable {
+    function playerWithdrawal() public minimizeFetch payable {
         require(isSigned(msg.sender), "you didn't sign yet.");
-        requestActivities(_encryptHeader, _userId);
     }
     
     function updateAllUserStep() public onlyOwner payable {
@@ -287,7 +286,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     }
     
     // 公布活動結果
-    function done() public onlyOwner returns (bool reached) {
+    function withdrawal() public onlyOwner returns (bool reached) {
         // require(!ended);
         calculatorWinners();
         playersWithdrawal();

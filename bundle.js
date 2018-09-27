@@ -50655,6 +50655,15 @@ module.exports=[{
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [],
+    "name": "playerWithdrawal",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "owner",
@@ -50682,18 +50691,6 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "getPlayersOfAmount",
@@ -50717,23 +50714,6 @@ module.exports=[{
       }
     ],
     "name": "requestActivities",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_encryptHeader",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      }
-    ],
-    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -50769,6 +50749,18 @@ module.exports=[{
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "withdrawal",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -50913,7 +50905,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x7c151ca626bc8a24fcf7e27ecb56518ccf89aa9c";
+const contractAddress = "0x84546f5753bfce187a31c1b10cca0479f6be47e8";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -50960,7 +50952,7 @@ const css = csjs`
     grid-column-start: 2;
     grid-column-end: 4;
     grid-row-start: 3;
-    grid-row-end: 5;
+    grid-row-end: 4;
     color: #00529B;
     background-color: #BDE5F8;
     padding: 20px;
@@ -50968,8 +50960,8 @@ const css = csjs`
   .box6 {
     grid-column-start: 2;
     grid-column-end: 4;
-    grid-row-start: 5;
-    grid-row-end: 7;
+    grid-row-start: 4;
+    grid-row-end: 6;
     color: #4F8A10;
     background-color: #DFF2BF;
     padding: 20px;
@@ -50977,8 +50969,16 @@ const css = csjs`
   .box7 {
     grid-column-start: 2;
     grid-column-end: 4;
-    grid-row-start: 7;
-    grid-row-end: 8;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    background-color: #FFBABA;
+    padding: 20px;
+  }
+  .box8 {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 8;
+    grid-row-end: 9;
     text-align: center;
     margin-top: 20px;
   }
@@ -51067,7 +51067,6 @@ function betAreaElement(result) {
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
       Your current amount of steps ${result.beginStep - result.endStep}.<br>
-      <button class=${css.button} onclick=${updateStep}> Allow us to update your step data from fitbit </button><br>
     </div>`;
   } else {
     return bel`
@@ -51098,10 +51097,10 @@ const fundAreaElement = bel`
 function debugAreaElement(result) {
   if (localStorage.debug == "true") {
     return bel`
-    <div class="${css.box7}">
-      <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button>
-      <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button>
-      <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button>
+    <div class="${css.box8}">
+      <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button> 
+      <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button> 
+      <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button> 
       <button class=${css.shortButton} onclick=${clearResult}"> Clear </button><br><br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
@@ -51122,8 +51121,9 @@ function errorRender(errorMessage) {
 function adminAreaElement(result) {
   if (!result.isOwner) return;
   return bel`
-  <div>
-    <button class=${css.button} onclick=${contestDone}"> Contest Done </button>
+  <div class="${css.box7}">
+    <button class=${css.button} onclick=${updateAllUserStep}"> fetch users end step </button> 
+    <button class=${css.button} onclick=${withdrawal}"> winner withdrawal </button>
   </div>`;
 }
 
@@ -51136,8 +51136,6 @@ function render(result) {
     <div class=${css.box2}>
       Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
       <br><br>
-      ${adminAreaElement(result)}
-      <br>
       <div>
         <b>Welcome</b> to the Fitbit wellness contest.<br>
         The price money is shared equally between all participate<br>
@@ -51153,6 +51151,7 @@ function render(result) {
     ${funderAreaElement(result)}
     ${betAreaElement(result)}
     ${fundAreaElement}
+    ${adminAreaElement(result)}
     ${debugAreaElement(result)}
   </div>
  `)
@@ -51316,19 +51315,6 @@ function signup(header, betAmount) {
   })
 }
 
-function updateStep(event) {
-  if (!localStorage.fitbitAccessToken) {
-    localStorage.continueEvent = 2;
-    getFitbitToken();
-    return;
-  }
-  myContract.methods.playerWithdrawal(localStorage.fitbitAccessToken, "alincode").send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei("0.01", "ether") }, (err, data) => {
-    if (err) return console.error(err);
-    console.log('>>> playerWithdrawal ok.');
-    localStorage.removeItem("continueEvent");
-  })
-}
-
 // funder
 
 function fund(event) {
@@ -51347,19 +51333,20 @@ function fund(event) {
 
 // owner
 
-function contestDone(event) {
-  myContract.methods.done().send({ from: localStorage.wallet}, (err, data) => {
+function updateAllUserStep(event) {
+  myContract.methods.updateAllUserStep().send({ from: localStorage.wallet }, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> contest done.');
+    console.log('>>> updateAllUserStep done');
   })
 }
 
-function ownerWithdrawal(event) {
-  myContract.methods.ownerWithdrawal().send({ from: localStorage.wallet}, (err, data) => {
+function withdrawal(event) {
+  myContract.methods.withdrawal().send({ from: localStorage.wallet}, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> owner withdrawal');
+    console.log('>>> withdrawal done.');
   })
 }
+
 
 function clearResult(event) {
   localStorage.clear();
@@ -51421,9 +51408,6 @@ function continueProcess() {
   switch (localStorage.continueEvent) {
     case "1":
       bet();
-      break;
-    case "2":
-      updateStep();
       break;
     default:
       break;

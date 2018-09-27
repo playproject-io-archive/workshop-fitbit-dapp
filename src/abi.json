@@ -249,6 +249,15 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [],
+    "name": "playerWithdrawal",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "owner",
@@ -276,18 +285,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [],
-    "name": "done",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "getPlayersOfAmount",
@@ -311,23 +308,6 @@
       }
     ],
     "name": "requestActivities",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_encryptHeader",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      }
-    ],
-    "name": "playerWithdrawal",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -363,6 +343,18 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "withdrawal",
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
