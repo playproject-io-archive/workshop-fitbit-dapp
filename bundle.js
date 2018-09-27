@@ -50404,17 +50404,14 @@ function extend() {
 }
 
 },{}],309:[function(require,module,exports){
-module.exports=[
-  {
+module.exports=[{
     "constant": true,
     "inputs": [],
     "name": "isOnTime",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50423,12 +50420,10 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getFundersOfAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50437,12 +50432,10 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getEnded",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50451,12 +50444,10 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getBalance",
-    "outputs": [
-      {
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "amount",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50465,20 +50456,17 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getNumFunders",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "myid",
         "type": "bytes32"
       },
@@ -50495,27 +50483,22 @@ module.exports=[
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "isOwner",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_queryId",
         "type": "bytes32"
       },
@@ -50536,27 +50519,22 @@ module.exports=[
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "getBeginStep",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -50573,8 +50551,7 @@ module.exports=[
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_query",
         "type": "string"
       },
@@ -50603,15 +50580,12 @@ module.exports=[
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
+    "inputs": [{
+      "name": "",
+      "type": "bytes32"
+    }],
     "name": "signDatas",
-    "outputs": [
-      {
+    "outputs": [{
         "name": "userId",
         "type": "string"
       },
@@ -50636,12 +50610,10 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getNumPlayers",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50650,12 +50622,10 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getTotalAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50664,24 +50634,20 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getAllFunders",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address[]"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "address[]"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [
-      {
-        "name": "_name",
-        "type": "string"
-      }
-    ],
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
     "name": "fund",
     "outputs": [],
     "payable": true,
@@ -50692,31 +50658,25 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "isSigned",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50725,12 +50685,10 @@ module.exports=[
     "constant": false,
     "inputs": [],
     "name": "done",
-    "outputs": [
-      {
-        "name": "reached",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{
+      "name": "reached",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -50739,20 +50697,17 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getPlayersOfAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -50769,8 +50724,7 @@ module.exports=[
   },
   {
     "constant": false,
-    "inputs": [
-      {
+    "inputs": [{
         "name": "_encryptHeader",
         "type": "string"
       },
@@ -50789,27 +50743,22 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getYourBetAmount",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "getFunder",
-    "outputs": [
-      {
+    "outputs": [{
         "name": "",
         "type": "string"
       },
@@ -50824,38 +50773,30 @@ module.exports=[
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "getEndStep",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "addr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
     "name": "getContestStep",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50864,8 +50805,7 @@ module.exports=[
     "constant": true,
     "inputs": [],
     "name": "getFunders",
-    "outputs": [
-      {
+    "outputs": [{
         "name": "",
         "type": "string[]"
       },
@@ -50895,8 +50835,7 @@ module.exports=[
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
+    "inputs": [{
         "indexed": false,
         "name": "tag",
         "type": "string"
@@ -50912,8 +50851,7 @@ module.exports=[
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
+    "inputs": [{
         "indexed": false,
         "name": "tag",
         "type": "string"
@@ -50929,8 +50867,7 @@ module.exports=[
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
+    "inputs": [{
         "indexed": false,
         "name": "userId",
         "type": "string"
@@ -50976,7 +50913,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x65850f7fb016ce667f23241c03c20e0a8b72a4a9";
+const contractAddress = "0x7c151ca626bc8a24fcf7e27ecb56518ccf89aa9c";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
