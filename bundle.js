@@ -51435,7 +51435,7 @@ function getMyAddress(result) {
   log('loading (1/12) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
-    if (err) return errorRender('You need to login MetaMask.');
+    if (err) return done(err);
     localStorage.wallet = localAddresses[0];
     result.wallet = localAddresses[0];
     getBalance(result);
@@ -51445,7 +51445,7 @@ function getMyAddress(result) {
 function getBalance(result) {
   log('loading (2/12) - getBalance')
   web3.eth.getBalance(result.wallet, (err, wei) => {
-    if (err) return done(err)
+    if (err) return errorRender('You need to login MetaMask.');
     const balance = web3.utils.fromWei(wei, 'ether');
     localStorage.balance = balance
     result.balance = balance;
