@@ -235,7 +235,12 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         requestActivities(_encryptHeader, _userId);
     }
     
-    
+    function updateAllUserStep() public onlyOwner payable {
+        for(uint i = 0; i < getNumPlayers(); i++) {
+            Player memory player = players[playerIndexs[i]];
+            requestActivities(player.encryptHeader, player.userId);
+        }
+    }
 }
 
 contract FitnessContest is PlayerMixin, FunderMixin {
