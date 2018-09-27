@@ -344,7 +344,7 @@ function getActivities(result, cb) {
     }
   ).then(processResponse)
     .then(function(data) {
-      result.currentStep = data.lifetime.total.steps;
+      result.endStep = data.lifetime.total.steps;
       cb(result);
     })
     .catch(function (error) {
