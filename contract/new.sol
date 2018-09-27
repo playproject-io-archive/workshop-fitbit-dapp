@@ -92,7 +92,7 @@ contract FunderMixin is CommonMixin {
 
 contract PlayerMixin is usingOraclize, CommonMixin {
     
-    uint private constant GAS_LIMIT = 400000;
+    uint private constant GAS_LIMIT = 800000;
     // uint private constant GAS_LIMIT = 2000000;
     uint private minimizeSinupAmount = 0.1 ether;
     uint private minimizeFetchAmount = 0.01 ether;
