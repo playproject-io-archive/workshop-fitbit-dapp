@@ -10,6 +10,7 @@ contract CommonMixin {
     
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
     modifier onlyOnTime { require(isOnTime(), "only on time"); _; }
+    modifier onlyTimeOut { require(!isOnTime(), "only time out"); _; }
     
     constructor() public {
         owner = msg.sender;
@@ -228,12 +229,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         require(!isSigned(msg.sender), "you already signed");
         requestActivities(_encryptHeader, _userId);
     }
-    
-    // 玩家申請領獎
-    function playerWithdrawal() public minimizeFetch payable {
-        require(isSigned(msg.sender), "you didn't sign yet.");
-    }
-    
+
     function updateAllUserStep() public onlyOwner payable {
         for(uint i = 0; i < getNumPlayers(); i++) {
             Player memory player = players[playerIndexs[i]];
@@ -244,20 +240,24 @@ contract PlayerMixin is usingOraclize, CommonMixin {
 
 contract FitnessContest is PlayerMixin, FunderMixin {
 
-    uint private constant GOAL_STEP = 100000;
     bool ended;
     uint startAt;
     uint endAt;
-    
+    uint private constant GOAL_STEP = 10000 * 30;
+    Status status;
+    enum Status { Started, Ended, Withdrawal}
     address[] private winners;
+    
+    modifier onlyEnded { require(isEnded(), "only contest ended"); _; }
     
     constructor() public {
         startAt = now;
         endAt = now + (60 * 60 * 24 * 7);
+        status = Status.Started;
     }
     
-    function getEnded() public view returns (bool) {
-        return ended;
+    function isEnded() public view returns (bool) {
+        return status == Status.Ended;
     }
 
     function getTotalAmount() public view returns (uint){
@@ -266,7 +266,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     
     function isWinner(address addr) private view returns (bool win){
         Player memory player = players[addr];
-        return (player.endStep - player.beginStep) > GOAL_STEP;
+        return (player.endStep - player.beginStep) >= GOAL_STEP;
     }
     
     function calculatorWinners() private {
@@ -277,24 +277,31 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         }
     }
     
+    function getWinnerWithdrawalAmount() public view returns (uint) {
+        return this.balance / winners.length;
+    }
+    
     function playersWithdrawal() private {
-        uint totalAmount = getTotalAmount();
-        uint averageAmount = totalAmount / winners.length;
+        uint averageAmount = getWinnerWithdrawalAmount();
         for(uint i = 0; i < winners.length; i++) {
             winners[i].transfer(averageAmount);
         }
     }
     
-    // 公布活動結果
-    function withdrawal() public onlyOwner returns (bool reached) {
-        // require(!ended);
+    function contestDone() public onlyOwner onlyTimeOut payable {
+        updateAllUserStep();
+        status = Status.Ended;
+    }
+    
+    function withdrawal() onlyEnded public {
+        // 最好在檢查，超過一個小時，確保每個 user 的 step 都有更新了。
+        require(isSigned(msg.sender) || (msg.sender == owner));
+        status = Status.Withdrawal;
         calculatorWinners();
         playersWithdrawal();
-        ended = true;
-        return true;
     }
 
-    // 合約裡面的結餘
+    // 查看合約裡面的結餘
     function getBalance() public onlyOwner view returns (uint amount) {
         return this.balance;
     }
