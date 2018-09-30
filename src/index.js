@@ -175,7 +175,7 @@ function funderAreaElement(result) {
 // player
 
 function playerRefundButton(result) {
-  if (!result.isEnded) return;
+  // if (!result.isEnded) return;
   return bel`
     <button class=${css.button} onclick=${playerRefund}"> Refund </button>
   `;
@@ -298,9 +298,7 @@ if(typeof web3 == 'undefined') {
     let { event, returnValues } = data;
     console.log('event:', data);
     let userId = returnValues.userId;
-    if (event === 'LOG_OraclizeCallbackName') console.log('callback data:', returnValues);
     if (event === 'LOG_OraclizeCallbackStep') console.log('callback data:', returnValues);
-    if (event === 'NewOraclizeQuery') console.log('oraclize log:', returnValues);
   })
 }
 
