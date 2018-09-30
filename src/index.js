@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x84546f5753bfce187a31c1b10cca0479f6be47e8";
+const contractAddress = "0x43c4af27fddfed7f5b36ff8c7204b9b7be3b339f";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -180,6 +180,7 @@ function betAreaElement(result) {
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
       Your current amount of steps ${result.beginStep - result.endStep}.<br>
+      ${withdrawalButton(result)}
     </div>`;
   } else {
     return bel`
@@ -231,12 +232,26 @@ function errorRender(errorMessage) {
  `)
 }
 
+function contestDoneButton(result) {
+  if (result.isEnded) return;
+  return bel`
+    <button class=${css.button} onclick=${contestDone}"> contest end </button>
+  `;
+}
+
+function withdrawalButton(result) {
+  if (!result.isEnded) return;
+  return bel`
+    <button class=${css.button} onclick=${withdrawal}"> withdrawal to winner</button>
+  `;
+}
+
 function adminAreaElement(result) {
   if (!result.isOwner) return;
   return bel`
   <div class="${css.box7}">
-    <button class=${css.button} onclick=${updateAllUserStep}"> fetch users end step </button> 
-    <button class=${css.button} onclick=${withdrawal}"> winner withdrawal </button>
+    ${contestDoneButton(result)}
+    ${withdrawalButton(result)}
   </div>`;
 }
 
@@ -446,10 +461,10 @@ function fund(event) {
 
 // owner
 
-function updateAllUserStep(event) {
-  myContract.methods.updateAllUserStep().send({ from: localStorage.wallet }, (err, data) => {
+function contestDone(event) {
+  myContract.methods.contestDone().send({ from: localStorage.wallet }, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> updateAllUserStep done');
+    console.log('>>> contestDone done');
   })
 }
 
@@ -529,7 +544,7 @@ function continueProcess() {
 
 function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
-  log('loading (1/12) - getMyAddress')
+  log('loading (1/13) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
     if (!localAddresses[0]) return errorRender('You need to login MetaMask.');
@@ -541,7 +556,7 @@ function getMyAddress(result) {
 }
 
 function getBalance(result) {
-  log('loading (2/12) - getBalance')
+  log('loading (2/13) - getBalance')
   web3.eth.getBalance(result.wallet, (err, wei) => {
     if (err) return done(err);
     const balance = web3.utils.fromWei(wei, 'ether');
@@ -552,7 +567,7 @@ function getBalance(result) {
 }
 
 function getNumPlayers(result) {
-  log('loading (3/12) - getNumPlayers')
+  log('loading (3/13) - getNumPlayers')
   myContract.methods.getNumPlayers().call((err, data) => {
     if (err) return errorRender('Please switch to Rinkeby test chain!');
     result.numPlayers = parseInt(data, 10);
@@ -561,7 +576,7 @@ function getNumPlayers(result) {
 }
 
 function getPlayersOfAmount(result) {
-  log('loading (4/12) - getPlayersOfAmount')
+  log('loading (4/13) - getPlayersOfAmount')
   myContract.methods.getPlayersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.playersOfAmount = data;
@@ -570,7 +585,7 @@ function getPlayersOfAmount(result) {
 }
 
 function getNumFunders(result) {
-  log('loading (5/12) - getNumFunders')
+  log('loading (5/13) - getNumFunders')
   myContract.methods.getNumFunders().call((err, data) => {
     if (err) return console.error(err);
     result.numFunders = parseInt(data, 10);
@@ -579,7 +594,7 @@ function getNumFunders(result) {
 }
 
 function getFundersOfAmount(result) {
-  log('loading (6/12) - getFundersOfAmount')
+  log('loading (6/13) - getFundersOfAmount')
   myContract.methods.getFundersOfAmount().call((err, data) => {
     if (err) return console.error(err);
     result.fundersOfAmount = data;
@@ -588,16 +603,25 @@ function getFundersOfAmount(result) {
 }
 
 function getFunders(result) {
-  log('loading (7/12) - getFunders')
+  log('loading (7/13) - getFunders')
   myContract.methods.getFunders().call((err, data) => {
     if (err) return console.error(err);
     result.funders = data;
+    isEneded(result);
+  })
+}
+
+function isEneded(result) {
+  log('loading (8/13) - isEneded')
+  myContract.methods.isSigned(result.wallet).call((err, data) => {
+    if (err) return console.error(err);
+    result.isEnded = data;
     isSigned(result);
   })
 }
 
 function isSigned(result) {
-  log('loading (8/12) - isSigned')
+  log('loading (9/13) - isSigned')
   myContract.methods.isSigned(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isSigned = data;
@@ -606,7 +630,7 @@ function isSigned(result) {
 }
 
 function getBeginStep(result) {
-  log('loading (9/12) - getBeginStep')
+  log('loading (10/13) - getBeginStep')
   myContract.methods.getBeginStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.beginStep = data;
@@ -615,12 +639,12 @@ function getBeginStep(result) {
 }
 
 function getEndStep(result) {
-  log('loading (10/12) - getEndStep')
+  log('loading (11/13) - getEndStep')
   getActivities(result, getContestStep);
 }
 
 function getContestStep(result) {
-  log('loading (11/12) - getContestStep')
+  log('loading (12/13) - getContestStep')
   myContract.methods.getContestStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.step = (data.length > 20) ? 0 : data;
@@ -629,7 +653,7 @@ function getContestStep(result) {
 }
 
 function isOwner(result) {
-  log('loading (12/12) - isOwner')
+  log('loading (13/13) - isOwner')
   myContract.methods.isOwner(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isOwner = data;

@@ -25,18 +25,6 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getEnded",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "getBalance",
     "outputs": [{
       "name": "amount",
@@ -174,34 +162,6 @@
   },
   {
     "constant": true,
-    "inputs": [{
-      "name": "",
-      "type": "bytes32"
-    }],
-    "name": "signDatas",
-    "outputs": [{
-        "name": "userId",
-        "type": "string"
-      },
-      {
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "name": "encryptHeader",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
     "inputs": [],
     "name": "getNumPlayers",
     "outputs": [{
@@ -251,7 +211,7 @@
   {
     "constant": false,
     "inputs": [],
-    "name": "playerWithdrawal",
+    "name": "contestDone",
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
@@ -276,6 +236,18 @@
       "type": "address"
     }],
     "name": "isSigned",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isEnded",
     "outputs": [{
       "name": "",
       "type": "bool"
@@ -316,7 +288,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getYourBetAmount",
+    "name": "getWinnerWithdrawalAmount",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -349,10 +321,7 @@
     "constant": false,
     "inputs": [],
     "name": "withdrawal",
-    "outputs": [{
-      "name": "reached",
-      "type": "bool"
-    }],
+    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -407,6 +376,15 @@
   {
     "constant": false,
     "inputs": [],
+    "name": "playerRefund",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
     "name": "updateAllUserStep",
     "outputs": [],
     "payable": true,
@@ -418,38 +396,6 @@
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "description",
-        "type": "string"
-      }
-    ],
-    "name": "NewOraclizeQuery",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "LOG_Address",
-    "type": "event"
   },
   {
     "anonymous": false,
