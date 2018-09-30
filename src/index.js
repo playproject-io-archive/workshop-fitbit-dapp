@@ -633,7 +633,7 @@ function getBeginStep(result) {
   log('loading (10/13) - getBeginStep')
   myContract.methods.getBeginStep(result.wallet).call((err, data) => {
     if (err) return console.error(err);
-    result.beginStep = data;
+    result.beginStep = parseInt(data);
     getEndStep(result);
   })
 }
