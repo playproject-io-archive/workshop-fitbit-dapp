@@ -51477,12 +51477,9 @@ function getEndStep(result) {
 }
 
 function getContestStep(result) {
-  log('loading (12/13) - getContestStep')
-  myContract.methods.getContestStep(result.wallet).call((err, data) => {
-    if (err) return console.error(err);
-    result.step = (data.length > 20) ? 0 : data;
-    isOwner(result);
-  })
+  log('loading (12/13) - getContestStep');
+  result.step = result.beginStep - result.endStep;
+  isOwner(result);
 }
 
 function isOwner(result) {
