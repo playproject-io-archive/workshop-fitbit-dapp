@@ -645,7 +645,7 @@ function getEndStep(result) {
 
 function getContestStep(result) {
   log('loading (12/13) - getContestStep');
-  result.step = result.beginStep - result.endStep;
+  result.step = result.endStep - result.beginStep;
   isOwner(result);
 }
 
