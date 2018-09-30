@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x43c4af27fddfed7f5b36ff8c7204b9b7be3b339f";
+const contractAddress = "0xa691fbf14dea7a66692b1a9307e1de090939e0ef";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -174,13 +174,20 @@ function funderAreaElement(result) {
 
 // player
 
+function playerRefundButton(result) {
+  if (!result.isEnded) return;
+  return bel`
+    <button class=${css.button} onclick=${playerRefund}"> Refund </button>
+  `;
+}
+
 function betAreaElement(result) {
   if (result.isSigned){
     return bel`
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
       Your current amount of steps ${result.step}.<br>
-      ${withdrawalButton(result)}
+      ${playerRefundButton(result)}
     </div>`;
   } else {
     return bel`
@@ -235,14 +242,14 @@ function errorRender(errorMessage) {
 function contestDoneButton(result) {
   if (result.isEnded) return;
   return bel`
-    <button class=${css.button} onclick=${contestDone}"> contest end </button>
+    <button class=${css.button} onclick=${contestDone}"> Step1: contest end </button>
   `;
 }
 
 function withdrawalButton(result) {
   if (!result.isEnded) return;
   return bel`
-    <button class=${css.button} onclick=${withdrawal}"> withdrawal to winner</button>
+    <button class=${css.button} onclick=${award}"> Step2: Award</button>
   `;
 }
 
@@ -413,6 +420,13 @@ function getFitbitToken(event) {
 
 // player
 
+function playerRefund(event) {
+  myContract.methods.playerRefund().send({ from: localStorage.wallet }, (err, data) => {
+    if (err) return console.error(err);
+    console.log('>>> player refund done.');
+  })
+}
+
 function bet(event) {
   if (parseFloat(localStorage.balance) < parseFloat(MINIMIZE_SIGNUP_AMOUNT)) {
     alert("you don't have enough ether.");
@@ -468,13 +482,12 @@ function contestDone(event) {
   })
 }
 
-function withdrawal(event) {
-  myContract.methods.withdrawal().send({ from: localStorage.wallet}, (err, data) => {
+function award(event) {
+  myContract.methods.award().send({ from: localStorage.wallet}, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> withdrawal done.');
+    console.log('>>> award done.');
   })
 }
-
 
 function clearResult(event) {
   localStorage.clear();
@@ -613,7 +626,7 @@ function getFunders(result) {
 
 function isEneded(result) {
   log('loading (8/13) - isEneded')
-  myContract.methods.isSigned(result.wallet).call((err, data) => {
+  myContract.methods.isEnded().call((err, data) => {
     if (err) return console.error(err);
     result.isEnded = data;
     isSigned(result);

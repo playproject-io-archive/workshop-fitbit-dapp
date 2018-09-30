@@ -214,7 +214,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     Status private status;
     enum Status { Started, Ended, Withdrawal}
     
-    modifier availableWithdrawal {
+    modifier availableAward {
         require(isEnded(), "the contest is not end yet.");
         require(isSigned(msg.sender) || (msg.sender == owner));
         // 最好在檢查，超過一個小時，確保每個 user 的 step 都有更新了。
@@ -223,7 +223,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     
     modifier availableRefund () {  
         require(isSigned(msg.sender), "you didn't signup.");
-        require(now > endAt + (day * 3), "you can't apply refund this moment.");
+        // require(now > endAt + (day * 3), "you can't apply refund this moment.");
         require(status != Status.Withdrawal, "the status can't apply refund.");
         require(!players[msg.sender].refunded, "you was refund.");
         _;
@@ -266,12 +266,14 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         }
     }
     
+    // owner Step1
     function contestDone() public onlyOwner onlyTimeOut payable {
         updateAllUserStep();
         status = Status.Ended;
     }
     
-    function withdrawal() public availableWithdrawal {
+    // owner Step2
+    function award() public availableAward {
         status = Status.Withdrawal;
         calculatorWinners();
         playersWithdrawal();
