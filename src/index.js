@@ -186,7 +186,7 @@ function betAreaElement(result) {
     return bel`
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
-      Your current amount of steps ${result.step}.<br>
+      Your current amount of steps ${result.step}. 
       ${playerRefundButton(result)}
     </div>`;
   } else {
