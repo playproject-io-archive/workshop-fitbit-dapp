@@ -134,7 +134,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     
     constructor() public {
         // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
-        oraclize_setCustomGasPrice(4000000000);
+        oraclize_setCustomGasPrice(20000000000);
+        // oraclize_setCustomGasPrice(4000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
     

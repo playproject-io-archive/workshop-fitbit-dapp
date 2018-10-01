@@ -206,6 +206,18 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "isAvailableRefund",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [{
       "name": "_name",
