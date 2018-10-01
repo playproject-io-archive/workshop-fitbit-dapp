@@ -2,8 +2,10 @@ pragma solidity ^0.4.17;
 pragma experimental ABIEncoderV2;
 
 import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
+import "github.com/OpenZeppelin/zeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract CommonMixin {
+    using SafeMath for uint;
     
     address public owner;
     uint duration = 30;
@@ -219,7 +221,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     modifier availableAward {
         require(isEnded(), "the contest is not end yet.");
         require(isSigned(msg.sender) || (msg.sender == owner));
-        require(now > doneAt + 1 hours);
+        require(now > doneAt + 10 minutes);
          _;
     }
     
@@ -250,25 +252,28 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     }
     
     function getWinnerWithdrawalAmount() public view returns (uint) {
-        return this.balance / winners.length;
+        return this.balance.div(winners.length);
     }
     
     function playersWithdrawal() private {
-        uint averageAmount = getWinnerWithdrawalAmount();
-        for(uint i = 0; i < winners.length; i++) {
-            winners[i].transfer(averageAmount);
+        if(winners.length > 0){
+            uint averageAmount = getWinnerWithdrawalAmount();
+            for(uint i = 0; i < winners.length; i++) {
+                winners[i].transfer(averageAmount);
+            }    
         }
     }
     
     // owner Step1
-    function contestDone() public onlyOwner onlyTimeOut payable {
+    // function contestDone() public onlyOwner onlyTimeOut payable {
+    function contestDone() public onlyOwner payable {
         updateAllUserStep();
         status = Status.Ended;
         doneAt = now;
     }
     
     // owner Step2
-    function award() public availableAward {
+    function award() public availableAward payable {
         status = Status.Withdrawal;
         calculatorWinners();
         playersWithdrawal();
