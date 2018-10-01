@@ -13,10 +13,11 @@ contract CommonMixin {
     modifier onlyOnTime { require(isOnTime(), "only on time"); _; }
     modifier onlyTimeOut { require(!isOnTime(), "only time out"); _; }
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
+    event LOG (string tag, bool condition);
     
     constructor() public {
         startAt = now;
-        endAt = now + (60 * 60 * 24 * duration);
+        endAt = now + (duration * 24 * 60 * 60);
         owner = msg.sender;
     }
     
@@ -62,7 +63,6 @@ contract FunderMixin is CommonMixin {
         
         return (names, amounts);
     }
-
     
     // 贊助人數
     function getNumFunders() public view returns (uint) {
@@ -86,7 +86,6 @@ contract FunderMixin is CommonMixin {
         }
         fundersOfAmount += msg.value;
     }
-    
 }
 
 contract PlayerMixin is usingOraclize, CommonMixin {
@@ -210,24 +209,18 @@ contract PlayerMixin is usingOraclize, CommonMixin {
 
 contract FitnessContest is PlayerMixin, FunderMixin {
     
+    uint private doneAt;
     uint private constant GOAL_STEP = 10000 * duration;
     address[] private winners;
     Status private status;
     enum Status { Started, Ended, Withdrawal}
     
+    modifier availableRefund () {  require(isAvailableRefund(), "you didn't signup."); _; }
     modifier availableAward {
         require(isEnded(), "the contest is not end yet.");
         require(isSigned(msg.sender) || (msg.sender == owner));
-        // 最好在檢查，超過一個小時，確保每個 user 的 step 都有更新了。
+        require(now > doneAt + 1 hours);
          _;
-    }
-    
-    modifier availableRefund () {  
-        require(isSigned(msg.sender), "you didn't signup.");
-        // require(now > endAt + (day * 3), "you can't apply refund this moment.");
-        require(status != Status.Withdrawal, "the status can't apply refund.");
-        require(!players[msg.sender].refunded, "you was refund.");
-        _;
     }
     
     constructor() public {
@@ -271,6 +264,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     function contestDone() public onlyOwner onlyTimeOut payable {
         updateAllUserStep();
         status = Status.Ended;
+        doneAt = now;
     }
     
     // owner Step2
@@ -283,6 +277,16 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     function playerRefund() public availableRefund {
         msg.sender.transfer(players[msg.sender].amount);
         players[msg.sender].refunded = true;
+    }
+    
+    function isAvailableRefund() public view returns (bool) {
+        bool condition1 = !players[msg.sender].refunded;
+        emit LOG("condition1", condition1);
+        bool condition2 = status != Status.Withdrawal;
+        emit LOG("condition2", condition1);
+        bool condition3 = now > endAt + 3 days;
+        emit LOG("condition3", condition1);
+        return isSigned(msg.sender) && condition1 && condition2 && condition3;
     }
 
     // 查看合約裡面的結餘

@@ -50840,6 +50840,22 @@ module.exports=[{
     ],
     "name": "LOG_OraclizeCallbackStep",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "condition",
+        "type": "bool"
+      }
+    ],
+    "name": "LOG",
+    "type": "event"
   }
 ]
 },{}],310:[function(require,module,exports){
@@ -50863,7 +50879,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0x8f38ef83a769d805b74132643b5dde21baba1a2c";
+const contractAddress = "0x15ae779f1d4bd814f2f3ec89f8e7d71e9872f916";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";

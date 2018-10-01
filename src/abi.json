@@ -434,5 +434,21 @@
     ],
     "name": "LOG_OraclizeCallbackStep",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "condition",
+        "type": "bool"
+      }
+    ],
+    "name": "LOG",
+    "type": "event"
   }
 ]
