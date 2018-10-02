@@ -22,6 +22,9 @@ git push
 ### Player
 
 * signup
+
+you need to wait 2~3 minute, until oraclize callback. then you could see you are signed.
+
 * playerRefund
 
 if contest end over 3 days, but the owner still not end the contest, the user could click refund button, then get money back.
