@@ -18,7 +18,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = "0xc0580e64698b9096f1fe4a86ce7adfe0246e21b4";
+const contractAddress = "0x23f0ae7f165069c504d47592a2804f3daf1482eb";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -240,17 +240,20 @@ function errorRender(errorMessage) {
 }
 
 function contestDoneButton(result) {
-  if (result.isEnded) return;
-  return bel`
+  if (result.status == 0) {
+    return bel`
     <button class=${css.button} onclick=${contestDone}"> Step1: contest end </button>
   `;
+  }
+  return;
 }
 
 function withdrawalButton(result) {
-  if (!result.isEnded) return;
-  return bel`
+  if (result.status == 1) {
+    return bel`
     <button class=${css.button} onclick=${award}"> Step2: Award</button>
   `;
+  }
 }
 
 function adminAreaElement(result) {
@@ -618,15 +621,15 @@ function getFunders(result) {
   myContract.methods.getFunders().call((err, data) => {
     if (err) return console.error(err);
     result.funders = data;
-    isEneded(result);
+    getStatus(result);
   })
 }
 
-function isEneded(result) {
-  log('loading (8/14) - isEneded')
-  myContract.methods.isEnded().call((err, data) => {
+function getStatus(result) {
+  log('loading (8/14) - getStatus')
+  myContract.methods.getStatus().call((err, data) => {
     if (err) return console.error(err);
-    result.isEnded = data;
+    result.status = parseInt(data);
     isSigned(result);
   })
 }
