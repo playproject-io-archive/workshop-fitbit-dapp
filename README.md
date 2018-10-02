@@ -1,4 +1,4 @@
-# devon4
+# Fitbit Dapp
 
 * [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
 * [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/)
@@ -31,25 +31,26 @@ git push
 
 ### Player
 
-* sign()
-
 ```
 struct Player {
-  address addr;
-  uint amount;
-  string userId;
-  uint createdAt;
-  uint beginStep;
-  uint endStep;
-  bool withdrew;
+    address addr;
+    uint amount;
+    string userId;
+    uint createdAt;
+    uint beginStep;
+    uint endStep;
+    bool refunded;
+    string encryptHeader;
 }
 ```
 
-* playerWithdrawal(): player check is winner.
+#### signup
+
+#### playerRefund
+
+if contest end over 3 days, but the owner still not end the contest, the user could click refund button, then get money back.
 
 ### Funder
-
-* fund(): it could fund many times, not only one.
 
 ```
 struct Funder {
@@ -57,12 +58,21 @@ struct Funder {
     uint amount;
     uint createdAt;
     string name;
-    // string url;
 }
 ```
 
-### Admin
+#### fund
 
-* done()
-  * calculatorWinners
-  * playersWithdrawal
+funder could fund many times, second time will update amount and name.
+
+### Owner
+
+#### Step1: contestDone
+
+it will update all user end step and save the doneAt.
+
+#### Step2: award
+
+if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function.
+
+it will count all winner and award money to winner.
