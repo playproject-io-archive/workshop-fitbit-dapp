@@ -240,11 +240,10 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     }
     
     function playersWithdrawal() private {
-        if(winnerIndexs.length > 0){
-            uint averageAmount = getWinnerWithdrawalAmount();
-            for(uint i = 0; i < winnerIndexs.length; i++) {
-                winnerIndexs[i].transfer(averageAmount);
-            }    
+        if(winnerIndexs.length == 0) return;
+        uint averageAmount = getWinnerWithdrawalAmount();
+        for(uint i = 0; i < winnerIndexs.length; i++) {
+            winnerIndexs[i].transfer(averageAmount);
         }
     }
     
