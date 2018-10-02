@@ -19,17 +19,12 @@ git add -A && git commit -m "bundle"
 git push
 ```
 
-## Flow
-
-* winners
-* funders
-* players
-* fundersOfAmount
-* playersOfAmount
-* NumPlayers
-* numFunders
-
 ### Player
+
+* signup
+* playerRefund
+
+if contest end over 3 days, but the owner still not end the contest, the user could click refund button, then get money back.
 
 ```
 struct Player {
@@ -44,13 +39,9 @@ struct Player {
 }
 ```
 
-#### signup
-
-#### playerRefund
-
-if contest end over 3 days, but the owner still not end the contest, the user could click refund button, then get money back.
-
 ### Funder
+
+* fund: funder could fund many times, second time will update amount and name.
 
 ```
 struct Funder {
@@ -61,17 +52,13 @@ struct Funder {
 }
 ```
 
-#### fund
-
-funder could fund many times, second time will update amount and name.
-
 ### Owner
 
-#### Step1: contestDone
+* Step1: contestDone
 
 it will update all user end step and save the doneAt.
 
-#### Step2: award
+* Step2: award
 
 if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function.
 
