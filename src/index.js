@@ -272,7 +272,7 @@ function render(result) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
     </div>
     <div class=${css.box2}>
-      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You could get test coin from <a href="https://faucet.rinkeby.io/">here</a>.
+      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You can get test coins here coin from <a href="https://faucet.rinkeby.io/">here</a>.
       <br><br>
       <div>
         <b>Welcome</b> to the Fitbit wellness contest.<br>
@@ -408,7 +408,7 @@ function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = 31536000;
   // const uri = window.location.href;
-  const uri = "https://alincode.github.io/devon4";
+  const uri = "https://alincode.github.io/fitbit-dapp";
   const redirectUri = encodeURIComponent(uri);
   window.open(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`, '_blank');
 
