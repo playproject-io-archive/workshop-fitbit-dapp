@@ -51509,7 +51509,7 @@ function award(event) {
 
 function hideDebug(event) {
   localStorage.debug = false;
-  location.reload();
+  location.href = "https://alincode.github.io/fitbit-dapp/"
 }
 
 function clearResult(event) {
