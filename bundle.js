@@ -50961,8 +50961,8 @@ if(localStorage.web3 === 'dev') {
     web3 = new Web3("ws://localhost:8545");
   }
 }
-
-const contractAddress = localStorage.constract || "0x7d3a878f4f5cbb661d5ad9594efd21a6b1edbd32";
+const DEFAULT_ADDRESS = "0x7d3a878f4f5cbb661d5ad9594efd21a6b1edbd32";
+const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -51193,6 +51193,7 @@ function debugAreaElement(result) {
       <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button> 
       <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button> 
       <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button> 
+      <button class=${css.shortButton} onclick=${restoreContract}"> Restore Contract </button> 
       <button class=${css.shortButton} onclick=${hideDebug}"> Hide Debug </button> 
       <button class=${css.shortButton} onclick=${clearResult}"> Clear </button><br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
@@ -51505,6 +51506,11 @@ function award(event) {
     if (err) return console.error(err);
     console.log('>>> award done.');
   })
+}
+
+function restoreContract(event) {
+  delete localStorage.constract;
+  location.reload();
 }
 
 function hideDebug(event) {
