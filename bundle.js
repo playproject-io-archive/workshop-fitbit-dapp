@@ -50447,6 +50447,42 @@ module.exports=[{
   },
   {
     "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getContestPayload1",
+    "outputs": [{
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [],
     "name": "getBalance",
     "outputs": [{
@@ -50673,12 +50709,24 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getDuration",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
     }],
+    "name": "getContestPayload3",
+    "outputs": [{
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50698,11 +50746,28 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "getGoalStep",
+    "name": "getContestPayload2",
     "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50837,8 +50902,8 @@ module.exports=[{
     "anonymous": false,
     "inputs": [{
         "indexed": false,
-        "name": "userId",
-        "type": "string"
+        "name": "addr",
+        "type": "address"
       },
       {
         "indexed": false,
@@ -50897,7 +50962,7 @@ if(localStorage.web3 === 'dev') {
   }
 }
 
-const contractAddress = localStorage.constract || "0xf0d74d3a71900fea8da6d5c04140267d09adfece";
+const contractAddress = localStorage.constract || "0x2ca81575e493bc3b82c9427efc6ceab87579101d";
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -51145,11 +51210,33 @@ function errorRender(errorMessage) {
  `)
 }
 
+function timeRemindMessage(result) {
+  const diffAt = (result.endAt - result.now);
+  return niceTimeFormat(diffAt);
+}
+
+function niceTimeFormat(s) {
+  if (s < 60) {
+    return "a few seconds";
+  } else if (s < 3600 && s >= 60) {
+    return Math.floor(s / 60) + " minutes";
+  } else if (s >= 3600 && s <= 86400) {
+    return Math.floor(s / 3600) + " hours";
+  } else {
+    return Math.floor(s / 86400) + " days";
+  }
+}
+
 function contestDoneButton(result) {
   if (result.status == 0) {
-    return bel`
-    <button class=${css.button} onclick=${contestDone}"> Step1: contest end </button>
-  `;
+    if(result.endAt > result.now) {
+      return bel`<div>
+                    wait for ${timeRemindMessage(result)}. <br>
+                    <button class=${css.button}> Step1: contest end </button>
+                </div>`;
+    } else {
+      return bel`<button class=${css.button} onclick=${contestDone}"> Step1: contest end </button>`;
+    }
   }
   return;
 }
@@ -51175,12 +51262,20 @@ function welcomeSubTitle(result) {
   if (result.goalStep != 300000) {
     return bel`
     <div>
-  who manage to walk ${result.goalStep} steps in the next ${result.duration} seconds</div>
+  who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>
   `  
   } else {
     return bel`<div>
   who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>
   `
+  }
+}
+
+function welcomeSubTitle2(result) {
+  if (result.now > result.endAt) {
+    return;
+  } else {
+    return bel`<div>The Fitbit Contest ends in ${timeRemindMessage(result)}.</div>`;
   }
 }
 
@@ -51197,6 +51292,7 @@ function render(result) {
         <h2><b>Welcome</b> to the Fitbit wellness contest.</h2>
         The price money is shared equally between all participate<br>
         ${welcomeSubTitle(result)}
+        ${welcomeSubTitle2(result)}
       </div>
     </div>
     <div class="${css.box3}">
@@ -51242,6 +51338,7 @@ if (window.location.hash) {
 
 var processResponse = function (res) {
   if (!res.ok) {
+    localStorage.clear();
     throw new Error('Fitbit API request failed: ' + res);
   }
 
@@ -51293,7 +51390,7 @@ function getActivities(result, cb) {
     }
   ).then(processResponse)
     .then(function(data) {
-      result.endStep = data.lifetime.total.steps;
+      result.currentStep = data.lifetime.total.steps;
       cb(result);
     })
     .catch(function (error) {
@@ -51482,7 +51579,7 @@ function continueProcess() {
 
 function getMyAddress(result) {
   web3.eth.defaultAccount = web3.eth.accounts[0];
-  log('loading (1/15) - getMyAddress')
+  log('loading (1/9) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
     if (!localAddresses[0]) return errorRender('You need to login MetaMask.');
@@ -51494,129 +51591,76 @@ function getMyAddress(result) {
 }
 
 function getBalance(result) {
-  log('loading (2/15) - getBalance')
+  log('loading (2/9) - getBalance')
   web3.eth.getBalance(result.wallet, (err, wei) => {
     if (err) return done(err);
     const balance = web3.utils.fromWei(wei, 'ether');
     localStorage.balance = balance
     result.balance = balance;
-    getGoalStep(result);
-  })
-}
-
-function getGoalStep(result) {
-  log('loading (3/15) - getGoalStep')
-  myContract.methods.getGoalStep().call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
-    result.goalStep = parseInt(data, 10);
-    getDuration(result);
-  })
-}
-
-function getDuration(result) {
-  log('loading (3/15) - getDuration')
-  myContract.methods.getDuration().call((err, data) => {
-    if (err) return console.error(err);
-    result.duration = parseInt(data, 10);
-    getNumPlayers(result);
-  })
-}
-
-function getNumPlayers(result) {
-  log('loading (4/15) - getNumPlayers')
-  myContract.methods.getNumPlayers().call((err, data) => {
-    if (err) return console.error(err);
-    result.numPlayers = parseInt(data, 10);
-    getPlayersOfAmount(result);
-  })
-}
-
-function getPlayersOfAmount(result) {
-  log('loading (5/15) - getPlayersOfAmount')
-  myContract.methods.getPlayersOfAmount().call((err, data) => {
-    if (err) return console.error(err);
-    result.playersOfAmount = data;
-    getNumFunders(result);
-  })
-}
-
-function getNumFunders(result) {
-  log('loading (6/15) - getNumFunders')
-  myContract.methods.getNumFunders().call((err, data) => {
-    if (err) return console.error(err);
-    result.numFunders = parseInt(data, 10);
-    getFundersOfAmount(result);
-  })
-}
-
-function getFundersOfAmount(result) {
-  log('loading (7/15) - getFundersOfAmount')
-  myContract.methods.getFundersOfAmount().call((err, data) => {
-    if (err) return console.error(err);
-    result.fundersOfAmount = data;
     getFunders(result);
   })
 }
 
 function getFunders(result) {
-  log('loading (8/15) - getFunders')
+  log('loading (3/9) - getFunders')
   myContract.methods.getFunders().call((err, data) => {
     if (err) return console.error(err);
     result.funders = data;
-    getStatus(result);
+    getContestPayload1(result);
   })
 }
 
-function getStatus(result) {
-  log('loading (9/15) - getStatus')
-  myContract.methods.getStatus().call((err, data) => {
-    if (err) return console.error(err);
-    result.status = parseInt(data);
-    isSigned(result);
+function getContestPayload1(result) {
+  log('loading (4/9) - getContestPayload1')
+  myContract.methods.getContestPayload1(result.wallet).call((err, data) => {
+    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    result.numPlayers = parseInt(data[0], 10);
+    result.playersOfAmount = data[1];
+    result.numFunders = parseInt(data[2], 10);
+    result.fundersOfAmount = data[3];
+    result.status = parseInt(data[4], 10);
+    result.isSigned = data[5];
+    getContestPayload2(result);
   })
 }
 
-function isSigned(result) {
-  log('loading (10/15) - isSigned')
-  myContract.methods.isSigned(result.wallet).call((err, data) => {
-    if (err) return console.error(err);
-    result.isSigned = data;
-    data ? getBeginStep(result) : isOwner(result);
+function getContestPayload2(result) {
+  log('loading (5/9) - getContestPayload2')
+  myContract.methods.getContestPayload2().call((err, data) => {
+    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    result.goalStep = parseInt(data[0], 10);
+    result.duration = parseInt(data[1], 10);
+    result.startAt = parseInt(data[2], 10);
+    result.endAt = parseInt(data[3], 10);
+    result.now = parseInt(data[4], 10);
+    result.isSigned ? getContestPayload3(result) : isOwner(result);
   })
 }
 
-function getBeginStep(result) {
-  log('loading (11/15) - getBeginStep')
-  myContract.methods.getBeginStep(result.wallet).call((err, data) => {
-    if (err) return console.error(err);
-    result.beginStep = parseInt(data);
-    getEndStep(result);
+function getContestPayload3(result) {
+  log('loading (6/9) - getContestPayload3')
+  myContract.methods.getContestPayload3(result.wallet).call((err, data) => {
+    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    result.beginStep = parseInt(data[0]);
+    result.endStep = parseInt(data[1]);
+    result.isAvailableRefund = data[2];
+    getCurrentStep(result);
   })
 }
 
-function getEndStep(result) {
-  log('loading (12/15) - getEndStep')
+function getCurrentStep(result) {
+  log('loading (7/9) - getEndStep')
   getActivities(result, getContestStep);
 }
 
 function getContestStep(result) {
-  log('loading (13/15) - getContestStep');
-  result.step = (result.beginStep > result.endStep) ? 0 : result.endStep - result.beginStep;
-  isAvailableRefund(result);
-}
-
-function isAvailableRefund(result) {
-  log('loading (14/15) - isAvailableRefund');
-  myContract.methods.isAvailableRefund().call((err, data) => {
-    if (err) return console.error(err);
-    result.isAvailableRefund = data;
-    isOwner(result);
-  })
-  
+  log('loading (8/9) - getContestStep');
+  result.step = (result.now > result.endAt) ? result.endStep - result.beginStep : result.currentStep - result.beginStep;
+  isOwner(result);
 }
 
 function isOwner(result) {
-  log('loading (15/15) - isOwner')
+  log('loading (9/9) - isOwner');
   myContract.methods.isOwner(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isOwner = data;
