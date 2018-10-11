@@ -249,6 +249,7 @@ function debugAreaElement(result) {
       <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button> 
       <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button> 
       <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button> 
+      <button class=${css.shortButton} onclick=${hideDebug}"> Hide Debug </button> 
       <button class=${css.shortButton} onclick=${clearResult}"> Clear </button><br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
@@ -560,6 +561,11 @@ function award(event) {
     if (err) return console.error(err);
     console.log('>>> award done.');
   })
+}
+
+function hideDebug(event) {
+  localStorage.debug = false;
+  location.reload();
 }
 
 function clearResult(event) {
