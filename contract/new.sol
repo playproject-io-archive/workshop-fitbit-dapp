@@ -8,7 +8,7 @@ contract CommonMixin {
     using SafeMath for uint;
     
     address public owner;
-    uint duration = 30;
+    uint internal duration;
     uint internal startAt;
     uint internal endAt;
     
@@ -19,7 +19,12 @@ contract CommonMixin {
     
     constructor() public {
         startAt = now;
-        endAt = now + (duration * 24 * 60 * 60);
+        if(duration == 0) {
+            endAt = now + 30 days;
+        } else {
+            endAt = now + duration;
+        }
+
         owner = msg.sender;
     }
     
@@ -131,7 +136,6 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     constructor() public {
         // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setCustomGasPrice(20000000000);
-        // oraclize_setCustomGasPrice(4000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
     
@@ -196,7 +200,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
 contract FitnessContest is PlayerMixin, FunderMixin {
     
     uint private doneAt;
-    uint private constant GOAL_STEP = 10000 * duration;
+    uint internal goalStep;
     address[] private winnerIndexs;
     Status private status;
     enum Status { Started, Ended, Withdrawal}
@@ -209,8 +213,10 @@ contract FitnessContest is PlayerMixin, FunderMixin {
          _;
     }
     
-    constructor() public {
+    constructor(uint _duration, uint _goalStep) public {
         status = Status.Started;
+        goalStep = _goalStep;
+        duration = _duration;
     }
     
     function getStatus() public view returns (uint) {
@@ -223,7 +229,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     
     function isWinner(address addr) private view returns (bool win) {
         Player memory player = players[addr];
-        bool isAchieveStep = (player.endStep - player.beginStep) >= GOAL_STEP;
+        bool isAchieveStep = (player.endStep - player.beginStep) >= goalStep;
         return !player.refunded && isAchieveStep;
     }
     
@@ -276,9 +282,17 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         emit LOG("condition3", condition1);
         return isSigned(msg.sender) && condition1 && condition2 && condition3;
     }
+    
+    function getGoalStep() public view returns (uint) {
+        return goalStep;
+    }
+    
+    function getDuration() public view returns (uint) {
+        return duration;
+    }
 
     // 查看合約裡面的結餘
-    function getBalance() public onlyOwner view returns (uint amount) {
+    function getBalance() public onlyOwner view returns (uint) {
         return this.balance;
     }
 }
