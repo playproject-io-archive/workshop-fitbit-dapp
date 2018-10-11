@@ -19,12 +19,7 @@ contract CommonMixin {
     
     constructor() public {
         startAt = now;
-        if(duration == 0) {
-            endAt = now + 30 days;
-        } else {
-            endAt = now + duration;
-        }
-
+        duration = 30 days;
         owner = msg.sender;
     }
     
@@ -99,7 +94,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     uint private playersOfAmount;
     address[] public playerIndexs;
     mapping (address => Player) players;
-    mapping (bytes32 => SignData) private signDatas;
+    mapping (bytes32 => SignData) private validIds;
     
     modifier onlyOraclize { require(msg.sender == oraclize_cbAddress(), "only oraclize"); _; }
     modifier onlySigned { require( isSigned(msg.sender), "only signed"); _; }
@@ -108,7 +103,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     
     // ===>>> event
 	event LOG_OraclizeCallbackStep(
-		string userId,
+		address addr,
 		bytes32 queryId,
 		uint step,
 		bytes proof
@@ -124,15 +119,14 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         uint endStep;
         bool refunded;
         string encryptHeader;
-    }
-	
-	struct SignData {
-        string userId;
-        address addr;
-        uint amount;
-        string encryptHeader;
+        bool initStep;
     }
     
+    struct SignData {
+        address addr;
+        bool valid;
+    }
+
     constructor() public {
         // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setCustomGasPrice(20000000000);
@@ -157,18 +151,20 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         string memory _method = "GET";
         string memory _url = "https://api.fitbit.com/1/user/-/activities.json";
         bytes32 queryId = oraclize_query("computation", [ _query, _method, _url, _encryptHeader ], GAS_LIMIT);
-        signDatas[queryId] = SignData(_userId, msg.sender, msg.value, _encryptHeader);
+        validIds[queryId] = SignData(msg.sender, true);
     }
     
     // Step2
     function __callback(bytes32 _queryId, string _result, bytes _proof) public onlyOraclize {
-        SignData memory o = signDatas[_queryId];
-        emit LOG_OraclizeCallbackStep(o.userId, _queryId, parseInt(_result), _proof);
+        if (!validIds[_queryId].valid) revert();
+        SignData memory o = validIds[_queryId];
+        emit LOG_OraclizeCallbackStep(o.addr, _queryId, parseInt(_result), _proof);
         uint steps = parseInt(_result);
-         if(isSigned(o.addr)) {
+         if(players[o.addr].initStep) {
             players[o.addr].endStep = steps;
         } else {
-            addPlayer(o.addr, o.amount, o.userId, o.encryptHeader, steps);
+            players[o.addr].beginStep = steps;
+            players[o.addr].initStep = true;
         }
     }
 
@@ -179,6 +175,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
 
     // 註冊
     function signup(string _encryptHeader, string _userId) public minimizeBet onlyOnTime isNewPlayer payable {
+        addPlayer(msg.sender, msg.value, _userId, _encryptHeader);
         request(_encryptHeader, _userId);
     }
 
@@ -189,8 +186,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         }
     }
     
-    function addPlayer(address _addr, uint _amount, string _userId, string _encryptHeader, uint _beginStep) private {
-        players[_addr] = Player(_addr, _amount, _userId, now, _beginStep, 0, false, _encryptHeader);
+    function addPlayer(address _addr, uint _amount, string _userId, string _encryptHeader) private {
+        players[_addr] = Player(_addr, _amount, _userId, now, 0, 0, false, _encryptHeader, false);
         playerIndexs.push(_addr);
         playersOfAmount += _amount;
         
@@ -216,7 +213,12 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     constructor(uint _duration, uint _goalStep) public {
         status = Status.Started;
         goalStep = _goalStep;
-        duration = _duration;
+         if(_duration == 0) {
+            duration = 30 days;
+        } else {
+            duration = _duration;
+        }
+        endAt = now + duration;
     }
     
     function getStatus() public view returns (uint) {
@@ -275,20 +277,24 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     
     function isAvailableRefund() public view returns (bool) {
         bool condition1 = !players[msg.sender].refunded;
-        emit LOG("condition1", condition1);
+        // emit LOG("condition1", condition1);
         bool condition2 = status != Status.Withdrawal;
-        emit LOG("condition2", condition1);
+        // emit LOG("condition2", condition1);
         bool condition3 = now > endAt + 3 days;
-        emit LOG("condition3", condition1);
+        // emit LOG("condition3", condition1);
         return isSigned(msg.sender) && condition1 && condition2 && condition3;
     }
-    
-    function getGoalStep() public view returns (uint) {
-        return goalStep;
+
+    function getContestPayload1(address addr) public view returns (uint, uint, uint, uint, uint, bool) {
+        return (getNumPlayers(), getPlayersOfAmount(), getNumFunders(), getFundersOfAmount(), getStatus(), isSigned(addr));
     }
     
-    function getDuration() public view returns (uint) {
-        return duration;
+    function getContestPayload2() public view returns (uint, uint, uint, uint, uint) {
+        return (goalStep, duration, startAt, endAt, now);
+    }
+    
+    function getContestPayload3(address addr) public view returns (uint, uint, bool) {
+        return (getBeginStep(addr), getEndStep(addr), isAvailableRefund());
     }
 
     // 查看合約裡面的結餘

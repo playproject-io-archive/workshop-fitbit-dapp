@@ -41,6 +41,42 @@
   },
   {
     "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getContestPayload1",
+    "outputs": [{
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [],
     "name": "getBalance",
     "outputs": [{
@@ -267,12 +303,24 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getDuration",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
     }],
+    "name": "getContestPayload3",
+    "outputs": [{
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -292,11 +340,28 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getGoalStep",
+    "name": "getContestPayload2",
     "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -431,8 +496,8 @@
     "anonymous": false,
     "inputs": [{
         "indexed": false,
-        "name": "userId",
-        "type": "string"
+        "name": "addr",
+        "type": "address"
       },
       {
         "indexed": false,
