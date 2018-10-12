@@ -464,6 +464,7 @@ function getTotalStep(event) {
 }
 
 function getFitbitToken(event) {
+  event.preventDefault();
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
   const uri = "https://alincode.github.io/fitbit-dapp";
