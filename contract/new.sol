@@ -145,6 +145,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         return players[addr].endStep - players[addr].beginStep;
     }
     
+    function getInitStep(address addr) public view returns (bool) { return players[addr].initStep; }
+    
     // Step1
     function request(string _encryptHeader, string _userId) public payable {
         string memory _query = "json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).lifetime.total.steps";
@@ -293,8 +295,8 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         return (goalStep, duration, startAt, endAt, now);
     }
     
-    function getContestPayload3(address addr) public view returns (uint, uint, bool) {
-        return (getBeginStep(addr), getEndStep(addr), isAvailableRefund());
+    function getContestPayload3(address addr) public view returns (uint, uint, bool, bool) {
+        return (getBeginStep(addr), getEndStep(addr), isAvailableRefund(), getInitStep(addr));
     }
 
     // 查看合約裡面的結餘
