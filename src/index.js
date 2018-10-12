@@ -373,8 +373,10 @@ if (window.location.hash) {
   );
 
   console.log('fragmentQueryParameters: ', fragmentQueryParameters);
-  localStorage.userId = fragmentQueryParameters.user_id;
-  localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
+  if (fragmentQueryParameters.access_token) {
+    localStorage.userId = fragmentQueryParameters.user_id;
+    localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
+  }
 }
 
 var processResponse = function (res) {
