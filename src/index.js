@@ -469,7 +469,8 @@ function getFitbitToken(event) {
   const uri = "https://alincode.github.io/fitbit-dapp";
   const redirectUri = encodeURIComponent(uri);
   window.location.target = "_blank";
-  window.open(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`, '_blank');
+  window.location.href = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
+  return;
 }
 
 /******************************************************************************
@@ -623,7 +624,9 @@ function start() {
 }
 
 function continueProcess() {
-  if (location.href.indexOf('5184000') != -1) bet();
+  if (location.href.indexOf('5184000') != -1) {
+    bet();
+  }
 }
 
 function getMyAddress(result) {
