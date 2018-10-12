@@ -51186,7 +51186,7 @@ function debugAreaElement(result) {
     <div class="${css.box8}">
       ${contractElement}
       <button class=${css.button} onclick=${updateContract}"> Update Address </button><br>
-      <button class=${css.shortButton} onclick=${getFitbitToken(0)}"> Get Token </button> 
+      <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button> 
       <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button> 
       <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button> 
       <button class=${css.shortButton} onclick=${restoreContract}"> Restore Contract </button> 
@@ -51316,7 +51316,7 @@ if (window.location.hash) {
     function ($0, $1, $2, $3) { fragmentQueryParameters[$1] = $3; }
   );
 
-  console.log('fragmentQueryParameters: ', fragmentQueryParameters);
+  log('fragmentQueryParameters: ', fragmentQueryParameters);
   if (fragmentQueryParameters.access_token) {
     localStorage.userId = fragmentQueryParameters.user_id;
     localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
@@ -51407,9 +51407,9 @@ function getTotalStep(event) {
     });
 }
 
-function getFitbitToken(action) {
+function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
-  const EXPIRES_IN = (action == 0) ? (60 * 60 * 24 * 60) : (60 * 60 * 24 * 40);
+  const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
   const uri = "https://alincode.github.io/fitbit-dapp";
   const redirectUri = encodeURIComponent(uri);
   window.open(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`, '_blank');
