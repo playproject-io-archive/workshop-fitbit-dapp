@@ -495,6 +495,7 @@ function bet(event) {
   const token = localStorage.fitbitAccessToken;
   if (!token) {
     getFitbitToken(1);
+    localStorage.next = 'bet';
     return;
   }
 
@@ -506,6 +507,7 @@ function bet(event) {
 
 function signup(header, betAmount) {
   const options = { from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") };
+  delete localStorage.next;
   myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
@@ -623,9 +625,7 @@ function start() {
 }
 
 function continueProcess() {
-  if (location.href.indexOf('5184000') != -1) {
-    bet();
-  }
+  if (localStorage.next == 'bet') bet();
 }
 
 function getMyAddress(result) {
