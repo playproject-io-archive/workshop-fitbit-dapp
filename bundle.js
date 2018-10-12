@@ -51432,7 +51432,6 @@ function playerRefund(event) {
 }
 
 function bet(event) {
-  if (event) event.preventDefault();
   if (parseFloat(localStorage.balance) < parseFloat(MINIMIZE_SIGNUP_AMOUNT)) {
     alert("you don't have enough ether.");
     return;
