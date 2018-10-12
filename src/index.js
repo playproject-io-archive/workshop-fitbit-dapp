@@ -195,7 +195,7 @@ function playSubTitle(result) {
 }
 
 function betSubTitle(result) {
-  if (result.initStep) return bel`Your current amount of steps ${result.step}.`;
+  if (result.initStep) return bel`<div>Your current amount of steps ${result.step}.</div`;
 }
 
 function betAreaElement(result) {
@@ -203,7 +203,7 @@ function betAreaElement(result) {
     return bel`
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
-      ${betSubTitle(result)};
+      ${betSubTitle(result)}
       ${playerRefundButton(result)}
     </div>`;
   } else {
