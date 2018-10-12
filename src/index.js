@@ -17,7 +17,7 @@ if(localStorage.web3 === 'dev') {
     web3 = new Web3("ws://localhost:8545");
   }
 }
-const DEFAULT_ADDRESS = "0xac6239164891c1088d2660ce52a6de97c6b4dbf1";
+const DEFAULT_ADDRESS = "0x9b4937ab8787f897bff932b7286567fb72942c80";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;

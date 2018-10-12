@@ -258,8 +258,8 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     }
     
     // owner Step1
-    // function contestDone() public onlyOwner onlyTimeOut payable {
-    function contestDone() public onlyOwner payable {
+    function contestDone() public onlyOwner onlyTimeOut payable {
+    // function contestDone() public onlyOwner payable {
         updateAllUserStep();
         status = Status.Ended;
         doneAt = now;
