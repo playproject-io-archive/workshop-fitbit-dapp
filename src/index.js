@@ -17,11 +17,20 @@ if(localStorage.web3 === 'dev') {
     web3 = new Web3("ws://localhost:8545");
   }
 }
-const DEFAULT_ADDRESS = "0xa16042422df49d42112f2b9da50b0b41d6542836";
+const DEFAULT_ADDRESS = "0x59e6f44293d9e634df2e95d5bb2c40f70082de36";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
+const NETWORK = 'ropsten';
+// const NETWORK = 'rinkeby';
+
+let faucetURL;
+if(NETWORK == 'ropsten') {
+  faucetURL = 'https://faucet.ropsten.be/';
+} else {
+  faucetURL = `https://faucet.${NETWORK}.io/`
+}
 
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
@@ -248,7 +257,7 @@ function debugAreaElement(result) {
       <button class=${css.shortButton} onclick=${restoreContract}"> Restore Contract </button> 
       <button class=${css.shortButton} onclick=${hideDebug}"> Hide Debug </button> 
       <button class=${css.shortButton} onclick=${clearCache}"> Clear </button><br>
-      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
+      <a href="https://${NETWORK}.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
     return;
@@ -327,7 +336,7 @@ function render(result) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
     </div>
     <div class=${css.box2}>
-      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You can get test coins here coin from <a href="https://faucet.rinkeby.io/">here</a>.
+      Please choose the <span class="${css.highlight}">${NETWORK} test chain.</span> You can get test coins here coin from <a href="${faucetURL}">here</a>.
       <br><br>
       <div>
         <h2><b>Welcome</b> to the Fitbit wellness contest.</h2>
@@ -657,7 +666,7 @@ function getBalance(result) {
 function getFunders(result) {
   log('loading (3/9) - getFunders')
   myContract.methods.getFunders().call((err, data) => {
-    if (err) return console.error(err);
+    if (err) return errorRender(`Please switch to ${NETWORK} test chain!`);
     result.funders = data;
     getContestPayload1(result);
   })
@@ -666,7 +675,7 @@ function getFunders(result) {
 function getContestPayload1(result) {
   log('loading (4/9) - getContestPayload1')
   myContract.methods.getContestPayload1(result.wallet).call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    if (err) return console.error(err);
     result.numPlayers = parseInt(data[0], 10);
     result.playersOfAmount = data[1];
     result.numFunders = parseInt(data[2], 10);
@@ -680,7 +689,7 @@ function getContestPayload1(result) {
 function getContestPayload2(result) {
   log('loading (5/9) - getContestPayload2')
   myContract.methods.getContestPayload2().call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    if (err) return errorRender(`Please switch to ${NETWORK} test chain!`);
     result.goalStep = parseInt(data[0], 10);
     result.duration = parseInt(data[1], 10);
     result.startAt = parseInt(data[2], 10);
@@ -693,7 +702,7 @@ function getContestPayload2(result) {
 function getContestPayload3(result) {
   log('loading (6/9) - getContestPayload3')
   myContract.methods.getContestPayload3(result.wallet).call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    if (err) return errorRender(`Please switch to ${NETWORK} test chain!`);
     result.beginStep = parseInt(data[0]);
     result.endStep = parseInt(data[1]);
     result.isAvailableRefund = data[2];

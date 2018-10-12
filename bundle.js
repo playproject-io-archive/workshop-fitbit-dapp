@@ -50405,6 +50405,125 @@ function extend() {
 
 },{}],309:[function(require,module,exports){
 module.exports=[{
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "condition",
+        "type": "bool"
+      }
+    ],
+    "name": "LOG",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_queryId",
+        "type": "bytes32"
+      },
+      {
+        "name": "_result",
+        "type": "string"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "__callback",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "myid",
+        "type": "bytes32"
+      },
+      {
+        "name": "result",
+        "type": "string"
+      }
+    ],
+    "name": "__callback",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "award",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "step",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "contestDone",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "playerRefund",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [{
         "name": "_encryptHeader",
@@ -50422,12 +50541,52 @@ module.exports=[{
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [{
+        "name": "_encryptHeader",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "signup",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{
+        "name": "_duration",
+        "type": "uint256"
+      },
+      {
+        "name": "_goalStep",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "updateAllUserStep",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
-    "name": "isOnTime",
+    "name": "getAllFunders",
     "outputs": [{
       "name": "",
-      "type": "bool"
+      "type": "address[]"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -50436,7 +50595,22 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "getFundersOfAmount",
+    "name": "getBalance",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getBeginStep",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50484,225 +50658,28 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "getBalance",
+    "name": "getContestPayload2",
     "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumFunders",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "myid",
-        "type": "bytes32"
+        "name": "",
+        "type": "uint256"
       },
       {
-        "name": "result",
-        "type": "string"
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isOwner",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_queryId",
-        "type": "bytes32"
-      },
-      {
-        "name": "_result",
-        "type": "string"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "award",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getBeginStep",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_encryptHeader",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      }
-    ],
-    "name": "signup",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getStatus",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumPlayers",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getTotalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getAllFunders",
-    "outputs": [{
-      "name": "",
-      "type": "address[]"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "isAvailableRefund",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "_name",
-      "type": "string"
-    }],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "contestDone",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "owner",
-    "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isSigned",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50737,8 +50714,11 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getPlayersOfAmount",
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getContestStep",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50749,37 +50729,11 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getContestPayload2",
-    "outputs": [{
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getWinnerWithdrawalAmount",
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getEndStep",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50810,14 +50764,28 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "playerIndexs",
+    "inputs": [],
+    "name": "getFunders",
+    "outputs": [{
+        "name": "",
+        "type": "string[]"
+      },
+      {
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getFundersOfAmount",
     "outputs": [{
       "name": "",
-      "type": "address"
+      "type": "uint256"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -50840,26 +50808,8 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getEndStep",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getContestStep",
+    "inputs": [],
+    "name": "getNumFunders",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50871,93 +50821,143 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "getFunders",
+    "name": "getNumPlayers",
     "outputs": [{
-        "name": "",
-        "type": "string[]"
-      },
-      {
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
+    "constant": true,
     "inputs": [],
-    "name": "playerRefund",
-    "outputs": [],
+    "name": "getPlayersOfAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": false,
+    "constant": true,
     "inputs": [],
-    "name": "updateAllUserStep",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
+    "name": "getStatus",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{
-        "name": "_duration",
-        "type": "uint256"
-      },
-      {
-        "name": "_goalStep",
-        "type": "uint256"
-      }
-    ],
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
     "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "step",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "LOG_OraclizeCallbackStep",
-    "type": "event"
+    "constant": true,
+    "inputs": [],
+    "name": "getWinnerWithdrawalAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    "anonymous": false,
+    "constant": true,
+    "inputs": [],
+    "name": "isAvailableRefund",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isOnTime",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "condition",
-        "type": "bool"
-      }
-    ],
-    "name": "LOG",
-    "type": "event"
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isOwner",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isSigned",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "name": "playerIndexs",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   }
 ]
 },{}],310:[function(require,module,exports){
@@ -50980,11 +50980,20 @@ if(localStorage.web3 === 'dev') {
     web3 = new Web3("ws://localhost:8545");
   }
 }
-const DEFAULT_ADDRESS = "0xa16042422df49d42112f2b9da50b0b41d6542836";
+const DEFAULT_ADDRESS = "0x59e6f44293d9e634df2e95d5bb2c40f70082de36";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
+const NETWORK = 'ropsten';
+// const NETWORK = 'rinkeby';
+
+let faucetURL;
+if(NETWORK == 'ropsten') {
+  faucetURL = 'https://faucet.ropsten.be/';
+} else {
+  faucetURL = `https://faucet.${NETWORK}.io/`
+}
 
 myContract = new web3.eth.Contract(ABI, contractAddress);
 
@@ -51211,7 +51220,7 @@ function debugAreaElement(result) {
       <button class=${css.shortButton} onclick=${restoreContract}"> Restore Contract </button> 
       <button class=${css.shortButton} onclick=${hideDebug}"> Hide Debug </button> 
       <button class=${css.shortButton} onclick=${clearCache}"> Clear </button><br>
-      <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
+      <a href="https://${NETWORK}.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
     return;
@@ -51290,7 +51299,7 @@ function render(result) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
     </div>
     <div class=${css.box2}>
-      Please choose the <span class="${css.highlight}">Rinkeby test chain.</span> You can get test coins here coin from <a href="https://faucet.rinkeby.io/">here</a>.
+      Please choose the <span class="${css.highlight}">${NETWORK} test chain.</span> You can get test coins here coin from <a href="${faucetURL}">here</a>.
       <br><br>
       <div>
         <h2><b>Welcome</b> to the Fitbit wellness contest.</h2>
@@ -51620,7 +51629,7 @@ function getBalance(result) {
 function getFunders(result) {
   log('loading (3/9) - getFunders')
   myContract.methods.getFunders().call((err, data) => {
-    if (err) return console.error(err);
+    if (err) return errorRender(`Please switch to ${NETWORK} test chain!`);
     result.funders = data;
     getContestPayload1(result);
   })
@@ -51629,7 +51638,7 @@ function getFunders(result) {
 function getContestPayload1(result) {
   log('loading (4/9) - getContestPayload1')
   myContract.methods.getContestPayload1(result.wallet).call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    if (err) return console.error(err);
     result.numPlayers = parseInt(data[0], 10);
     result.playersOfAmount = data[1];
     result.numFunders = parseInt(data[2], 10);
@@ -51643,7 +51652,7 @@ function getContestPayload1(result) {
 function getContestPayload2(result) {
   log('loading (5/9) - getContestPayload2')
   myContract.methods.getContestPayload2().call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    if (err) return errorRender(`Please switch to ${NETWORK} test chain!`);
     result.goalStep = parseInt(data[0], 10);
     result.duration = parseInt(data[1], 10);
     result.startAt = parseInt(data[2], 10);
@@ -51656,7 +51665,7 @@ function getContestPayload2(result) {
 function getContestPayload3(result) {
   log('loading (6/9) - getContestPayload3')
   myContract.methods.getContestPayload3(result.wallet).call((err, data) => {
-    if (err) return errorRender('Please switch to Rinkeby test chain!');
+    if (err) return errorRender(`Please switch to ${NETWORK} test chain!`);
     result.beginStep = parseInt(data[0]);
     result.endStep = parseInt(data[1]);
     result.isAvailableRefund = data[2];
