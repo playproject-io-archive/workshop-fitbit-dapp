@@ -51412,6 +51412,7 @@ function getFitbitToken(event) {
   const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
   const uri = "https://alincode.github.io/fitbit-dapp";
   const redirectUri = encodeURIComponent(uri);
+  window.location.target = "_blank";
   window.open(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`, '_blank');
 }
 
@@ -51429,6 +51430,7 @@ function playerRefund(event) {
 }
 
 function bet(event) {
+  if (event) event.preventDefault();
   if (parseFloat(localStorage.balance) < parseFloat(MINIMIZE_SIGNUP_AMOUNT)) {
     alert("you don't have enough ether.");
     return;
@@ -51541,6 +51543,7 @@ function encryptHeader(token, next) {
 ******************************************************************************/
 
 function redirectHome() {
+  location.target = "_blank";
   location.href = "https://alincode.github.io/fitbit-dapp/";
 }
 
