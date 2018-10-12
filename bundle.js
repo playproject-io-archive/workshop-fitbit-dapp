@@ -51564,7 +51564,7 @@ function start() {
 }
 
 function continueProcess() {
-  if (location.href.indexOf('5184000') == -1) bet();
+  if (location.href.indexOf('5184000') != -1) bet();
 }
 
 function getMyAddress(result) {
