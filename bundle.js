@@ -51140,7 +51140,6 @@ function playSubTitle(result) {
   I bet that I can reach ${result.goalStep} steps! </div>
   `
   }
-  
 }
 
 function betAreaElement(result) {
@@ -51163,12 +51162,9 @@ function betAreaElement(result) {
 
 // funder
 
-const fundAmountElement = bel`
-  <input class=${css.input} type="text"/>
-`
-const fundNameElement = bel`
-  <input class=${css.input} type="text"/>
-`
+const fundAmountElement = bel`<input class=${css.input} type="text"/>`;
+const fundNameElement = bel`<input class=${css.input} type="text"/>`;
+
 const fundAreaElement = bel`
   <div class="${css.box6}">
     I want to sponsor this contest with ${fundAmountElement} ETH!<br>
@@ -51190,12 +51186,12 @@ function debugAreaElement(result) {
     <div class="${css.box8}">
       ${contractElement}
       <button class=${css.button} onclick=${updateContract}"> Update Address </button><br>
-      <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button> 
+      <button class=${css.shortButton} onclick=${getFitbitToken(0)}"> Get Token </button> 
       <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button> 
       <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button> 
       <button class=${css.shortButton} onclick=${restoreContract}"> Restore Contract </button> 
       <button class=${css.shortButton} onclick=${hideDebug}"> Hide Debug </button> 
-      <button class=${css.shortButton} onclick=${clearResult}"> Clear </button><br>
+      <button class=${css.shortButton} onclick=${clearCache}"> Clear </button><br>
       <a href="https://rinkeby.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
@@ -51244,11 +51240,7 @@ function contestDoneButton(result) {
 }
 
 function withdrawalButton(result) {
-  if (result.status == 1) {
-    return bel`
-    <button class=${css.button} onclick=${award}"> Step2: Award</button>
-  `;
-  }
+  if (result.status == 1) return bel`<button class=${css.button} onclick=${award}"> Step2: Award</button>`;
 }
 
 function adminAreaElement(result) {
@@ -51262,23 +51254,14 @@ function adminAreaElement(result) {
 
 function welcomeSubTitle(result) {
   if (result.goalStep != 300000) {
-    return bel`
-    <div>
-  who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>
-  `  
+    return bel`<div>who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>`
   } else {
-    return bel`<div>
-  who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>
-  `
+    return bel`<div>who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>`
   }
 }
 
 function welcomeSubTitle2(result) {
-  if (result.now > result.endAt) {
-    return;
-  } else {
-    return bel`<div>The Fitbit Contest ends in ${timeRemindMessage(result)}.</div>`;
-  }
+  if (result.now < result.endAt) return bel`<div>The Fitbit Contest ends in ${timeRemindMessage(result)}.</div>`;
 }
 
 function render(result) {
@@ -51422,15 +51405,12 @@ function getTotalStep(event) {
     });
 }
 
-function getFitbitToken(event) {
+function getFitbitToken(action) {
   const CLIENT_ID = '22CYSG';
-  const EXPIRES_IN = 31536000;
-  // const uri = window.location.href;
+  const EXPIRES_IN = (action == 0) ? (60 * 60 * 24 * 60) : (60 * 60 * 24 * 40);
   const uri = "https://alincode.github.io/fitbit-dapp";
   const redirectUri = encodeURIComponent(uri);
   window.open(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`, '_blank');
-
-  // window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
 }
 
 /******************************************************************************
@@ -51454,9 +51434,7 @@ function bet(event) {
 
   const token = localStorage.fitbitAccessToken;
   if (!token) {
-    localStorage.continueBetAmount = MINIMIZE_SIGNUP_AMOUNT;
-    localStorage.continueEvent = 1;
-    getFitbitToken();
+    getFitbitToken(1);
     return;
   }
 
@@ -51471,8 +51449,7 @@ function signup(header, betAmount) {
   myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
-    localStorage.removeItem("continueBetAmount");
-    localStorage.removeItem("continueEvent");
+    setTimeout(function () { redirectHome() }, 3000);
   })
 }
 
@@ -51510,17 +51487,17 @@ function award(event) {
 
 function restoreContract(event) {
   delete localStorage.constract;
-  location.reload();
+  redirectHome();
 }
 
 function hideDebug(event) {
   localStorage.debug = false;
-  location.href = "https://alincode.github.io/fitbit-dapp/"
+  redirectHome();
 }
 
-function clearResult(event) {
+function clearCache(event) {
   localStorage.clear();
-  location.reload();
+  redirectHome();
 }
 
 function updateContract(event) {
@@ -51560,6 +51537,11 @@ function encryptHeader(token, next) {
 /******************************************************************************
   DONE
 ******************************************************************************/
+
+function redirectHome() {
+  location.href = "https://alincode.github.io/fitbit-dapp/";
+}
+
 function done(err, result) {
   if (err) return log(new Error(err))
   const { username } = result
@@ -51580,13 +51562,7 @@ function start() {
 }
 
 function continueProcess() {
-  switch (localStorage.continueEvent) {
-    case "1":
-      bet();
-      break;
-    default:
-      break;
-  }
+  if (location.href.indexOf('5184000') == -1) bet();
 }
 
 function getMyAddress(result) {
@@ -51676,7 +51652,6 @@ function isOwner(result) {
   myContract.methods.isOwner(result.wallet).call((err, data) => {
     if (err) return console.error(err);
     result.isOwner = data;
-
     console.log('result: ', result);
     continueProcess();
     render(result);
