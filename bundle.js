@@ -51472,6 +51472,7 @@ function fund(event) {
   myContract.methods.fund(name).send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> fund ok.');
+    redirectHome();
   })
 }
 
@@ -51488,6 +51489,7 @@ function award(event) {
   myContract.methods.award().send({ from: localStorage.wallet}, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> award done.');
+    redirectHome();
   })
 }
 
