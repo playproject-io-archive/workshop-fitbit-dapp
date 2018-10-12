@@ -1,8 +1,10 @@
 # Fitbit Dapp
 
-* [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
-* [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/)
-* [Remix error : The constructor should be payable if you send value](https://ethereum.stackexchange.com/questions/35112/remix-error-the-constructor-should-be-payable-if-you-send-value?rq=1)
+![](assets/screen1.png)
+
+![](assets/screen2.png)
+
+![](assets/screen3.png)
 
 ## Run it
 
@@ -66,3 +68,8 @@ it will update all user end step and save the doneAt.
 if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function.
 
 it will count all winner and award money to winner.
+
+## Ref
+
+* [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
+* [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/)
