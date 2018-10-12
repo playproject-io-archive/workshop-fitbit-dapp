@@ -17,7 +17,7 @@ if(localStorage.web3 === 'dev') {
     web3 = new Web3("ws://localhost:8545");
   }
 }
-const DEFAULT_ADDRESS = "0x3c25b9e490551af8563f360ca898735220bcb292";
+const DEFAULT_ADDRESS = "0xac6239164891c1088d2660ce52a6de97c6b4dbf1";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
@@ -188,14 +188,14 @@ function playerRefundButton(result) {
 
 function playSubTitle(result) {
   if (result.goalStep == 300000) {
-    return bel`<div>
-  I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)</div>
-  `
+    return bel`<div>I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)</div>`
   } else {
-    return bel`<div>
-  I bet that I can reach ${result.goalStep} steps! </div>
-  `
+    return bel`<div>I bet that I can reach ${result.goalStep} steps! </div>`
   }
+}
+
+function betSubTitle(result) {
+  if (result.initStep) return bel`Your current amount of steps ${result.step}.`;
 }
 
 function betAreaElement(result) {
@@ -203,7 +203,7 @@ function betAreaElement(result) {
     return bel`
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
-      Your current amount of steps ${result.step}. 
+      ${betSubTitle(result)};
       ${playerRefundButton(result)}
     </div>`;
   } else {
@@ -697,6 +697,7 @@ function getContestPayload3(result) {
     result.beginStep = parseInt(data[0]);
     result.endStep = parseInt(data[1]);
     result.isAvailableRefund = data[2];
+    result.initStep = data[3];
     getCurrentStep(result);
   })
 }

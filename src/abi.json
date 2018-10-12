@@ -319,6 +319,10 @@
       {
         "name": "",
         "type": "bool"
+      },
+      {
+        "name": "",
+        "type": "bool"
       }
     ],
     "payable": false,
@@ -408,6 +412,21 @@
     "outputs": [{
       "name": "",
       "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getInitStep",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
     }],
     "payable": false,
     "stateMutability": "view",
