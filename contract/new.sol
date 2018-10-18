@@ -102,15 +102,15 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     modifier isNewPlayer { require(!isSigned(msg.sender), "you already signed"); _; }
     
     // ===>>> event
-	event LOG_OraclizeCallbackStep(
+    event LOG_OraclizeCallbackStep (
 		address addr,
 		bytes32 queryId,
 		uint step,
 		bytes proof
-	);
+    );
 	
 	// ===>>> struct
-	struct Player {
+    struct Player {
         address addr;
         uint amount;
         string userId;
@@ -128,7 +128,6 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     }
 
     constructor() public {
-        // OAR = OraclizeAddrResolverI(0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475);
         oraclize_setCustomGasPrice(20000000000);
         oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
     }
@@ -148,12 +147,12 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     function getInitStep(address addr) public view returns (bool) { return players[addr].initStep; }
     
     // Step1
-    function request(string _encryptHeader, string _userId) public payable {
+    function request(string _encryptHeader, string _userId, address userAddr) public payable {
         string memory _query = "json(QmdKK319Veha83h6AYgQqhx9YRsJ9MJE7y33oCXyZ4MqHE).lifetime.total.steps";
         string memory _method = "GET";
         string memory _url = "https://api.fitbit.com/1/user/-/activities.json";
         bytes32 queryId = oraclize_query("computation", [ _query, _method, _url, _encryptHeader ], GAS_LIMIT);
-        validIds[queryId] = SignData(msg.sender, true);
+        validIds[queryId] = SignData(userAddr, true);
     }
     
     // Step2
@@ -162,7 +161,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         SignData memory o = validIds[_queryId];
         emit LOG_OraclizeCallbackStep(o.addr, _queryId, parseInt(_result), _proof);
         uint steps = parseInt(_result);
-         if(players[o.addr].initStep) {
+        if(players[o.addr].initStep) {
             players[o.addr].endStep = steps;
         } else {
             players[o.addr].beginStep = steps;
@@ -178,13 +177,13 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     // 註冊
     function signup(string _encryptHeader, string _userId) public minimizeBet onlyOnTime isNewPlayer payable {
         addPlayer(msg.sender, msg.value, _userId, _encryptHeader);
-        request(_encryptHeader, _userId);
+        request(_encryptHeader, _userId, msg.sender);
     }
 
     function updateAllUserStep() public onlyOwner payable {
         for(uint i = 0; i < getNumPlayers(); i++) {
             Player memory player = players[playerIndexs[i]];
-            request(player.encryptHeader, player.userId);
+            request(player.encryptHeader, player.userId, player.addr);
         }
     }
     
@@ -209,13 +208,13 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         require(status == Status.Ended, "the contest is not end yet.");
         require(isSigned(msg.sender) || (msg.sender == owner));
         require(now > doneAt + 10 minutes);
-         _;
+        _;
     }
     
     constructor(uint _duration, uint _goalStep) public {
         status = Status.Started;
         goalStep = _goalStep;
-         if(_duration == 0) {
+        if(_duration == 0) {
             duration = 30 days;
         } else {
             duration = _duration;

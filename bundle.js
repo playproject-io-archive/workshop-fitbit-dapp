@@ -50405,125 +50405,6 @@ function extend() {
 
 },{}],309:[function(require,module,exports){
 module.exports=[{
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "tag",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "name": "condition",
-        "type": "bool"
-      }
-    ],
-    "name": "LOG",
-    "type": "event"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "_queryId",
-        "type": "bytes32"
-      },
-      {
-        "name": "_result",
-        "type": "string"
-      },
-      {
-        "name": "_proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-        "name": "myid",
-        "type": "bytes32"
-      },
-      {
-        "name": "result",
-        "type": "string"
-      }
-    ],
-    "name": "__callback",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "award",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "queryId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "name": "step",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "proof",
-        "type": "bytes"
-      }
-    ],
-    "name": "LOG_OraclizeCallbackStep",
-    "type": "event"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "contestDone",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{
-      "name": "_name",
-      "type": "string"
-    }],
-    "name": "fund",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "playerRefund",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [{
         "name": "_encryptHeader",
@@ -50532,6 +50413,10 @@ module.exports=[{
       {
         "name": "_userId",
         "type": "string"
+      },
+      {
+        "name": "userAddr",
+        "type": "address"
       }
     ],
     "name": "request",
@@ -50541,52 +50426,12 @@ module.exports=[{
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [{
-        "name": "_encryptHeader",
-        "type": "string"
-      },
-      {
-        "name": "_userId",
-        "type": "string"
-      }
-    ],
-    "name": "signup",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [{
-        "name": "_duration",
-        "type": "uint256"
-      },
-      {
-        "name": "_goalStep",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "updateAllUserStep",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
-    "name": "getAllFunders",
+    "name": "isOnTime",
     "outputs": [{
       "name": "",
-      "type": "address[]"
+      "type": "bool"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -50595,22 +50440,7 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "getBalance",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getBeginStep",
+    "name": "getFundersOfAmount",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50658,28 +50488,225 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "getContestPayload2",
+    "name": "getBalance",
     "outputs": [{
-        "name": "",
-        "type": "uint256"
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumFunders",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "myid",
+        "type": "bytes32"
       },
       {
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256"
+        "name": "result",
+        "type": "string"
       }
     ],
+    "name": "__callback",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isOwner",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_queryId",
+        "type": "bytes32"
+      },
+      {
+        "name": "_result",
+        "type": "string"
+      },
+      {
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "__callback",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "award",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getBeginStep",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+        "name": "_encryptHeader",
+        "type": "string"
+      },
+      {
+        "name": "_userId",
+        "type": "string"
+      }
+    ],
+    "name": "signup",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getStatus",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNumPlayers",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalAmount",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getAllFunders",
+    "outputs": [{
+      "name": "",
+      "type": "address[]"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isAvailableRefund",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [{
+      "name": "_name",
+      "type": "string"
+    }],
+    "name": "fund",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "contestDone",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+      "name": "",
+      "type": "address"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "isSigned",
+    "outputs": [{
+      "name": "",
+      "type": "bool"
+    }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -50714,11 +50741,8 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getContestStep",
+    "inputs": [],
+    "name": "getPlayersOfAmount",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50729,11 +50753,37 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "getEndStep",
+    "inputs": [],
+    "name": "getContestPayload2",
+    "outputs": [{
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getWinnerWithdrawalAmount",
     "outputs": [{
       "name": "",
       "type": "uint256"
@@ -50764,28 +50814,14 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getFunders",
-    "outputs": [{
-        "name": "",
-        "type": "string[]"
-      },
-      {
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getFundersOfAmount",
-    "outputs": [{
+    "inputs": [{
       "name": "",
       "type": "uint256"
+    }],
+    "name": "playerIndexs",
+    "outputs": [{
+      "name": "",
+      "type": "address"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -50808,95 +50844,14 @@ module.exports=[{
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getNumFunders",
+    "inputs": [{
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "getEndStep",
     "outputs": [{
       "name": "",
       "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getNumPlayers",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getPlayersOfAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getStatus",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getTotalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getWinnerWithdrawalAmount",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "isAvailableRefund",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "isOnTime",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -50908,25 +50863,10 @@ module.exports=[{
       "name": "addr",
       "type": "address"
     }],
-    "name": "isOwner",
+    "name": "getContestStep",
     "outputs": [{
       "name": "",
-      "type": "bool"
-    }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{
-      "name": "addr",
-      "type": "address"
-    }],
-    "name": "isSigned",
-    "outputs": [{
-      "name": "",
-      "type": "bool"
+      "type": "uint256"
     }],
     "payable": false,
     "stateMutability": "view",
@@ -50935,29 +50875,93 @@ module.exports=[{
   {
     "constant": true,
     "inputs": [],
-    "name": "owner",
+    "name": "getFunders",
     "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
+        "name": "",
+        "type": "string[]"
+      },
+      {
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "name": "playerIndexs",
-    "outputs": [{
-      "name": "",
-      "type": "address"
-    }],
+    "constant": false,
+    "inputs": [],
+    "name": "playerRefund",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "updateAllUserStep",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{
+        "name": "_duration",
+        "type": "uint256"
+      },
+      {
+        "name": "_goalStep",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "queryId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "step",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "LOG_OraclizeCallbackStep",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "tag",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "condition",
+        "type": "bool"
+      }
+    ],
+    "name": "LOG",
+    "type": "event"
   }
 ]
 },{}],310:[function(require,module,exports){
@@ -50967,7 +50971,7 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
-if(localStorage.web3 === 'dev') {
+if (localStorage.web3 === 'dev') {
   console.log('=== dev');
   web3 = new Web3("ws://localhost:8545");
 } else {
@@ -50976,11 +50980,10 @@ if(localStorage.web3 === 'dev') {
     web3 = new Web3(web3.currentProvider);
   } else {
     console.log('=== 2');
-    // web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     web3 = new Web3("ws://localhost:8545");
   }
 }
-const DEFAULT_ADDRESS = "0x59e6f44293d9e634df2e95d5bb2c40f70082de36";
+const DEFAULT_ADDRESS = "0xe9a728e162b6e9d2d7b158c3d824f7d980a7517c";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
@@ -50989,7 +50992,7 @@ const NETWORK = 'ropsten';
 // const NETWORK = 'rinkeby';
 
 let faucetURL;
-if(NETWORK == 'ropsten') {
+if (NETWORK == 'ropsten') {
   faucetURL = 'https://faucet.ropsten.be/';
 } else {
   faucetURL = `https://faucet.${NETWORK}.io/`
@@ -51002,7 +51005,7 @@ const log = console.log;
 /******************************************************************************
   SETUP
 ******************************************************************************/
-const css = csjs`
+const css = csjs `
   .box {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -51141,7 +51144,7 @@ const css = csjs`
 
 function funderAreaElement(result) {
   if (result.funders[0].length == 0) return;
-  return bel`<div class="${css.box4}">Funder : <ul>
+  return bel `<div class="${css.box4}">Funder : <ul>
     ${result.funders[0].map(function (item, index) {
     return bel`<li>${item} : ${web3.utils.fromWei(result.funders[1][index], "ether")} ETH
     </li>`
@@ -51153,33 +51156,33 @@ function funderAreaElement(result) {
 
 function playerRefundButton(result) {
   if (!result.isAvailableRefund) return;
-  return bel`
+  return bel `
     <button class=${css.shortButton} onclick=${playerRefund}"> Refund </button>
   `;
 }
 
 function playSubTitle(result) {
   if (result.goalStep == 300000) {
-    return bel`<div>I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)</div>`
+    return bel `<div>I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)</div>`
   } else {
-    return bel`<div>I bet that I can reach ${result.goalStep} steps! </div>`
+    return bel `<div>I bet that I can reach ${result.goalStep} steps! </div>`
   }
 }
 
 function betSubTitle(result) {
-  if (result.initStep) return bel`<div>Your current amount of steps ${result.step}.</div`;
+  if (result.initStep) return bel `<div>Your current amount of steps ${result.step}.</div`;
 }
 
 function betAreaElement(result) {
-  if (result.isSigned){
-    return bel`
+  if (result.isSigned) {
+    return bel `
     <div class="${css.box5}">
       You successfully <span class="${css.highlight}">joined</span> the contest.<br>
       ${betSubTitle(result)}
       ${playerRefundButton(result)}
     </div>`;
   } else {
-    return bel`
+    return bel `
     <div class="${css.box5}">
       ${playSubTitle(result)}
       <button class=${css.shortButton} onclick=${bet}> Bet</button> (joining fee ${MINIMIZE_SIGNUP_AMOUNT} ETH)
@@ -51190,10 +51193,10 @@ function betAreaElement(result) {
 
 // funder
 
-const fundAmountElement = bel`<input class=${css.input} type="text"/>`;
-const fundNameElement = bel`<input class=${css.input} type="text"/>`;
+const fundAmountElement = bel `<input class=${css.input} type="text"/>`;
+const fundNameElement = bel `<input class=${css.input} type="text"/>`;
 
-const fundAreaElement = bel`
+const fundAreaElement = bel `
   <div class="${css.box6}">
     I want to sponsor this contest with ${fundAmountElement} ETH!<br>
     Name you want to be added to our sponsorship board. ${fundNameElement}<br>
@@ -51201,7 +51204,7 @@ const fundAreaElement = bel`
   </div>
 `
 
-const contractElement = bel`
+const contractElement = bel `
   <input class="${css.longInput}" type="text" name="address" placeholder="Please enter AwardToken contract addres"/>
 `
 
@@ -51210,7 +51213,7 @@ function debugAreaElement(result) {
     localStorage.debug = true;
   }
   if (localStorage.debug == "true") {
-    return bel`
+    return bel `
     <div class="${css.box8}">
       ${contractElement}
       <button class=${css.button} onclick=${updateContract}"> Update Address </button><br>
@@ -51229,7 +51232,7 @@ function debugAreaElement(result) {
 
 function errorRender(errorMessage) {
   console.error(errorMessage);
-  document.body.appendChild(bel`
+  document.body.appendChild(bel `
   <div class=${css.error} id="app">
     ${errorMessage}
   </div>
@@ -51255,25 +51258,25 @@ function niceTimeFormat(s) {
 
 function contestDoneButton(result) {
   if (result.status == 0) {
-    if(result.endAt > result.now) {
-      return bel`<div>
+    if (result.endAt > result.now) {
+      return bel `<div>
                     wait for ${timeRemindMessage(result)}. <br>
                     <button class=${css.button}> Step1: contest end </button>
                 </div>`;
     } else {
-      return bel`<button class=${css.button} onclick=${contestDone}"> Step1: contest end </button>`;
+      return bel `<button class=${css.button} onclick=${contestDone}"> Step1: contest end </button>`;
     }
   }
   return;
 }
 
 function withdrawalButton(result) {
-  if (result.status == 1) return bel`<button class=${css.button} onclick=${award}"> Step2: Award</button>`;
+  if (result.status == 1) return bel `<button class=${css.button} onclick=${award}"> Step2: Award</button>`;
 }
 
 function adminAreaElement(result) {
   if (!result.isOwner) return;
-  return bel`
+  return bel `
   <div class="${css.box7}">
     ${contestDoneButton(result)}
     ${withdrawalButton(result)}
@@ -51282,18 +51285,18 @@ function adminAreaElement(result) {
 
 function welcomeSubTitle(result) {
   if (result.goalStep != 300000) {
-    return bel`<div>who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>`
+    return bel `<div>who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>`
   } else {
-    return bel`<div>who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>`
+    return bel `<div>who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>`
   }
 }
 
 function welcomeSubTitle2(result) {
-  if (result.now < result.endAt) return bel`<div>The Fitbit Contest ends in ${timeRemindMessage(result)}.</div>`;
+  if (result.now < result.endAt) return bel `<div>The Fitbit Contest ends in ${timeRemindMessage(result)}.</div>`;
 }
 
 function render(result) {
-  document.body.appendChild(bel`
+  document.body.appendChild(bel `
   <div class=${css.box} id="app">
     <div class="${css.box1}">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
@@ -51323,10 +51326,13 @@ function render(result) {
  `)
 }
 
-if(typeof web3 == 'undefined') {
+if (typeof web3 == 'undefined') {
   const eventHandler = myContract.events.allEvents((error, data) => {
     if (error) console.error(error);
-    let { event, returnValues } = data;
+    let {
+      event,
+      returnValues
+    } = data;
     console.log('event:', data);
     let userId = returnValues.userId;
     if (event === 'LOG_OraclizeCallbackStep') console.log('callback data:', returnValues);
@@ -51341,7 +51347,9 @@ if (window.location.hash) {
   var fragmentQueryParameters = {};
   window.location.hash.slice(1).replace(
     new RegExp("([^?=&]+)(=([^&]*))?", "g"),
-    function ($0, $1, $2, $3) { fragmentQueryParameters[$1] = $3; }
+    function ($0, $1, $2, $3) {
+      fragmentQueryParameters[$1] = $3;
+    }
   );
 
   log('fragmentQueryParameters: ', fragmentQueryParameters);
@@ -51377,15 +51385,14 @@ function showProfile(data) {
 function getProfile(event) {
   if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
-    'https://api.fitbit.com/1/user/-/profile.json',
-    {
-      headers: new Headers({
-        'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
-      }),
-      mode: 'cors',
-      method: 'GET'
-    }
-  ).then(processResponse)
+      'https://api.fitbit.com/1/user/-/profile.json', {
+        headers: new Headers({
+          'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
+        }),
+        mode: 'cors',
+        method: 'GET'
+      }
+    ).then(processResponse)
     .then(showProfile)
     .catch(function (error) {
       console.error(error);
@@ -51395,16 +51402,15 @@ function getProfile(event) {
 function getActivities(result, cb) {
   if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
-    'https://api.fitbit.com/1/user/-/activities.json',
-    {
-      headers: new Headers({
-        'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
-      }),
-      mode: 'cors',
-      method: 'GET'
-    }
-  ).then(processResponse)
-    .then(function(data) {
+      'https://api.fitbit.com/1/user/-/activities.json', {
+        headers: new Headers({
+          'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
+        }),
+        mode: 'cors',
+        method: 'GET'
+      }
+    ).then(processResponse)
+    .then(function (data) {
       result.currentStep = data.lifetime.total.steps;
       cb(result);
     })
@@ -51420,15 +51426,14 @@ function showTotalStep(data) {
 function getTotalStep(event) {
   if (!isExistToken()) console.error('the fitbit access token is not found.')
   fetch(
-    'https://api.fitbit.com/1/user/-/activities.json',
-    {
-      headers: new Headers({
-        'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
-      }),
-      mode: 'cors',
-      method: 'GET'
-    }
-  ).then(processResponse)
+      'https://api.fitbit.com/1/user/-/activities.json', {
+        headers: new Headers({
+          'Authorization': `Bearer ${localStorage.fitbitAccessToken}`
+        }),
+        mode: 'cors',
+        method: 'GET'
+      }
+    ).then(processResponse)
     .then(showTotalStep)
     .catch(function (error) {
       console.error(error);
@@ -51452,7 +51457,9 @@ function getFitbitToken(event) {
 // player
 
 function playerRefund(event) {
-  myContract.methods.playerRefund().send({ from: localStorage.wallet }, (err, data) => {
+  myContract.methods.playerRefund().send({
+    from: localStorage.wallet
+  }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> player refund done.');
   })
@@ -51471,19 +51478,26 @@ function bet(event) {
     return;
   }
 
-  encryptHeader(token, function(error, header){
+  encryptHeader(token, function (error, header) {
     console.log(header);
     signup(header, MINIMIZE_SIGNUP_AMOUNT);
   });
 }
 
 function signup(header, betAmount) {
-  const options = { from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(betAmount, "ether") };
+  const options = {
+    from: localStorage.wallet,
+    gas: CONTRACT_GAS,
+    gasPrice: CONTRACT_PRICE,
+    value: web3.utils.toWei(betAmount, "ether")
+  };
   delete localStorage.next;
   myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> bet ok.');
-    setTimeout(function () { redirectHome() }, 3000);
+    setTimeout(function () {
+      redirectHome()
+    }, 3000);
   })
 }
 
@@ -51497,7 +51511,12 @@ function fund(event) {
     alert("you don't have enough ether.");
     return;
   }
-  myContract.methods.fund(name).send({ from: localStorage.wallet, gas: CONTRACT_GAS, gasPrice: CONTRACT_PRICE, value: web3.utils.toWei(fundAmount, "ether") }, (err, data) => {
+  myContract.methods.fund(name).send({
+    from: localStorage.wallet,
+    gas: CONTRACT_GAS,
+    gasPrice: CONTRACT_PRICE,
+    value: web3.utils.toWei(fundAmount, "ether")
+  }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> fund ok.');
     redirectHome();
@@ -51507,14 +51526,18 @@ function fund(event) {
 // owner
 
 function contestDone(event) {
-  myContract.methods.contestDone().send({ from: localStorage.wallet }, (err, data) => {
+  myContract.methods.contestDone().send({
+    from: localStorage.wallet
+  }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> contestDone done');
   })
 }
 
 function award(event) {
-  myContract.methods.award().send({ from: localStorage.wallet}, (err, data) => {
+  myContract.methods.award().send({
+    from: localStorage.wallet
+  }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> award done.');
     redirectHome();
@@ -51558,7 +51581,9 @@ function encrypt(data, next) {
 
 function encryptHeader(token, next) {
   const header = `{'headers': {'content-type': 'json', 'Authorization': 'Bearer ${token}'}}`;
-  encrypt({ "message" : header }, function (data) {
+  encrypt({
+    "message": header
+  }, function (data) {
     // console.log(data);
     if (data.success) {
       next(null, data.result);
@@ -51581,7 +51606,9 @@ function redirectHome() {
 
 function done(err, result) {
   if (err) return log(new Error(err))
-  const { username } = result
+  const {
+    username
+  } = result
   if (username) {
     log(null, 'success')
     // var el = dapp(result)
@@ -51697,5 +51724,4 @@ function isOwner(result) {
 }
 
 start();
-
 },{"./abi.json":309,"bel":20,"csjs-inject":67,"web3":292}]},{},[310]);
