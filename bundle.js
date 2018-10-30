@@ -50971,35 +50971,33 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
-if (localStorage.web3 === 'dev') {
-  console.log('=== dev');
-  web3 = new Web3("ws://localhost:8545");
-} else {
-  if (typeof web3 !== 'undefined') {
-    console.log('=== 1');
+async function web3Init() {
+  if (ethereum) {
+    web3 = new Web3(ethereum);
+    try {
+      //  https://bit.ly/2QQHXvF
+      await ethereum.enable();
+    } catch (error) {}
+  } else if (web3) {
     web3 = new Web3(web3.currentProvider);
   } else {
-    console.log('=== 2');
-    web3 = new Web3("ws://localhost:8545");
+    console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
   }
 }
+
+web3Init();
+
 const DEFAULT_ADDRESS = "0xe9a728e162b6e9d2d7b158c3d824f7d980a7517c";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
+
 const NETWORK = 'ropsten';
 // const NETWORK = 'rinkeby';
+let faucetURL = (NETWORK == 'ropsten') ? 'https://faucet.ropsten.be/' : `https://faucet.${NETWORK}.io/`;
 
-let faucetURL;
-if (NETWORK == 'ropsten') {
-  faucetURL = 'https://faucet.ropsten.be/';
-} else {
-  faucetURL = `https://faucet.${NETWORK}.io/`
-}
-
-myContract = new web3.eth.Contract(ABI, contractAddress);
-
+const myContract = new web3.eth.Contract(ABI, contractAddress);
 const log = console.log;
 
 /******************************************************************************
@@ -51619,14 +51617,14 @@ function done(err, result) {
 /******************************************************************************
   START
 ******************************************************************************/
+function continueProcess() {
+  if (localStorage.next == 'bet') bet();
+}
+
 function start() {
   getMyAddress({
     fitbitAccessToken: localStorage.fitbitAccessToken
   });
-}
-
-function continueProcess() {
-  if (localStorage.next == 'bet') bet();
 }
 
 function getMyAddress(result) {

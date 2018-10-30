@@ -36,7 +36,8 @@ contract FunderMixin is CommonMixin {
     mapping (address => Funder) funders;
 
     modifier minimizeContribute { require( msg.value >= 0.5 ether, "ether not enough"); _; }
-    
+    event NewFundLog(string name);
+
     struct Funder {
         address addr;
         uint amount;
@@ -85,6 +86,7 @@ contract FunderMixin is CommonMixin {
             funderIndexs.push(msg.sender);
         }
         fundersOfAmount += msg.value;
+        emit NewFundLog(_name);
     }
 }
 
@@ -200,19 +202,19 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     uint private doneAt;
     uint internal goalStep;
     address[] private winnerIndexs;
-    Status private status;
-    enum Status { Started, Ended, Withdrawal}
+    State private state;
+    enum State { Started, Ended, Withdrawal}
     
     modifier availableRefund () {  require(isAvailableRefund(), "you didn't signup."); _; }
     modifier availableAward {
-        require(status == Status.Ended, "the contest is not end yet.");
+        require(state == State.Ended, "the contest is not end yet.");
         require(isSigned(msg.sender) || (msg.sender == owner));
         require(now > doneAt + 10 minutes);
         _;
     }
     
     constructor(uint _duration, uint _goalStep) public {
-        status = Status.Started;
+        state = State.Started;
         goalStep = _goalStep;
         if(_duration == 0) {
             duration = 30 days;
@@ -222,8 +224,8 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         endAt = now + duration;
     }
     
-    function getStatus() public view returns (uint) {
-        return uint(status);
+    function getState() public view returns (uint) {
+        return uint(state);
     }
 
     function getTotalAmount() public view returns (uint) {
@@ -260,7 +262,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     function contestDone() public onlyOwner onlyTimeOut payable {
     // function contestDone() public onlyOwner payable {
         updateAllUserStep();
-        status = Status.Ended;
+        state = State.Ended;
         doneAt = now;
     }
     
@@ -268,7 +270,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     function award() public availableAward payable {
         calculatorWinners();
         playersWithdrawal();
-        status = Status.Withdrawal;
+        state = State.Withdrawal;
     }
     
     function playerRefund() public availableRefund {
@@ -279,7 +281,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     function isAvailableRefund() public view returns (bool) {
         bool condition1 = !players[msg.sender].refunded;
         // emit LOG("condition1", condition1);
-        bool condition2 = status != Status.Withdrawal;
+        bool condition2 = state != State.Withdrawal;
         // emit LOG("condition2", condition1);
         bool condition3 = now > endAt + 3 days;
         // emit LOG("condition3", condition1);
@@ -287,7 +289,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     }
 
     function getContestPayload1(address addr) public view returns (uint, uint, uint, uint, uint, bool) {
-        return (getNumPlayers(), getPlayersOfAmount(), getNumFunders(), getFundersOfAmount(), getStatus(), isSigned(addr));
+        return (getNumPlayers(), getPlayersOfAmount(), getNumFunders(), getFundersOfAmount(), getState(), isSigned(addr));
     }
     
     function getContestPayload2() public view returns (uint, uint, uint, uint, uint) {
