@@ -15,7 +15,7 @@ contract CommonMixin {
     modifier onlyOnTime { require(isOnTime(), "only on time"); _; }
     modifier onlyTimeOut { require(!isOnTime(), "only time out"); _; }
     modifier onlyOwner { require(msg.sender == owner, "only for owner"); _; }
-    event LOG (string tag, bool condition);
+    event LOG(string tag, bool condition);
     
     constructor() public {
         startAt = now;
@@ -36,7 +36,7 @@ contract FunderMixin is CommonMixin {
     mapping (address => Funder) funders;
 
     modifier minimizeContribute { require( msg.value >= 0.5 ether, "ether not enough"); _; }
-    event NewFundLog(string name);
+    event NewFundLog(string name, uint amount, uint fundersOfAmount, uint numFunders);
 
     struct Funder {
         address addr;
@@ -86,7 +86,7 @@ contract FunderMixin is CommonMixin {
             funderIndexs.push(msg.sender);
         }
         fundersOfAmount += msg.value;
-        emit NewFundLog(_name);
+        emit NewFundLog(_name, msg.value, getFundersOfAmount(), getNumFunders());
     }
 }
 
@@ -104,12 +104,8 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     modifier isNewPlayer { require(!isSigned(msg.sender), "you already signed"); _; }
     
     // ===>>> event
-    event LOG_OraclizeCallbackStep (
-		address addr,
-		bytes32 queryId,
-		uint step,
-		bytes proof
-    );
+    event OraclizeCallbackStep(address addr, bytes32 queryId, uint step, bytes proof);
+    event NewPlayerLog(address addr, uint amount, uint playersOfAmount, uint numPlayers);
 	
 	// ===>>> struct
     struct Player {
@@ -161,7 +157,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
     function __callback(bytes32 _queryId, string _result, bytes _proof) public onlyOraclize {
         if (!validIds[_queryId].valid) revert();
         SignData memory o = validIds[_queryId];
-        emit LOG_OraclizeCallbackStep(o.addr, _queryId, parseInt(_result), _proof);
+        emit OraclizeCallbackStep(o.addr, _queryId, parseInt(_result), _proof);
         uint steps = parseInt(_result);
         if(players[o.addr].initStep) {
             players[o.addr].endStep = steps;
@@ -193,7 +189,7 @@ contract PlayerMixin is usingOraclize, CommonMixin {
         players[_addr] = Player(_addr, _amount, _userId, now, 0, 0, false, _encryptHeader, false);
         playerIndexs.push(_addr);
         playersOfAmount += _amount;
-        
+        emit NewPlayerLog(_addr, _amount, playersOfAmount, getNumPlayers());
     }
 }
 
@@ -212,6 +208,9 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         require(now > doneAt + 10 minutes);
         _;
     }
+    
+    event NoticeContestDone(address addr);
+    event NoticeAward(address addr);
     
     constructor(uint _duration, uint _goalStep) public {
         state = State.Started;
@@ -260,10 +259,10 @@ contract FitnessContest is PlayerMixin, FunderMixin {
     
     // owner Step1
     function contestDone() public onlyOwner onlyTimeOut payable {
-    // function contestDone() public onlyOwner payable {
         updateAllUserStep();
         state = State.Ended;
         doneAt = now;
+        emit NoticeContestDone(msg.sender);
     }
     
     // owner Step2
@@ -271,6 +270,7 @@ contract FitnessContest is PlayerMixin, FunderMixin {
         calculatorWinners();
         playersWithdrawal();
         state = State.Withdrawal;
+        emit NoticeAward(msg.sender);
     }
     
     function playerRefund() public availableRefund {
