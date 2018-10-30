@@ -20,7 +20,7 @@ async function web3Init() {
 
 web3Init();
 
-const DEFAULT_ADDRESS = "0xe9a728e162b6e9d2d7b158c3d824f7d980a7517c";
+const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
 const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
@@ -240,6 +240,9 @@ const contractElement = bel `
 `
 
 function debugAreaElement(result) {
+  if (window.location.hash.indexOf("#clear") != -1) {
+    restoreContract();
+  }
   if (window.location.hash.indexOf("#dev") != -1) {
     localStorage.debug = true;
   }
@@ -248,12 +251,12 @@ function debugAreaElement(result) {
     <div class="${css.box8}">
       ${contractElement}
       <button class=${css.button} onclick=${updateContract}"> Update Address </button><br>
-      <button class=${css.shortButton} onclick=${getFitbitToken}"> Get Token </button> 
-      <button class=${css.shortButton} onclick=${getProfile}"> Get Profile </button> 
-      <button class=${css.shortButton} onclick=${getTotalStep}"> Get Step </button> 
-      <button class=${css.shortButton} onclick=${restoreContract}"> Restore Contract </button> 
-      <button class=${css.shortButton} onclick=${hideDebug}"> Hide Debug </button> 
-      <button class=${css.shortButton} onclick=${clearCache}"> Clear </button><br>
+      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button> 
+      <button class=${css.button} onclick=${getProfile}"> Get Profile </button> 
+      <button class=${css.button} onclick=${getTotalStep}"> Get Step </button> <br>
+      <button class=${css.button} onclick=${restoreContract}"> Restore Contract </button> 
+      <button class=${css.button} onclick=${hideDebug}"> Hide Debug </button> 
+      <button class=${css.button} onclick=${clearCache}"> Clear </button><br>
       <a href="https://${NETWORK}.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
   } else {
@@ -291,7 +294,7 @@ function contestDoneButton(result) {
   if (result.status == 0) {
     if (result.endAt > result.now) {
       return bel `<div>
-                    wait for ${timeRemindMessage(result)}. <br>
+                    waiting for ${timeRemindMessage(result)}. <br>
                     <button class=${css.button}> Step1: contest end </button>
                 </div>`;
     } else {
@@ -482,11 +485,76 @@ function getFitbitToken(event) {
 }
 
 /******************************************************************************
-  Event
+  Smart Contract Event
 ******************************************************************************/
 
-// player
+// Generate filter options
+const options = {
+  // filter: {
+  //   _from: process.env.WALLET_FROM,
+  //   _to: process.env.WALLET_TO,
+  //   _value: process.env.AMOUNT
+  // },
+  fromBlock: 'latest'
+}
 
+myContract.events.NewFundLog(options, async (error, event) => {
+  if (error) {
+    console.log(error)
+    return
+  }
+  console.log('NewFundLog: ', event.returnValues);
+  redirectHome();
+  return
+});
+
+myContract.events.NewPlayerLog(options, async (error, event) => {
+  if (error) {
+    console.log(error)
+    return
+  }
+  console.log('NewPlayerLog: ', event.returnValues);
+  if (localStorage.wallet == event.returnValues.addr) redirectHome();
+  return
+});
+
+myContract.events.OraclizeCallbackStep(options, async (error, event) => {
+  if (error) {
+    console.log(error)
+    return
+  }
+  console.log('OraclizeCallbackStep: ', event.returnValues);
+  if (localStorage.wallet == event.returnValues.addr) redirectHome();
+  return
+});
+
+myContract.events.NoticeContestDone(options, async (error, event) => {
+  if (error) {
+    console.log(error)
+    return
+  }
+  console.log('NoticeContestDone: ', event.returnValues);
+  if (localStorage.wallet == event.returnValues.addr) redirectHome();
+  return
+});
+
+myContract.events.NoticeAward(options, async (error, event) => {
+  if (error) {
+    console.log(error)
+    return
+  }
+  console.log('NoticeAward: ', event.returnValues);
+  if (localStorage.wallet == event.returnValues.addr) redirectHome();
+  return
+});
+
+/******************************************************************************
+  DOM Event
+******************************************************************************/
+
+// === player ===
+
+// 玩家退款
 function playerRefund(event) {
   myContract.methods.playerRefund().send({
     from: localStorage.wallet
@@ -496,6 +564,7 @@ function playerRefund(event) {
   })
 }
 
+// 玩家參賽
 function bet(event) {
   if (parseFloat(localStorage.balance) < parseFloat(MINIMIZE_SIGNUP_AMOUNT)) {
     alert("you don't have enough ether.");
@@ -525,14 +594,11 @@ function signup(header, betAmount) {
   delete localStorage.next;
   myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
-    console.log('>>> bet ok.');
-    setTimeout(function () {
-      redirectHome()
-    }, 3000);
+    console.log('>>> signup ok.');
   })
 }
 
-// funder
+// === funder ===
 
 function fund(event) {
   let fundAmount = fundAmountElement.value;
@@ -550,11 +616,10 @@ function fund(event) {
   }, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> fund ok.');
-    redirectHome();
   })
 }
 
-// owner
+// === owner ===
 
 function contestDone(event) {
   myContract.methods.contestDone().send({
@@ -574,6 +639,8 @@ function award(event) {
     redirectHome();
   })
 }
+
+// === debug ===
 
 function restoreContract(event) {
   delete localStorage.constract;
@@ -632,7 +699,7 @@ function encryptHeader(token, next) {
 
 function redirectHome() {
   location.target = "_blank";
-  location.href = "https://alincode.github.io/fitbit-dapp/";
+  location.href = location.origin;
 }
 
 function done(err, result) {

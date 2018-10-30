@@ -94,6 +94,18 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "getState",
+    "outputs": [{
+      "name": "",
+      "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "getNumFunders",
     "outputs": [{
       "name": "",
@@ -195,18 +207,6 @@
     "outputs": [],
     "payable": true,
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getStatus",
-    "outputs": [{
-      "name": "",
-      "type": "uint256"
-    }],
-    "payable": false,
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -518,6 +518,52 @@
   {
     "anonymous": false,
     "inputs": [{
+      "indexed": false,
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "NoticeContestDone",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+      "indexed": false,
+      "name": "addr",
+      "type": "address"
+    }],
+    "name": "NoticeAward",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "fundersOfAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "numFunders",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewFundLog",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
         "indexed": false,
         "name": "addr",
         "type": "address"
@@ -538,7 +584,33 @@
         "type": "bytes"
       }
     ],
-    "name": "LOG_OraclizeCallbackStep",
+    "name": "OraclizeCallbackStep",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "playersOfAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "numPlayers",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewPlayerLog",
     "type": "event"
   },
   {
