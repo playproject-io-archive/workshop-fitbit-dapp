@@ -1,5 +1,12 @@
 # Fitbit Dapp
 
+**learning resource**
+
+* [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
+* [slides - Introduction to fitbit dapp by alincode](https://slides.com/alincode/fitbit-dapp-intro/fullscreen)
+* [slides - Introduction to oraclize  by alincode](https://slides.com/alincode/oraclize201810#/)
+
+
 ![](assets/screen1.png)
 
 ![](assets/screen2.png)
@@ -68,8 +75,3 @@ it will update all user end step and save the doneAt.
 if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function.
 
 it will count all winner and award money to winner.
-
-## Ref
-
-* [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
-* [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/)
