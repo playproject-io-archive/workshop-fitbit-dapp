@@ -51048,9 +51048,11 @@ async function web3Init() {
     web3 = new Web3(ethereum);
     try {
       //  https://bit.ly/2QQHXvF
+      console.log('ethereum.enable()');
       await ethereum.enable();
     } catch (error) {}
   } else if (web3) {
+    console.log('load web3.currentProvider');
     web3 = new Web3(web3.currentProvider);
   } else {
     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
