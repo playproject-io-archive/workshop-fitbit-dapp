@@ -51740,7 +51740,7 @@ function encryptHeader(token, next) {
 
 function redirectHome() {
   location.target = "_blank";
-  if (ocation.href.indexOf("github") != -1) {
+  if (location.href.indexOf("github") != -1) {
     location.href = 'https://alincode.github.io/fitbit-dapp/';
   } else {
     location.href = 'http://192.168.0.173:9966/';
