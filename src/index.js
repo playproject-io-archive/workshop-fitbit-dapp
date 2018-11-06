@@ -4,8 +4,15 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
-const REDIRECT_URL = 'https://alincode.github.io/fitbit-dapp'
-// const REDIRECT_URL = 'https://ethereum-play.github.io/workshop-fitbit-dapp'
+const CLIENT_ID = '22D5DZ';
+const REDIRECT_URL = 'https://ethereum-play.github.io/workshop-fitbit-dapp'
+const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
+const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
+const CONTRACT_GAS = 800000;
+const CONTRACT_PRICE = 40000000000;
+const MINIMIZE_SIGNUP_AMOUNT = "0.1";
+const GOAL_STEPS = 300000
+const NETWORK = 'ropsten';
 
 async function web3Init() {
   if (ethereum) {
@@ -25,16 +32,6 @@ async function web3Init() {
 }
 
 web3Init();
-
-const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
-const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
-const CONTRACT_GAS = 800000;
-const CONTRACT_PRICE = 40000000000;
-const MINIMIZE_SIGNUP_AMOUNT = "0.1";
-
-const NETWORK = 'ropsten';
-// const NETWORK = 'rinkeby';
-let faucetURL = (NETWORK == 'ropsten') ? 'https://faucet.ropsten.be/' : `https://faucet.${NETWORK}.io/`;
 
 const myContract = new web3.eth.Contract(ABI, contractAddress);
 const log = console.log;
@@ -199,7 +196,7 @@ function playerRefundButton(result) {
 }
 
 function playSubTitle(result) {
-  if (result.goalStep == 300000) {
+  if (result.goalStep == GOAL_STEPS) {
     return bel `<div>I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)</div>`
   } else {
     return bel `<div>I bet that I can reach ${result.goalStep} steps! </div>`
@@ -321,7 +318,7 @@ function adminAreaElement(result) {
 }
 
 function welcomeSubTitle(result) {
-  if (result.goalStep != 300000) {
+  if (result.goalStep != GOAL_STEPS) {
     return bel `<div>who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>`
   } else {
     return bel `<div>who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>`
@@ -339,7 +336,7 @@ function render(result) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
     </div>
     <div class=${css.box2}>
-      Please choose the <span class="${css.highlight}">${NETWORK} test chain.</span> You can get test coins here coin from <a href="${faucetURL}">here</a>.
+      Please choose the <span class="${css.highlight}">${NETWORK} test chain.</span> You can get test coins from metamasks deposit button on ropsten when clicking faucet.
       <br><br>
       <div>
         <h2><b>Welcome</b> to the Fitbit wellness contest.</h2>
@@ -379,7 +376,6 @@ if (typeof web3 == 'undefined') {
 /******************************************************************************
   Fitbit
 ******************************************************************************/
-
 if (window.location.hash) {
   var fragmentQueryParameters = {};
   window.location.hash.slice(1).replace(
@@ -478,7 +474,6 @@ function getTotalStep(event) {
 }
 
 function getFitbitToken(event) {
-  const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
   const uri = REDIRECT_URL
   const redirectUri = encodeURIComponent(uri);
@@ -556,8 +551,6 @@ myContract.events.NoticeAward(options, async (error, event) => {
 ******************************************************************************/
 
 // === player ===
-
-// 玩家退款
 function playerRefund(event) {
   myContract.methods.playerRefund().send({
     from: localStorage.wallet
@@ -567,7 +560,6 @@ function playerRefund(event) {
   })
 }
 
-// 玩家參賽
 function bet(event) {
   if (parseFloat(localStorage.balance) < parseFloat(MINIMIZE_SIGNUP_AMOUNT)) {
     alert("you don't have enough ether.");
@@ -597,7 +589,6 @@ function signup(header, betAmount) {
 }
 
 // === funder ===
-
 function fund(event) {
   let fundAmount = fundAmountElement.value;
   let name = fundNameElement.value;
@@ -618,7 +609,6 @@ function fund(event) {
 }
 
 // === owner ===
-
 function contestDone(event) {
   myContract.methods.contestDone().send({
     from: localStorage.wallet
@@ -639,7 +629,6 @@ function award(event) {
 }
 
 // === debug ===
-
 function restoreContract(event) {
   delete localStorage.contract;
   redirectHome();
