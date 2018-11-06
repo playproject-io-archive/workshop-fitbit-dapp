@@ -8,7 +8,7 @@ async function web3Init() {
   if (ethereum) {
     web3 = new Web3(ethereum);
     try {
-      //  https://bit.ly/2QQHXvF
+      // https://bit.ly/2QQHXvF
       console.log('ethereum.enable()');
       await ethereum.enable();
     } catch (error) {}
@@ -23,7 +23,7 @@ async function web3Init() {
 web3Init();
 
 const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
-const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
+const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -253,11 +253,11 @@ function debugAreaElement(result) {
     <div class="${css.box8}">
       ${contractElement}
       <button class=${css.button} onclick=${updateContract}"> Update Address </button><br>
-      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button> 
-      <button class=${css.button} onclick=${getProfile}"> Get Profile </button> 
+      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
+      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
       <button class=${css.button} onclick=${getTotalStep}"> Get Step </button> <br>
-      <button class=${css.button} onclick=${restoreContract}"> Restore Contract </button> 
-      <button class=${css.button} onclick=${hideDebug}"> Hide Debug </button> 
+      <button class=${css.button} onclick=${restoreContract}"> Restore Contract </button>
+      <button class=${css.button} onclick=${hideDebug}"> Hide Debug </button>
       <button class=${css.button} onclick=${clearCache}"> Clear </button><br>
       <a href="https://${NETWORK}.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
@@ -645,7 +645,7 @@ function award(event) {
 // === debug ===
 
 function restoreContract(event) {
-  delete localStorage.constract;
+  delete localStorage.contract;
   redirectHome();
 }
 
@@ -660,7 +660,7 @@ function clearCache(event) {
 }
 
 function updateContract(event) {
-  localStorage.constract = contractElement.value;
+  localStorage.contract = contractElement.value;
   location.reload();
 }
 

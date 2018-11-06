@@ -1,5 +1,6 @@
 # Oraclize
 
+### Official Resources
 * [Remix - Solidity IDE](https://remix.oraclize.it/#plugintitle=Oraclize&pluginurl=https://remix-plugin.oraclize.it)
 * [oraclize/ethereum-examples](https://github.com/oraclize/ethereum-examples/tree/master/solidity)
 * [Tutorial - Getting started with Oraclize on Ethereum - YouTube](https://www.youtube.com/watch?v=v2Skr_m0J2E&feature=youtu.be)
@@ -17,6 +18,70 @@
 * [Oracle系列一: Human Oracle – Taipei Ethereum Meetup – Medium](https://medium.com/taipei-ethereum-meetup/oracle%E7%B3%BB%E5%88%97%E4%B8%80-human-oracle-cb7ed8268030)
 * [johnhckuo/Oraclize-Tutorial](https://github.com/johnhckuo/Oraclize-Tutorial)
 * [【区块链】使用Oraclize让智能合约调用外部数据 - CSDN博客](https://blog.csdn.net/ns2250225/article/details/80498838)
+
+### Example Usage
+
+**example 1**
+```
+pragma solidity ^0.4.0;
+import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
+
+contract ExampleContract is usingOraclize {
+    string public name;
+    event NewOraclizeQuery(string description);
+    event NewMessage(string message);
+    function ExampleContract() public {
+        /// initialization
+    }
+    function __callback(bytes32 myid, string _result) public {
+        if (msg.sender != oraclize_cbAddress()) revert();
+        name = _result;
+        NewOraclizeQuery(_result);
+        NewMessage(_result);
+    }
+    function callAPItoGetUserName() public payable {
+        NewOraclizeQuery("Oraclize query was sent, standing by for the answer..");
+        oraclize_query("URL", "json(https://jsonplaceholder.typicode.com/users/1).name");
+    }
+}
+```
+
+**example 2**
+```
+pragma solidity ^0.4.0;
+import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";
+
+contract KrakenPriceTicker is usingOraclize {
+
+    string public ETHXBT;
+    uint constant CUSTOM_GASLIMIT = 150000;
+
+    event LogConstructorInitiated(string nextStep);
+    event newOraclizeQuery(string description);
+    event newKrakenPriceTicker(string price);
+
+
+    function KrakenPriceTicker() {
+        oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
+        LogConstructorInitiated("Constructor was initiated. Call 'update()' to send the Oraclize Query.");
+    }
+
+    function __callback(bytes32 myid, string result, bytes proof) {
+        if (msg.sender != oraclize_cbAddress()) revert();
+        ETHXBT = result;
+        newKrakenPriceTicker(ETHXBT);
+    }
+
+    function update() payable {
+        if (oraclize_getPrice("URL", CUSTOM_GASLIMIT) > this.balance) {
+            newOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");
+        } else {
+            newOraclizeQuery("Oraclize query was sent, standing by for the answer..");
+            oraclize_query("URL", "json(https://api.kraken.com/0/public/Ticker?pair=ETHXBT).result.XETHXXBT.c.0", CUSTOM_GASLIMIT);
+        }
+    }
+}
+```
 
 ### ethereum-bridge
 

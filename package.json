@@ -1,11 +1,11 @@
 {
-  "name": "dapp",
-  "version": "1.0.0",
+  "private": true,
+  "name": "workshop-fitbit-dapp",
+  "version": "1.1.0",
   "description": "",
-  "main": "abi.js",
+  "main": "src/abi.json",
   "scripts": {
     "start": "budo src/index.js:bundle.js --dir ./ --live --open",
-    "fitbit": "budo src/fitbit.js:bundle.js --dir ./ --live --open",
     "bridge": "ethereum-bridge -a 9 -H 127.0.0.1 -p 8545 --dev",
     "ganache": "ganache-cli -p 8545",
     "build": "browserify src/index.js > bundle.js"
@@ -16,11 +16,11 @@
   "dependencies": {
     "bel": "^6.0.0",
     "csjs-inject": "^1.0.1",
-    "ganache-cli": "^6.1.8",
     "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
     "budo": "^11.2.0",
-    "ethereum-bridge": "^0.6.1"
+    "ethereum-bridge": "^0.6.1",
+    "ganache-cli": "^6.1.8"
   }
 }

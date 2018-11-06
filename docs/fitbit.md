@@ -1,3 +1,79 @@
+# fitbit
+
+* [Fitbit Development: Using OAuth 2.0](https://dev.fitbit.com/build/reference/web-api/oauth2/)
+* [create Fitbit app account](https://dev.fitbit.com/apps/new)
+  * choose client app
+* [Fitbit Apps](https://dev.fitbit.com/apps)
+* [Swagger UI](https://dev.fitbit.com/build/reference/web-api/explore/)
+
+### example
+
+* [jeremiahlee/fitbit-web-demo](https://github.com/jeremiahlee/fitbit-web-demo/blob/master/boot.js)
+* [thegameofcode/passport-fitbit-oauth2](https://github.com/thegameofcode/passport-fitbit-oauth2)
+
+
+### helper tools
+* [URL Encoder &amp; Decoder - Free Online Text Conversion](http://www.togglecase.com/url_encode_decode)
+* [ngrok - secure introspectable tunnels to localhost](https://ngrok.com/)
+```
+ngrok http 9966
+```
+
+### Example Contract
+```js
+var fitbitAccessToken;
+var CLIENT_ID = '22CYSG';
+var EXPIRES_IN = 31536000;
+
+if (!window.location.hash) {
+  window.location.replace(`https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=https%3A%2F%2Falincode.github.io%2Fdevon4&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=${EXPIRES_IN}`);
+} else {
+  var fragmentQueryParameters = {};
+  window.location.hash.slice(1).replace(
+    new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+    function ($0, $1, $2, $3) { fragmentQueryParameters[$1] = $3; }
+  );
+
+  fitbitAccessToken = fragmentQueryParameters.access_token;
+  document.body.innerHTML = fragmentQueryParameters;
+}
+
+var processResponse = function (res) {
+  if (!res.ok) {
+    throw new Error('Fitbit API request failed: ' + res);
+  }
+
+  var contentType = res.headers.get('content-type')
+  if (contentType && contentType.indexOf("application/json") !== -1) {
+    return res.json();
+  } else {
+    throw new Error('JSON expected but received ' + contentType);
+  }
+}
+
+var getProfile = function(profile) {
+  console.log(profile.user.age);
+  return profile;
+}
+
+fetch(
+  'https://api.fitbit.com/1/user/-/profile.json',
+  {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + fitbitAccessToken
+    }),
+    mode: 'cors',
+    method: 'GET'
+  }
+).then(processResponse)
+  .then(getProfile)
+  .catch(function (error) {
+    console.error(error);
+  });
+```
+
+### Example Data for `https://api.fitbit.com/1/user/-/activities.json`
+```
 [{
     "anonymous": false,
     "inputs": [{
@@ -452,3 +528,4 @@
     "type": "function"
   }
 ]
+```

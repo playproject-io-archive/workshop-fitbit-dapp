@@ -1,77 +1,35 @@
-# Fitbit Dapp
-
-**learning resource**
-
-* [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
+# Fitbit Dapp Workshop
+**tutorials**
 * [slides - Introduction to fitbit dapp by alincode](https://slides.com/alincode/fitbit-dapp-intro/fullscreen)
 * [slides - Introduction to oraclize  by alincode](https://slides.com/alincode/oraclize201810#/)
+* [Oraclize Documentation](https://docs.oraclize.it/#ethereum-quick-start-simple-query)
 
+# demo
+### 1. player role
+* `signup` - you need to wait 2~3 minute until you can see you are signed up
+* `playerRefund` - if the contest ends and 3 days after the owner still did not trigger payouts, the user can click the refund button to get their money back
 
-![](assets/screen1.png)
+### 2. sponsor role
+* `fund` - sponsors can fund many times, additional times will update "amount" and "name"
 
-![](assets/screen2.png)
+### 3. owner role
+1. `contestDone` - it will update all user end step and save the doneAt.
+2. `award` - if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function and it will count all winner and award money to winner
 
-![](assets/screen3.png)
+https://ethereum-play.github.io/workshop-fitbit-dapp
 
-## Run it
+![](docs/assets/screen1.png)
+![](docs/assets/screen2.png)
+![](docs/assets/screen3.png)
 
+# contribute
+```bash
+git clone https://github.com/ethereum-play/workshop-fitbit-dapp.git
+cd workshop-fitbit-dapp
+npm install
+npm start # run livereload dev server
+# edit repo
+npm run build # build: updates bundle
+git add -A && git commit -m "<summary of changes>"
+git push # publish
 ```
-npm i
-npm start
-```
-
-## build & publish
-
-```sh
-npm run build
-git add -A && git commit -m "bundle"
-git push
-```
-
-### Player
-
-* signup
-
-you need to wait 2~3 minute, until oraclize callback. then you could see you are signed.
-
-* playerRefund
-
-if contest end over 3 days, but the owner still not end the contest, the user could click refund button, then get money back.
-
-```
-struct Player {
-    address addr;
-    uint amount;
-    string userId;
-    uint createdAt;
-    uint beginStep;
-    uint endStep;
-    bool refunded;
-    string encryptHeader;
-}
-```
-
-### Funder
-
-* fund: funder could fund many times, second time will update amount and name.
-
-```
-struct Funder {
-    address addr;
-    uint amount;
-    uint createdAt;
-    string name;
-}
-```
-
-### Owner
-
-* Step1: contestDone
-
-it will update all user end step and save the doneAt.
-
-* Step2: award
-
-if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function.
-
-it will count all winner and award money to winner.
