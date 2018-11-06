@@ -4,6 +4,9 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
+const REDIRECT_URL = 'https://alincode.github.io/fitbit-dapp'
+// const REDIRECT_URL = 'https://ethereum-play.github.io/workshop-fitbit-dapp'
+
 async function web3Init() {
   if (ethereum) {
     web3 = new Web3(ethereum);
@@ -246,9 +249,6 @@ function debugAreaElement(result) {
     restoreContract();
   }
   if (window.location.hash.indexOf("#dev") != -1) {
-    localStorage.debug = true;
-  }
-  if (localStorage.debug == "true") {
     return bel `
     <div class="${css.box8}">
       ${contractElement}
@@ -479,7 +479,7 @@ function getTotalStep(event) {
 function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
-  const uri = "https://alincode.github.io/fitbit-dapp";
+  const uri = REDIRECT_URL
   const redirectUri = encodeURIComponent(uri);
   window.location.target = "_blank";
   window.location.href = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
@@ -574,11 +574,7 @@ function bet(event) {
   }
 
   const token = localStorage.fitbitAccessToken;
-  if (!token) {
-    getFitbitToken(1);
-    localStorage.next = 'bet';
-    return;
-  }
+  if (!token) return getFitbitToken(1)
 
   encryptHeader(token, function (error, header) {
     console.log(header);
@@ -593,7 +589,6 @@ function signup(header, betAmount) {
     gasPrice: CONTRACT_PRICE,
     value: web3.utils.toWei(betAmount, "ether")
   };
-  delete localStorage.next;
   myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> signup ok.');
@@ -650,7 +645,6 @@ function restoreContract(event) {
 }
 
 function hideDebug(event) {
-  localStorage.debug = false;
   redirectHome();
 }
 
@@ -702,7 +696,7 @@ function encryptHeader(token, next) {
 function redirectHome() {
   location.target = "_blank";
   if (location.href.indexOf("github") != -1) {
-    location.href = 'https://alincode.github.io/fitbit-dapp/';
+    location.href = REDIRECT_URL
   } else {
     location.href = 'http://192.168.0.173:9966/';
   }
@@ -723,9 +717,6 @@ function done(err, result) {
 /******************************************************************************
   START
 ******************************************************************************/
-function continueProcess() {
-  if (localStorage.next == 'bet') bet();
-}
 
 function start() {
   getMyAddress({
@@ -822,7 +813,6 @@ function isOwner(result) {
     if (err) return console.error(err);
     result.isOwner = data;
     console.log('result: ', result);
-    continueProcess();
     render(result);
   })
 }
