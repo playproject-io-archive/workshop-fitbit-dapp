@@ -51033,13 +51033,17 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
+const REDIRECT_URL = 'https://alincode.github.io/fitbit-dapp'
+// const REDIRECT_URL = 'https://ethereum-play.github.io/workshop-fitbit-dapp'
+
 async function web3Init() {
   if (ethereum) {
     web3 = new Web3(ethereum);
     try {
-      //  https://bit.ly/2QQHXvF
+      // https://bit.ly/2QQHXvF
       console.log('ethereum.enable()');
-      await ethereum.enable();
+      const accounts = await ethereum.enable();
+      web3.eth.defaultAccount = accounts[0];
     } catch (error) {}
   } else if (web3) {
     console.log('load web3.currentProvider');
@@ -51052,7 +51056,7 @@ async function web3Init() {
 web3Init();
 
 const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
-const contractAddress = localStorage.constract || DEFAULT_ADDRESS;
+const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
 const CONTRACT_PRICE = 40000000000;
 const MINIMIZE_SIGNUP_AMOUNT = "0.1";
@@ -51275,18 +51279,15 @@ function debugAreaElement(result) {
     restoreContract();
   }
   if (window.location.hash.indexOf("#dev") != -1) {
-    localStorage.debug = true;
-  }
-  if (localStorage.debug == "true") {
     return bel `
     <div class="${css.box8}">
       ${contractElement}
       <button class=${css.button} onclick=${updateContract}"> Update Address </button><br>
-      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button> 
-      <button class=${css.button} onclick=${getProfile}"> Get Profile </button> 
+      <button class=${css.button} onclick=${getFitbitToken}"> Get Token </button>
+      <button class=${css.button} onclick=${getProfile}"> Get Profile </button>
       <button class=${css.button} onclick=${getTotalStep}"> Get Step </button> <br>
-      <button class=${css.button} onclick=${restoreContract}"> Restore Contract </button> 
-      <button class=${css.button} onclick=${hideDebug}"> Hide Debug </button> 
+      <button class=${css.button} onclick=${restoreContract}"> Restore Contract </button>
+      <button class=${css.button} onclick=${hideDebug}"> Hide Debug </button>
       <button class=${css.button} onclick=${clearCache}"> Clear </button><br>
       <a href="https://${NETWORK}.etherscan.io/address/${contractAddress}">etherscan</a>
     </div>`;
@@ -51508,7 +51509,7 @@ function getTotalStep(event) {
 function getFitbitToken(event) {
   const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
-  const uri = "https://alincode.github.io/fitbit-dapp";
+  const uri = REDIRECT_URL
   const redirectUri = encodeURIComponent(uri);
   window.location.target = "_blank";
   window.location.href = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
@@ -51603,11 +51604,7 @@ function bet(event) {
   }
 
   const token = localStorage.fitbitAccessToken;
-  if (!token) {
-    getFitbitToken(1);
-    localStorage.next = 'bet';
-    return;
-  }
+  if (!token) return getFitbitToken(1)
 
   encryptHeader(token, function (error, header) {
     console.log(header);
@@ -51622,7 +51619,6 @@ function signup(header, betAmount) {
     gasPrice: CONTRACT_PRICE,
     value: web3.utils.toWei(betAmount, "ether")
   };
-  delete localStorage.next;
   myContract.methods.signup(header, localStorage.userId).send(options, (err, data) => {
     if (err) return console.error(err);
     console.log('>>> signup ok.');
@@ -51674,12 +51670,11 @@ function award(event) {
 // === debug ===
 
 function restoreContract(event) {
-  delete localStorage.constract;
+  delete localStorage.contract;
   redirectHome();
 }
 
 function hideDebug(event) {
-  localStorage.debug = false;
   redirectHome();
 }
 
@@ -51689,7 +51684,7 @@ function clearCache(event) {
 }
 
 function updateContract(event) {
-  localStorage.constract = contractElement.value;
+  localStorage.contract = contractElement.value;
   location.reload();
 }
 
@@ -51731,7 +51726,7 @@ function encryptHeader(token, next) {
 function redirectHome() {
   location.target = "_blank";
   if (location.href.indexOf("github") != -1) {
-    location.href = 'https://alincode.github.io/fitbit-dapp/';
+    location.href = REDIRECT_URL
   } else {
     location.href = 'http://192.168.0.173:9966/';
   }
@@ -51752,9 +51747,6 @@ function done(err, result) {
 /******************************************************************************
   START
 ******************************************************************************/
-function continueProcess() {
-  if (localStorage.next == 'bet') bet();
-}
 
 function start() {
   getMyAddress({
@@ -51763,7 +51755,6 @@ function start() {
 }
 
 function getMyAddress(result) {
-  web3.eth.defaultAccount = web3.eth.accounts[0];
   log('loading (1/9) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
@@ -51851,10 +51842,10 @@ function isOwner(result) {
     if (err) return console.error(err);
     result.isOwner = data;
     console.log('result: ', result);
-    continueProcess();
     render(result);
   })
 }
 
 start();
+
 },{"./abi.json":309,"bel":20,"csjs-inject":67,"web3":292}]},{},[310]);
