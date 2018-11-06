@@ -13,7 +13,8 @@ async function web3Init() {
     try {
       // https://bit.ly/2QQHXvF
       console.log('ethereum.enable()');
-      await ethereum.enable();
+      const accounts = await ethereum.enable();
+      web3.eth.defaultAccount = accounts[0];
     } catch (error) {}
   } else if (web3) {
     console.log('load web3.currentProvider');
@@ -725,7 +726,6 @@ function start() {
 }
 
 function getMyAddress(result) {
-  web3.eth.defaultAccount = web3.eth.accounts[0];
   log('loading (1/9) - getMyAddress')
   web3.eth.getAccounts((err, localAddresses) => {
     if (!localAddresses) return errorRender('You must be have MetaMask or local RPC endpoint.');
