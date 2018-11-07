@@ -1,8 +1,45 @@
+// 0. temp email: https://www.mailinator.com/
+// 1. make test account: https://www.fitbit.com/signup
+// 2. signup as dev: https://dev.fitbit.com/login
+// 3. register app: https://dev.fitbit.com/apps/new
+const CLIENT_ID = '22D5DZ';
+// @NOTE only works if `https://dev.fitbit.com/apps/details/${CLIENT_ID}` has set Callback URL to `location.href` too
+const REDIRECT_URL = location.href.split('#')[0].split('?')[0]
+const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
+const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
+const CONTRACT_GAS = 800000;
+const CONTRACT_PRICE = 40000000000;
+const MINIMIZE_SIGNUP_AMOUNT = "0.1";
+const GOAL_STEPS = 300000
+const NETWORK = 'ropsten';
+
 var hasCustomPort = location.href.split('//')[1].indexOf(':') !== -1
 var isLocalhost = location.href.indexOf('localhost') !== -1
 if (hasCustomPort && !isLocalhost) { // update url to use localhost
   location.href = new URL(location.pathname, 'https://localhost:9966').href
   throw new Error('reload page with using "localhost"')
+}
+if (window.location.hash) {
+  var fragmentQueryParameters = {};
+  window.location.hash.slice(1).replace(
+    new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+    function ($0, $1, $2, $3) {
+      fragmentQueryParameters[$1] = $3;
+    }
+  );
+  log('fragmentQueryParameters: ', fragmentQueryParameters);
+  if (fragmentQueryParameters.access_token) {
+    localStorage.userId = fragmentQueryParameters.user_id;
+    localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
+    localStorage.token_scope = fragmentQueryParameters.scope;
+    localStorage.token_type = fragmentQueryParameters.token_type;
+    localStorage.token_expires_in = fragmentQueryParameters.expires_in;
+    localStorage.betOnce = true
+    location = REDIRECT_URL
+  }
+} else if (localStorage.betOnce) {
+  localStorage.removeItem('betOnce')
+  bet()
 }
 
 const bel = require('bel')
@@ -11,20 +48,6 @@ const csjs = require('csjs-inject')
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
-// 0. temp email: https://www.mailinator.com/
-// 1. make test account: https://www.fitbit.com/signup
-// 2. signup as dev: https://dev.fitbit.com/login
-// 3. register app: https://dev.fitbit.com/apps/new
-const CLIENT_ID = '22D5DZ';
-// @NOTE only works if `https://dev.fitbit.com/apps/details/${CLIENT_ID}` has set Callback URL to `location.href` too
-const REDIRECT_URL = location.href
-const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
-const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
-const CONTRACT_GAS = 800000;
-const CONTRACT_PRICE = 40000000000;
-const MINIMIZE_SIGNUP_AMOUNT = "0.1";
-const GOAL_STEPS = 300000
-const NETWORK = 'ropsten';
 
 async function web3Init() {
   if (ethereum) {
@@ -46,8 +69,6 @@ async function web3Init() {
 web3Init();
 
 const myContract = new web3.eth.Contract(ABI, contractAddress);
-const log = console.log;
-
 /******************************************************************************
   SETUP
 ******************************************************************************/
@@ -352,7 +373,7 @@ function render(result) {
       <br><br>
       <div>
         <h2><b>Welcome</b> to the Fitbit wellness contest.</h2>
-        The price money is shared equally between all participate<br>
+        The prize money will be equally shared between all participants<br>
         ${welcomeSubTitle(result)}
         ${welcomeSubTitle2(result)}
       </div>
@@ -388,22 +409,6 @@ if (typeof web3 == 'undefined') {
 /******************************************************************************
   Fitbit
 ******************************************************************************/
-if (window.location.hash) {
-  var fragmentQueryParameters = {};
-  window.location.hash.slice(1).replace(
-    new RegExp("([^?=&]+)(=([^&]*))?", "g"),
-    function ($0, $1, $2, $3) {
-      fragmentQueryParameters[$1] = $3;
-    }
-  );
-
-  log('fragmentQueryParameters: ', fragmentQueryParameters);
-  if (fragmentQueryParameters.access_token) {
-    localStorage.userId = fragmentQueryParameters.user_id;
-    localStorage.fitbitAccessToken = fragmentQueryParameters.access_token;
-  }
-}
-
 function processResponse (res) {
   if (!res.ok) {
     localStorage.clear();
@@ -580,7 +585,9 @@ function bet(event) {
     return;
   }
   const token = localStorage.fitbitAccessToken;
-  if (!token) return getFitbitToken(1)
+  if (!token) {
+    return getFitbitToken(1)
+  }
 
   encryptHeader(token, function (error, header) {
     console.log(header);
@@ -717,14 +724,14 @@ function done(err, result) {
   } else log(new Error('fail'))
 }
 
+function log () { console.log.apply(console, arguments) }
+
 /******************************************************************************
   START
 ******************************************************************************/
 
 function start() {
-  getMyAddress({
-    fitbitAccessToken: localStorage.fitbitAccessToken
-  });
+  getMyAddress({});
 }
 
 function getMyAddress(result) {
@@ -770,7 +777,7 @@ function getContestPayload1(result) {
     result.status = parseInt(data[4], 10);
 
     if (!localStorage.fitbitAccessToken) result.isSigned = false
-    else result.isSigned = data[5]; // @TODO: contract tells about "isSigned = true", but localhost localStorage does not contain FITBIT TOKEN
+    else result.isSigned = data[5];
 
     getContestPayload2(result);
   })
