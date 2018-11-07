@@ -25,6 +25,8 @@ contract CommonMixin {
 
     constructor() public {
         startAt = now;
+        /// https://solidity.readthedocs.io/en/latest/units-and-global-variables.html
+        /// syntactic sugar is available for some "Units"
         duration = 30 days;
         owner = msg.sender;
     }
