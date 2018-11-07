@@ -1,4 +1,4 @@
-var hasCustomPort = location.href.split('//')[1].indexOf(':')
+var hasCustomPort = location.href.split('//')[1].indexOf(':') !== -1
 var isLocalhost = location.href.indexOf('localhost') !== -1
 if (hasCustomPort && !isLocalhost) { // update url to use localhost
   location.href = new URL(location.pathname, 'https://localhost:9966').href

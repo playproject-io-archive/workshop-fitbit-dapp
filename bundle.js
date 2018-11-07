@@ -51027,14 +51027,33 @@ module.exports=[{
   }
 ]
 },{}],310:[function(require,module,exports){
+var hasCustomPort = location.href.split('//')[1].indexOf(':') !== -1
+var isLocalhost = location.href.indexOf('localhost') !== -1
+if (hasCustomPort && !isLocalhost) { // update url to use localhost
+  location.href = new URL(location.pathname, 'https://localhost:9966').href
+  throw new Error('reload page with using "localhost"')
+}
+
 const bel = require('bel')
 const csjs = require('csjs-inject')
 
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
-const REDIRECT_URL = 'https://alincode.github.io/fitbit-dapp'
-// const REDIRECT_URL = 'https://ethereum-play.github.io/workshop-fitbit-dapp'
+// 0. temp email: https://www.mailinator.com/
+// 1. make test account: https://www.fitbit.com/signup
+// 2. signup as dev: https://dev.fitbit.com/login
+// 3. register app: https://dev.fitbit.com/apps/new
+const CLIENT_ID = '22D5DZ';
+// @NOTE only works if `https://dev.fitbit.com/apps/details/${CLIENT_ID}` has set Callback URL to `location.href` too
+const REDIRECT_URL = location.href
+const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
+const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
+const CONTRACT_GAS = 800000;
+const CONTRACT_PRICE = 40000000000;
+const MINIMIZE_SIGNUP_AMOUNT = "0.1";
+const GOAL_STEPS = 300000
+const NETWORK = 'ropsten';
 
 async function web3Init() {
   if (ethereum) {
@@ -51054,16 +51073,6 @@ async function web3Init() {
 }
 
 web3Init();
-
-const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
-const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
-const CONTRACT_GAS = 800000;
-const CONTRACT_PRICE = 40000000000;
-const MINIMIZE_SIGNUP_AMOUNT = "0.1";
-
-const NETWORK = 'ropsten';
-// const NETWORK = 'rinkeby';
-let faucetURL = (NETWORK == 'ropsten') ? 'https://faucet.ropsten.be/' : `https://faucet.${NETWORK}.io/`;
 
 const myContract = new web3.eth.Contract(ABI, contractAddress);
 const log = console.log;
@@ -51210,7 +51219,7 @@ const css = csjs `
 
 function funderAreaElement(result) {
   if (result.funders[0].length == 0) return;
-  return bel `<div class="${css.box4}">Funder : <ul>
+  return bel `<div class="${css.box4}">Sponsorship Board : <ul>
     ${result.funders[0].map(function (item, index) {
     return bel`<li>${item} : ${web3.utils.fromWei(result.funders[1][index], "ether")} ETH
     </li>`
@@ -51228,7 +51237,7 @@ function playerRefundButton(result) {
 }
 
 function playSubTitle(result) {
-  if (result.goalStep == 300000) {
+  if (result.goalStep == GOAL_STEPS) {
     return bel `<div>I bet that I can reach 10.000 steps each day! (GOAL: 300.000 steps a month)</div>`
   } else {
     return bel `<div>I bet that I can reach ${result.goalStep} steps! </div>`
@@ -51266,7 +51275,7 @@ const fundAreaElement = bel `
   <div class="${css.box6}">
     I want to sponsor this contest with ${fundAmountElement} ETH!<br>
     Name you want to be added to our sponsorship board. ${fundNameElement}<br>
-    <button class=${css.shortButton} onclick=${fund}> Fund </button> (min 0.5 ETH)
+    <button class=${css.shortButton} onclick=${fund}> Sponsor </button> (min 0.5 ETH)
   </div>
 `
 
@@ -51350,7 +51359,7 @@ function adminAreaElement(result) {
 }
 
 function welcomeSubTitle(result) {
-  if (result.goalStep != 300000) {
+  if (result.goalStep != GOAL_STEPS) {
     return bel `<div>who manage to walk ${result.goalStep} steps in the next ${niceTimeFormat(result.duration)}</div>`
   } else {
     return bel `<div>who manage to walk 300.000 steps in the next 30 days (10.000 steps per day)</div>`
@@ -51368,7 +51377,7 @@ function render(result) {
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/ETHEREUM-YOUTUBE-PROFILE-PIC.png"/><br/>
     </div>
     <div class=${css.box2}>
-      Please choose the <span class="${css.highlight}">${NETWORK} test chain.</span> You can get test coins here coin from <a href="${faucetURL}">here</a>.
+      Please choose the <span class="${css.highlight}">${NETWORK} test chain.</span> You can get test coins from metamasks deposit button on ropsten when clicking faucet.
       <br><br>
       <div>
         <h2><b>Welcome</b> to the Fitbit wellness contest.</h2>
@@ -51380,7 +51389,7 @@ function render(result) {
     <div class="${css.box3}">
       Total players: ${result.numPlayers} <br>
       Total fees: ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
-      Total funders: ${result.numFunders} <br>
+      Total sponsors: ${result.numFunders} <br>
       Total prize amount: ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br><br>
     </div>
     ${funderAreaElement(result)}
@@ -51408,7 +51417,6 @@ if (typeof web3 == 'undefined') {
 /******************************************************************************
   Fitbit
 ******************************************************************************/
-
 if (window.location.hash) {
   var fragmentQueryParameters = {};
   window.location.hash.slice(1).replace(
@@ -51425,7 +51433,7 @@ if (window.location.hash) {
   }
 }
 
-var processResponse = function (res) {
+function processResponse (res) {
   if (!res.ok) {
     localStorage.clear();
     throw new Error('Fitbit API request failed: ' + res);
@@ -51482,6 +51490,7 @@ function getActivities(result, cb) {
     })
     .catch(function (error) {
       console.error(error);
+      cb(result);
     });
 }
 
@@ -51507,12 +51516,12 @@ function getTotalStep(event) {
 }
 
 function getFitbitToken(event) {
-  const CLIENT_ID = '22CYSG';
   const EXPIRES_IN = (event == 1) ? (60 * 60 * 24 * 40) : (60 * 60 * 24 * 60);
   const uri = REDIRECT_URL
   const redirectUri = encodeURIComponent(uri);
   window.location.target = "_blank";
-  window.location.href = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
+  const url = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
+  window.location.href = url
   return;
 }
 
@@ -51585,8 +51594,6 @@ myContract.events.NoticeAward(options, async (error, event) => {
 ******************************************************************************/
 
 // === player ===
-
-// 玩家退款
 function playerRefund(event) {
   myContract.methods.playerRefund().send({
     from: localStorage.wallet
@@ -51596,13 +51603,11 @@ function playerRefund(event) {
   })
 }
 
-// 玩家參賽
 function bet(event) {
   if (parseFloat(localStorage.balance) < parseFloat(MINIMIZE_SIGNUP_AMOUNT)) {
     alert("you don't have enough ether.");
     return;
   }
-
   const token = localStorage.fitbitAccessToken;
   if (!token) return getFitbitToken(1)
 
@@ -51626,7 +51631,6 @@ function signup(header, betAmount) {
 }
 
 // === funder ===
-
 function fund(event) {
   let fundAmount = fundAmountElement.value;
   let name = fundNameElement.value;
@@ -51647,7 +51651,6 @@ function fund(event) {
 }
 
 // === owner ===
-
 function contestDone(event) {
   myContract.methods.contestDone().send({
     from: localStorage.wallet
@@ -51668,7 +51671,6 @@ function award(event) {
 }
 
 // === debug ===
-
 function restoreContract(event) {
   delete localStorage.contract;
   redirectHome();
@@ -51795,7 +51797,10 @@ function getContestPayload1(result) {
     result.numFunders = parseInt(data[2], 10);
     result.fundersOfAmount = data[3];
     result.status = parseInt(data[4], 10);
-    result.isSigned = data[5];
+
+    if (!localStorage.fitbitAccessToken) result.isSigned = false
+    else result.isSigned = data[5]; // @TODO: contract tells about "isSigned = true", but localhost localStorage does not contain FITBIT TOKEN
+
     getContestPayload2(result);
   })
 }
