@@ -1,11 +1,23 @@
+var hasCustomPort = location.href.split('//')[1].indexOf(':')
+var isLocalhost = location.href.indexOf('localhost') !== -1
+if (hasCustomPort && !isLocalhost) { // update url to use localhost
+  location.href = new URL(location.pathname, 'https://localhost:9966').href
+  throw new Error('reload page with using "localhost"')
+}
+
 const bel = require('bel')
 const csjs = require('csjs-inject')
 
 var ABI = require('./abi.json');
 var Web3 = require('web3');
 
+// 0. temp email: https://www.mailinator.com/
+// 1. make test account: https://www.fitbit.com/signup
+// 2. signup as dev: https://dev.fitbit.com/login
+// 3. register app: https://dev.fitbit.com/apps/new
 const CLIENT_ID = '22D5DZ';
-const REDIRECT_URL = 'https://ethereum-play.github.io/workshop-fitbit-dapp'
+// @NOTE only works if `https://dev.fitbit.com/apps/details/${CLIENT_ID}` has set Callback URL to `location.href` too
+const REDIRECT_URL = location.href
 const DEFAULT_ADDRESS = "0xa35f44a199015081d86da841ba8e14ece52e840c";
 const contractAddress = localStorage.contract || DEFAULT_ADDRESS;
 const CONTRACT_GAS = 800000;
@@ -178,7 +190,7 @@ const css = csjs `
 
 function funderAreaElement(result) {
   if (result.funders[0].length == 0) return;
-  return bel `<div class="${css.box4}">Funder : <ul>
+  return bel `<div class="${css.box4}">Sponsorship Board : <ul>
     ${result.funders[0].map(function (item, index) {
     return bel`<li>${item} : ${web3.utils.fromWei(result.funders[1][index], "ether")} ETH
     </li>`
@@ -234,7 +246,7 @@ const fundAreaElement = bel `
   <div class="${css.box6}">
     I want to sponsor this contest with ${fundAmountElement} ETH!<br>
     Name you want to be added to our sponsorship board. ${fundNameElement}<br>
-    <button class=${css.shortButton} onclick=${fund}> Fund </button> (min 0.5 ETH)
+    <button class=${css.shortButton} onclick=${fund}> Sponsor </button> (min 0.5 ETH)
   </div>
 `
 
@@ -348,7 +360,7 @@ function render(result) {
     <div class="${css.box3}">
       Total players: ${result.numPlayers} <br>
       Total fees: ${web3.utils.fromWei(result.playersOfAmount, "ether")} ETH. <br><br>
-      Total funders: ${result.numFunders} <br>
+      Total sponsors: ${result.numFunders} <br>
       Total prize amount: ${web3.utils.fromWei(result.fundersOfAmount, "ether")} ETH. <br><br>
     </div>
     ${funderAreaElement(result)}
@@ -392,7 +404,7 @@ if (window.location.hash) {
   }
 }
 
-var processResponse = function (res) {
+function processResponse (res) {
   if (!res.ok) {
     localStorage.clear();
     throw new Error('Fitbit API request failed: ' + res);
@@ -449,6 +461,7 @@ function getActivities(result, cb) {
     })
     .catch(function (error) {
       console.error(error);
+      cb(result);
     });
 }
 
@@ -478,7 +491,8 @@ function getFitbitToken(event) {
   const uri = REDIRECT_URL
   const redirectUri = encodeURIComponent(uri);
   window.location.target = "_blank";
-  window.location.href = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
+  const url = `https://www.fitbit.com/oauth2/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&scope=activity%20profile&expires_in=${EXPIRES_IN}`;
+  window.location.href = url
   return;
 }
 
@@ -565,7 +579,6 @@ function bet(event) {
     alert("you don't have enough ether.");
     return;
   }
-
   const token = localStorage.fitbitAccessToken;
   if (!token) return getFitbitToken(1)
 
@@ -755,7 +768,10 @@ function getContestPayload1(result) {
     result.numFunders = parseInt(data[2], 10);
     result.fundersOfAmount = data[3];
     result.status = parseInt(data[4], 10);
-    result.isSigned = data[5];
+
+    if (!localStorage.fitbitAccessToken) result.isSigned = false
+    else result.isSigned = data[5]; // @TODO: contract tells about "isSigned = true", but localhost localStorage does not contain FITBIT TOKEN
+
     getContestPayload2(result);
   })
 }

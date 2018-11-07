@@ -5,7 +5,7 @@
   "description": "",
   "main": "src/abi.json",
   "scripts": {
-    "start": "budo src/index.js:bundle.js --dir ./ --live --open",
+    "start": "budo src/index.js:bundle.js --dir ./ --live --open --ssl",
     "bridge": "ethereum-bridge -a 9 -H 127.0.0.1 -p 8545 --dev",
     "ganache": "ganache-cli -p 8545",
     "build": "browserify src/index.js > bundle.js"
