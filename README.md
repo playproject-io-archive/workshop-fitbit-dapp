@@ -16,7 +16,7 @@
 1. `contestDone` - it will update all user end step and save the doneAt.
 2. `award` - if will check doneAt, make a sure, you already waiting for 10 minutes. then you can call this function and it will count all winner and award money to winner
 
-https://ethereum-play.github.io/workshop-fitbit-dapp
+https://playproject-io-archive.github.io/workshop-fitbit-dapp/
 
 ![](docs/assets/screen1.png)
 ![](docs/assets/screen2.png)
